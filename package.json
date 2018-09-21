@@ -1,6 +1,6 @@
 {
     "name": "esifycss",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Generates .js or .ts exports class names and custom properties",
     "author": {
         "name": "Kei Ito",
@@ -11,7 +11,7 @@
     "engines": {
         "node": ">=8"
     },
-    "repository": "kei-ito/postcss-esify",
+    "repository": "kei-ito/esify",
     "main": "lib/index.js",
     "dependencies": {
         "@nlib/afs": "^0.2.4",
