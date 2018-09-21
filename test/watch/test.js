@@ -9,9 +9,7 @@ const {getExports} = require('../util');
 t.test('watch', async (t) => {
     const directory = await afs.mkdtemp(path.join(os.tmpdir(), t.name));
     await afs.deploy(directory, {
-        'foo.css': [
-            '.foo {--color: red}',
-        ].join('\n'),
+        'foo.css': '.foo {--color: red}',
     });
     const dest = path.join(directory, 'output.css');
     const watcher = await esifycss.watch({
@@ -20,9 +18,15 @@ t.test('watch', async (t) => {
         dest,
     });
     await new Promise((resolve, reject) => {
+        let timer;
         watcher
         .on('error', reject)
-        .on('esifycss:output', resolve);
+        .on('esifycss:output', () => {
+            clearTimeout(timer);
+            timer = setTimeout(resolve, 500);
+        });
+        afs.writeFilep(path.join(directory, 'foo.css'), '.foo {--color: gold}')
+        .catch(reject);
     });
     watcher.close();
     await t.rejects(afs.readFile(path.join(directory, 'bar/bar.css.js')));
@@ -30,7 +34,7 @@ t.test('watch', async (t) => {
     const exported = getExports(outputJS);
     t.match(exported, {
         classes: {foo: '_foo_css_foo'},
-        properties: {color: 'red'},
+        properties: {color: 'gold'},
         default: {
             classes: {name: 'classes'},
             properties: {name: 'properties'},
