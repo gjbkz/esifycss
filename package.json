@@ -1,5 +1,5 @@
 {
-    "name": "postcss-esify",
+    "name": "esifycss",
     "version": "0.1.1",
     "description": "Generates .js or .ts exports class names and custom properties",
     "author": {
