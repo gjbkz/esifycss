@@ -13,6 +13,9 @@
     },
     "repository": "kei-ito/esify",
     "main": "lib/index.js",
+    "bin": {
+        "esifycss": "bin/esifycss"
+    },
     "dependencies": {
         "@nlib/afs": "^0.2.4",
         "chokidar": "^2.0.4",
