@@ -9,7 +9,10 @@ const {getExports} = require('../util');
 t.test('es', async (t) => {
     const directory = await afs.mkdtemp(path.join(os.tmpdir(), 'es'));
     await afs.deploy(directory, {
-        'foo.css': '.foo {--color: red}',
+        'foo.css': [
+            '.foo {--color: red}',
+            '@media print {}',
+        ].join('\n'),
         'bar': {
             'bar.css': '.bar {--color: blue}',
         },
