@@ -9,7 +9,9 @@ program
 .version(packageData.version)
 .usage('[options] <patterns ...>')
 .option('-c, --config <path>', 'Path to configuration files', String)
-.option('-w, --watch', 'Watch files')
+.option('-d, --dest <path>', 'Path to output concatenated css', String)
+.option('-w, --watch', 'Watch files and update definitions automatically')
+.option('-m, --mangle', 'Minify classnames for production build')
 .parse(process.argv);
 
 program.patterns = program.args;
