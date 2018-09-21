@@ -51,13 +51,13 @@ t.test('import', async (t) => {
         prop: '--color',
         value: barExported.properties.color,
     });
-    t.equal(cssAST.nodes[1].selector, `.${fooExported.classes.foo}`);
-    t.match(cssAST.nodes[1].nodes[0], {
+    const fooNode = cssAST.nodes.find((node) => node.selector === `.${fooExported.classes.foo}`);
+    t.match(fooNode.nodes[0], {
         prop: '--color',
         value: fooExported.properties.color,
     });
-    t.equal(cssAST.nodes[2].selector, `.${barExported.classes.bar}.${fooExported.classes.foo}`);
-    t.match(cssAST.nodes[2].nodes[0], {
+    const mixedNode = cssAST.nodes.find((node) => node.selector === `.${barExported.classes.bar}.${fooExported.classes.foo}`);
+    t.match(mixedNode.nodes[0], {
         prop: '--color2',
         value: fooExported.properties.color2,
     });
