@@ -1,0 +1,13 @@
+extends:
+  - './node_modules/@nlib/lint/.eslintrc.json'
+env:
+  node: true
+  es6: true
+rules:
+  global-require: 'off'
+overrides:
+  -
+    files:
+      - 'test/**'
+    rules:
+      no-loop-func: 'off'
