@@ -18,9 +18,7 @@ t.test('watch', {timeout: 5000}, (t) => {
     t.test('watcher', {timeout: 3000}, async (t) => {
         const directory = await afs.mkdtemp(path.join(os.tmpdir(), t.name));
         await afs.deploy(directory, {
-            foo: {
-                'foo.css': '.foo {--color: red}',
-            },
+            'foo.css': '.foo {--color: red}',
         });
         const dest = path.join(directory, 'output.css');
         watcher = await esifycss.watch({
@@ -28,7 +26,7 @@ t.test('watch', {timeout: 5000}, (t) => {
             base: directory,
             dest,
         });
-        const target = path.join(directory, 'foo', 'foo.css');
+        const target = path.join(directory, 'foo.css');
         let count = 0;
         await new Promise((resolve, reject) => {
             watcher
@@ -46,7 +44,7 @@ t.test('watch', {timeout: 5000}, (t) => {
                 }
             });
         });
-        const outputJS = await afs.readFile(path.join(directory, 'foo', 'foo.css.js'), 'utf8');
+        const outputJS = await afs.readFile(path.join(directory, 'foo.css.js'), 'utf8');
         const exported = getExports(outputJS);
         t.match(exported, {
             classes: {foo: '_foo_css_foo'},
