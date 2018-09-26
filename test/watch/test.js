@@ -18,27 +18,35 @@ t.test('watch', {timeout: 5000}, (t) => {
     t.test('watcher', async (t) => {
         const directory = await afs.mkdtemp(path.join(os.tmpdir(), t.name));
         await afs.deploy(directory, {
-            'foo.css': '.foo {--color: red}',
+            foo: {
+                'foo.css': '.foo {--color: red}',
+            },
         });
         const dest = path.join(directory, 'output.css');
         watcher = await esifycss.watch({
-            patterns: path.join(directory, '*.css'),
+            patterns: path.join(directory, '**/*.css'),
             base: directory,
             dest,
         });
+        const target = path.join(directory, 'foo', 'foo.css');
+        let count = 0;
         await new Promise((resolve, reject) => {
-            let timer;
             watcher
             .on('error', reject)
+            .on('esifycss:file', (file) => {
+                if (target === file) {
+                    count += 1;
+                }
+            })
             .on('esifycss:output', () => {
-                clearTimeout(timer);
-                timer = setTimeout(resolve, 500);
+                if (1 < count) {
+                    resolve();
+                } else {
+                    afs.updateFile(target, '.foo {--color: gold}').catch(reject);
+                }
             });
-            afs.writeFilep(path.join(directory, 'foo.css'), '.foo {--color: gold}')
-            .catch(reject);
         });
-        await t.rejects(afs.readFile(path.join(directory, 'bar/bar.css.js')));
-        const outputJS = await afs.readFile(path.join(directory, 'foo.css.js'), 'utf8');
+        const outputJS = await afs.readFile(path.join(directory, 'foo', 'foo.css.js'), 'utf8');
         const exported = getExports(outputJS);
         t.match(exported, {
             classes: {foo: '_foo_css_foo'},
