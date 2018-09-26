@@ -15,7 +15,7 @@ t.test('watch', {timeout: 5000}, (t) => {
         }
         done();
     });
-    t.test('watcher', async (t) => {
+    t.test('watcher', {timeout: 3000}, async (t) => {
         const directory = await afs.mkdtemp(path.join(os.tmpdir(), t.name));
         await afs.deploy(directory, {
             foo: {
