@@ -34,7 +34,7 @@ t.test('watch', {timeout: 5000}, (t) => {
             watcher
             .on('error', reject)
             .on('esifycss:file', (file) => {
-                if (target === file) {
+                if (path.basename(file) === 'foo.css') {
                     count += 1;
                 }
             })
