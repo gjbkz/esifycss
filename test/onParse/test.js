@@ -14,7 +14,7 @@ t.test('es', async (t) => {
             'bar.css': '.bar {--color: blue}',
         },
     });
-    const dest = path.join(directory, 'output.css');
+    const dest = path.join(directory, 'output', 'output', 'output.css');
     const args = [];
     await esifycss.start({
         patterns: path.join(directory, '*.css'),
