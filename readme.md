@@ -61,13 +61,16 @@ npm install --save-dev esifycss
 Usage: esifycss [options] <patterns ...>
 
 Options:
-
-  -V, --version        output the version number
-  -c, --config <path>  Path to configuration files
-  -d, --dest <path>    Path to output concatenated css
-  -w, --watch          Watch files and update definitions automatically
-  -m, --mangle         Minify classnames for production build
-  -h, --help           output usage information
+  -V, --version       output the version number.
+  --config <path>     A path to configuration files.
+  --dest <path>       A path to concatenated css.
+  --watch             Watch files and update module automatically.
+  --mangle            Minify classnames for production build.
+  --ext <string>      An extension of generated modules.
+  --baseDir <path>    A path which is used to generate modules to outputDir.
+  --outputDir <path>  A path to a directory where modules are generated.
+  --classesOnly       If it is true, a CSS file exports classes as default export. Otherwise, {classes, properties} is exported.
+  -h, --help          output usage information.
 ```
 
 ## `@import` Syntax
@@ -104,13 +107,18 @@ You can also name the imports.
 
 ## Options
 
-- `plugins`: An array which passed to [postcss](http://api.postcss.org/postcss.html).
-- `processOptions`: An object which passed to [postcss.parse](http://api.postcss.org/postcss.html#.parse) or [processor.process](http://api.postcss.org/Processor.html#process).
-- `mangle`: Boolean. See the mangler section below.
-- `base`: String. See the mangler section below.
-- `classesOnly`: Boolean. If it is true, a CSS file exports classes as default export. Otherwise, `{classes, properties}` is exported.
-- `mangler`: Function(String *id*, String *className*) → String. See the mangler section below. If it is set, the `mangle` and `base` options are ignored.
-- `dest`: String. If it exists, the CSS code is written to options.dest.
+- `config`: `string`. A path to configuration files.
+- `dest`: `string`. A path to concatenated css.
+- `watch`: `boolean`. Watch files and update module automatically.
+- `mangle`: `boolean`. Minify classnames for production build.
+- `ext`: `string`. An extension of generated modules.
+- `baseDir`: `string`. A path which is used to generate modules to outputDir.
+- `outputDir`: `string`. A path to a directory where modules are generated.
+- `classesOnly`: `boolean`. If it is true, a CSS file exports classes as default export. Otherwise, {classes, properties} is exported.
+- `plugins`: `Array<PostCSSPlugin>`. An array which passed to [postcss](http://api.postcss.org/postcss.html).
+- `processOptions`: `{...}`. An object which passed to [postcss.parse](http://api.postcss.org/postcss.html#.parse) or [processor.process](http://api.postcss.org/Processor.html#process).
+- `base`: `string`. See the mangler section below.
+- `mangler`: `(id: string, className: string) => String`. See the mangler section below. If it is set, the `mangle` and `base` options are ignored.
 
 ### `mangler` option
 
@@ -127,7 +135,7 @@ if (!options.mangler) {
     // ('/home/foo/bar.css', 'b') → _1
     // ('/home/foo/baz.css', 'a') → _2
   } else {
-    options.base = options.base || process.cwd();
+    options.base = options.base || options.baseDir || process.cwd();
     options.mangler = (id, className) => [
       path.relative(options.base, id).replace(/^(\w)/, '_$1').replace(/[^\w]+/g, '_'),
       className,

@@ -6,7 +6,7 @@ const postcss = require('postcss');
 const esifycss = require('../../lib');
 const {getExports} = require('../util');
 
-t.test('changeExt', async (t) => {
+t.test('outputDir', async (t) => {
     const directory = await afs.mkdtemp(path.join(os.tmpdir(), 'es'));
     await afs.deploy(directory, {
         'foo.css': [
@@ -18,14 +18,17 @@ t.test('changeExt', async (t) => {
         },
     });
     const dest = path.join(directory, 'output.css');
+    const baseDir = directory;
+    const outputDir = path.join(directory, 'intermediates');
     await esifycss.start({
         patterns: path.join(directory, '*.css'),
         base: directory,
         dest,
-        changeExt: true,
+        baseDir,
+        outputDir,
     });
-    await t.rejects(afs.readFile(path.join(directory, 'bar/bar.js')));
-    const outputJS = await afs.readFile(path.join(directory, 'foo.js'), 'utf8');
+    await t.rejects(afs.readFile(path.join(outputDir, 'bar/bar.css.js')));
+    const outputJS = await afs.readFile(path.join(outputDir, 'foo.css.js'), 'utf8');
     const exported = getExports(outputJS);
     t.match(exported, {
         classes: {foo: '_foo_css_foo'},

@@ -8,10 +8,14 @@ const packageData = require('../package.json');
 program
 .version(packageData.version)
 .usage('[options] <patterns ...>')
-.option('-c, --config <path>', 'Path to configuration files', String)
-.option('-d, --dest <path>', 'Path to output concatenated css', String)
-.option('-w, --watch', 'Watch files and update definitions automatically')
-.option('-m, --mangle', 'Minify classnames for production build')
+.option('--config <path>', 'A path to configuration files.', String)
+.option('--dest <path>', 'A path to concatenated css.', String)
+.option('--watch', 'Watch files and update module automatically.', Boolean)
+.option('--mangle', 'Minify classnames for production build.', Boolean)
+.option('--ext <string>', 'An extension of generated modules.', String)
+.option('--baseDir <path>', 'A path which is used to generate modules to outputDir.', String)
+.option('--outputDir <path>', 'A path to a directory where modules are generated.', String)
+.option('--classesOnly', 'If it is true, a CSS file exports classes as default export. Otherwise, {classes, properties} is exported.', Boolean)
 .parse(process.argv);
 
 program.patterns = program.args;
