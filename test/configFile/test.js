@@ -6,7 +6,7 @@ const postcss = require('postcss');
 const esifycss = require('../../lib');
 const {getExports} = require('../util');
 
-t.test('mangle', async (t) => {
+t.test('configFile', async (t) => {
     const directory = await afs.mkdtemp(path.join(os.tmpdir(), 'es'));
     await afs.deploy(directory, {
         'foo.css': '.foo {--color: red}',
