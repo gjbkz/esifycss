@@ -8,13 +8,13 @@ const packageData = require('../package.json');
 program
 .version(packageData.version)
 .usage('[options] <patterns ...>')
-.option('--config <path>', 'A path to configuration files.', String)
-.option('--dest <path>', 'A path to concatenated css.', String)
-.option('--watch', 'Watch files and update module automatically.', Boolean)
-.option('--mangle', 'Minify classnames for production build.', Boolean)
-.option('--ext <string>', 'An extension of generated modules.', String)
-.option('--baseDir <path>', 'A path which is used to generate modules to outputDir.', String)
-.option('--outputDir <path>', 'A path to a directory where modules are generated.', String)
+.option('--config <path>', 'A path to configuration files.')
+.option('--dest <path>', 'A path to concatenated css.')
+.option('--watch', 'Watch files and update module automatically.')
+.option('--mangle', 'Minify classnames for production build.')
+.option('--ext <string>', 'An extension of generated modules.')
+.option('--baseDir <path>', 'A path which is used to generate modules to outputDir.')
+.option('--outputDir <path>', 'A path to a directory where modules are generated.')
 .option('--classesOnly', 'If it is true, a CSS file exports classes as default export. Otherwise, {classes, properties} is exported.', Boolean)
 .parse(process.argv);
 
