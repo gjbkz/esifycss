@@ -1,4 +1,4 @@
 module.exports = {
     ext: '.esified.js',
-    patterns: ['foo.css'],
+    include: ['foo.css'],
 };

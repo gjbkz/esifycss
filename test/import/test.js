@@ -20,7 +20,7 @@ t.test('import', async (t) => {
     });
     const dest = path.join(directory, 'output.css');
     await esifycss.start({
-        patterns: [path.join(directory, '**/*.css'), null],
+        include: [path.join(directory, '**/*.css'), null],
         base: directory,
         dest,
     });

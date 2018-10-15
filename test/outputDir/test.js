@@ -21,7 +21,7 @@ t.test('outputDir', async (t) => {
     const baseDir = directory;
     const outputDir = path.join(directory, 'intermediates');
     await esifycss.start({
-        patterns: path.join(directory, '*.css'),
+        include: path.join(directory, '*.css'),
         base: directory,
         dest,
         baseDir,

@@ -7,7 +7,7 @@ const packageData = require('../package.json');
 
 program
 .version(packageData.version)
-.usage('[options] <patterns ...>')
+.usage('[options] <include ...>')
 .option('--config <path>', 'A path to configuration files.')
 .option('--dest <path>', 'A path to concatenated css.')
 .option('--watch', 'Watch files and update module automatically.')

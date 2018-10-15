@@ -18,7 +18,7 @@ t.test('mangler', async (t) => {
     let counter = 0;
     const cache = new Map();
     await esifycss.start({
-        patterns: path.join(directory, '*.css'),
+        include: path.join(directory, '*.css'),
         base: directory,
         dest,
         mangler: (file, name) => {
