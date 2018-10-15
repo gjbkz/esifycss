@@ -22,7 +22,7 @@ t.test('watch', {timeout: 5000}, (t) => {
         });
         const dest = path.join(directory, 'output.css');
         watcher = await esifycss.watch({
-            patterns: path.join(directory, '**/*.css'),
+            include: path.join(directory, '**/*.css'),
             base: directory,
             dest,
         });

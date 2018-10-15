@@ -17,7 +17,7 @@ t.test('configFile', async (t) => {
     const dest = path.join(directory, 'output.css');
     await esifycss.start({
         config: path.join(__dirname, 'foo.js'),
-        patterns: path.join(directory, '*.css'),
+        include: path.join(directory, '*.css'),
         base: directory,
         dest,
     });

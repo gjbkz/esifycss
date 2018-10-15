@@ -17,7 +17,7 @@ t.test('onParse', async (t) => {
     const dest = path.join(directory, 'output', 'output', 'output.css');
     const args = [];
     await esifycss.start({
-        patterns: path.join(directory, '*.css'),
+        include: path.join(directory, '*.css'),
         base: directory,
         dest,
         onParse: async (data) => {
