@@ -18,7 +18,7 @@
     },
     "dependencies": {
         "@nlib/afs": "^0.2.4",
-        "chokidar": "^2.0.4",
+        "chokidar": "^2.1.5",
         "commander": "^2.19.0",
         "glob": "^7.1.3",
         "minimatch": "^3.0.4",
@@ -27,8 +27,8 @@
     "devDependencies": {
         "@commitlint/cli": "7.5.2",
         "@commitlint/config-conventional": "7.5.0",
-        "@nlib/lint": "3.3.3",
-        "acorn": "6.0.5",
+        "@nlib/lint": "^3.5.0",
+        "acorn": "^6.1.1",
         "conventional-changelog-cli": "2.0.12",
         "eslint": "5.16.0",
         "husky": "1.3.1",
