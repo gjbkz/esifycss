@@ -17,7 +17,7 @@
         "esifycss": "bin/esifycss"
     },
     "dependencies": {
-        "@nlib/afs": "^0.2.4",
+        "@nlib/afs": "^3.0.0",
         "chokidar": "^2.1.5",
         "commander": "^2.19.0",
         "glob": "^7.1.3",
