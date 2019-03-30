@@ -1,6 +1,5 @@
 # esifycss
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/kei-ito/esifycss.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/kei-ito/esifycss.svg?branch=master)](https://travis-ci.org/kei-ito/esifycss)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kei-ito/esifycss?branch=master&svg=true)](https://ci.appveyor.com/project/kei-ito/esifycss/branch/master)
 [![codecov](https://codecov.io/gh/kei-ito/esifycss/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/esifycss)
