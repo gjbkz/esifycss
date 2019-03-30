@@ -35,7 +35,7 @@
         "lint-staged": "8.1.5",
         "npm-run-all": "4.1.5",
         "postcss-nested": "4.1.1",
-        "tap": "12.4.0"
+        "tap": "12.6.1"
     },
     "scripts": {
         "lint": "eslint bin/esifycss lib test",
