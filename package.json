@@ -20,7 +20,6 @@
         "@types/anymatch": "^1.3.1",
         "chokidar": "^2.1.5",
         "commander": "^2.20.0",
-        "micromatch": "^3.1.10",
         "postcss": "^7.0.14"
     },
     "devDependencies": {
@@ -28,17 +27,18 @@
         "@commitlint/config-conventional": "7.5.0",
         "@nlib/lint": "3.5.0",
         "@types/micromatch": "3.1.0",
-        "@types/node": "^11.13.0",
+        "@types/node": "^11.13.4",
         "@typescript-eslint/eslint-plugin": "^1.6.0",
         "acorn": "6.1.1",
+        "ava": "^1.4.1",
         "conventional-changelog-cli": "2.0.12",
         "eslint": "5.16.0",
         "husky": "1.3.1",
         "lint-staged": "8.1.5",
         "npm-run-all": "4.1.5",
         "postcss-nested": "4.1.2",
-        "tap": "12.6.1",
-        "typescript": "3.4.2"
+        "ts-node": "^8.0.3",
+        "typescript": "^3.4.3"
     },
     "scripts": {
         "lint": "eslint bin/esifycss lib test",
@@ -46,6 +46,15 @@
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "npm-run-all --sequential version:changelog version:add"
+    },
+    "ava": {
+        "compileEnhancements": false,
+        "extensions": [
+            "ts"
+        ],
+        "require": [
+            "ts-node/register"
+        ]
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
@@ -55,9 +64,11 @@
         },
         "overrides": [
             {
-                "files": "lib/index.js",
+                "files": [
+                    "*.ts"
+                ],
                 "rules": {
-                    "global-require": "off"
+                    "@typescript-eslint/no-require-imports": "off"
                 }
             }
         ]

@@ -1,13 +1,4 @@
-export interface IIdentifier {
-    (key: string): number,
-}
-
-export interface IIdListener {
-    (
-        key: string,
-        id: number,
-    ): void,
-}
+import {IIdListener, IIdentifier} from './types';
 
 export const createIdentifier = (
     listener?: IIdListener,

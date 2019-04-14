@@ -2,26 +2,12 @@ language: node_js
 node_js:
 - '10'
 - '8'
-before_install:
-- export GREENKEEPER=$([[ $(node -v) == v10.* ]]; echo $?)
-- if [[ ${GREENKEEPER} -eq 0 ]]; then npm install -g greenkeeper-lockfile; fi
 install:
 - npm install
-before_script:
-- if [[ ${GREENKEEPER} -eq 0 ]]; then greenkeeper-lockfile-update; fi
 script:
 - npm run test
 - npm run lint
 after_success:
-- if [[ ${GREENKEEPER} -eq 0 ]]; then greenkeeper-lockfile-upload; fi
 - npm install -g codecov
 - tap --coverage-report=text-lcov > coverage.lcov
 - codecov
-deploy:
-  provider: npm
-  email: kei.itof@gmail.com
-  api_key:
-    secure: w+G5VAxFmt7VRnd2hOH6JC7gAS2wsFB9RNPsbiZsNsHWAvoztNae7eILq/Lnz+uhoHRJDrQO+rLAQ5K51+QdnRCEqGdd2nwCol8vIROxYrB2LslXS5fZG31B6fvS6i70QK9FrcaTaypzcIJAiT7wN1OSSJPA6JQVedT0YqTgUCb5V2HWw5XJj2zN8WeDvIbL7ptvFks9tsCi1NFjKBU13JaBxoLPnm0FTOHxe6rS0ggXm0UtSsj7zgCWIvrZpCh7MtMuAujMNhr2hwwj2nUgSvmI1ZSJSCbigmkufjjTb33utM0VmXbp29H37UmpQoMuxbmyP6YodqouOaM9Qn9k+4ykysbTQ3WWWo5xJRMmdcffDcguuReZPMuEoGolIuzqV1fswkGPylZ/3tV7SH5xrOMwZpq92AAfHVEkPXSoeZDu5L+ZApCCTqw34w/Zyia/yguYF6IX0sZOq6dnxrknbug6FUKI0SpeMfbNfl0GCs1ArLUno0m/nvIgGBBjAmenqzyPVR9EhHyRzpJ6dYFCEh1n0L5gq8Bw+Bp6qPNQ0mRZZnHTFMK3uBL9knC9QE/q6MbaBfm/xqMYQiKveyRYlG3sXriEqMzfdRkbHOx0yqQgbs1y/jNOZZ1IAESuYxA284edEvJOnFzJ1eexHCgUpgLY+N3TnUorHA9VXhDA8kg=
-  on:
-    tags: true
-    repo: kei-ito/esifycss

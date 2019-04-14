@@ -1,17 +1,17 @@
-import {Stats} from 'fs';
-import {watch, FSWatcher} from 'chokidar';
+import fs from 'fs';
+import chokidar from 'chokidar';
 import {ISessionParameters, ISessionConfiguration} from './types';
-import {getConfiguration} from './getConfiguration';
-import {write} from './write';
+import {getSessionConfiguration} from './getSessionConfiguration';
+import {write} from '../util/write';
 
 export class Session {
 
     public readonly configuration: Readonly<ISessionConfiguration>
 
-    protected watcher?: FSWatcher
+    protected watcher?: chokidar.FSWatcher
 
     public constructor(parameters: ISessionParameters) {
-        this.configuration = getConfiguration(parameters);
+        this.configuration = getSessionConfiguration(parameters);
     }
 
     public async start(): Promise<void> {
@@ -24,7 +24,7 @@ export class Session {
 
     protected async startWatcher(): Promise<void> {
         this.stopWatcher();
-        this.watcher = watch(
+        this.watcher = chokidar.watch(
             this.configuration.path.slice(),
             this.configuration.chokidar,
         )
@@ -70,7 +70,7 @@ export class Session {
     protected onFileEvent(
         eventName: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir',
         path: string,
-        stats: Stats,
+        stats: fs.Stats,
     ): void {
         this.log(`[${eventName}] ${path}`);
         switch (eventName) {
@@ -89,14 +89,14 @@ export class Session {
 
     protected onAdd(
         path: string,
-        stats: Stats,
+        stats: fs.Stats,
     ): void {
         return this.onChange(path, stats);
     }
 
     protected onChange(
         path: string,
-        stats: Stats,
+        stats: fs.Stats,
     ): void {
         if (this.configuration) {
             path.slice(stats.size);
@@ -105,7 +105,7 @@ export class Session {
 
     protected onUnlink(
         path: string,
-        stats: Stats,
+        stats: fs.Stats,
     ): void {
         if (this.configuration) {
             path.slice(stats.size);

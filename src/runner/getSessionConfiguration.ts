@@ -1,10 +1,7 @@
-import {
-    ISessionConfiguration,
-    ISessionParameters,
-} from './types';
-import {ensureArray} from './ensureArray';
+import {ISessionConfiguration, ISessionParameters} from './types';
+import {ensureArray} from '../util/ensureArray';
 
-export const getConfiguration = (
+export const getSessionConfiguration = (
     {
         include,
         exclude,
