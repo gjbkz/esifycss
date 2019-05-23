@@ -1,8 +1,8 @@
-export const ensureArray = <T>(
-    arg: Array<T> | T | undefined | null,
-): Array<T> => {
+export const ensureArray = <TType>(
+    arg: Array<TType> | TType | undefined | null,
+): Array<TType> => {
     if (Array.isArray(arg)) {
-        return arg;
+        return arg.slice();
     }
-    return arg ? [arg] : [];
+    return typeof arg === 'undefined' || arg === null ? [] : [arg];
 };

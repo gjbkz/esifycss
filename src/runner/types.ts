@@ -1,7 +1,7 @@
-import anymatch from 'anymatch';
-import chokidar from 'chokidar';
-import postcss from 'postcss';
-import stream from 'stream';
+import * as anymatch from 'anymatch';
+import * as chokidar from 'chokidar';
+import * as postcss from 'postcss';
+import * as stream from 'stream';
 
 export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
     awaitWriteFinish?: Readonly<chokidar.AwaitWriteFinishOptions> | boolean,

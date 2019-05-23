@@ -7,7 +7,7 @@
         "email": "kei.itof@gmail.com",
         "url": "https://github.com/kei-ito"
     },
-    "license": "MIT",
+    "license": "Apache-2.0",
     "engines": {
         "node": ">=8"
     },
@@ -15,6 +15,14 @@
     "main": "lib/index.js",
     "bin": {
         "esifycss": "bin/esifycss"
+    },
+    "scripts": {
+        "lint": "eslint --ext .ts src test",
+        "build": "tsc",
+        "test": "ava src/**/*.test.ts",
+        "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
+        "version:add": "git add .",
+        "version": "npm-run-all --sequential version:changelog version:add"
     },
     "dependencies": {
         "@types/anymatch": "^1.3.1",
@@ -40,13 +48,6 @@
         "ts-node": "^8.1.0",
         "typescript": "^3.4.5"
     },
-    "scripts": {
-        "lint": "eslint bin/esifycss lib test",
-        "test": "tap --coverage test/*/test.js",
-        "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
-        "version:add": "git add .",
-        "version": "npm-run-all --sequential version:changelog version:add"
-    },
     "ava": {
         "compileEnhancements": false,
         "extensions": [
@@ -61,17 +62,7 @@
         "env": {
             "es6": true,
             "node": true
-        },
-        "overrides": [
-            {
-                "files": [
-                    "*.ts"
-                ],
-                "rules": {
-                    "@typescript-eslint/no-require-imports": "off"
-                }
-            }
-        ]
+        }
     },
     "commitlint": {
         "extends": [

@@ -1,14 +1,14 @@
-import fs from 'fs';
-import chokidar from 'chokidar';
+import * as fs from 'fs';
+import * as chokidar from 'chokidar';
 import {ISessionParameters, ISessionConfiguration} from './types';
 import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 
 export class Session {
 
-    public readonly configuration: Readonly<ISessionConfiguration>
+    public readonly configuration: Readonly<ISessionConfiguration>;
 
-    protected watcher?: chokidar.FSWatcher
+    protected watcher?: chokidar.FSWatcher;
 
     public constructor(parameters: ISessionParameters) {
         this.configuration = getSessionConfiguration(parameters);
@@ -24,17 +24,18 @@ export class Session {
 
     protected async startWatcher(): Promise<void> {
         this.stopWatcher();
-        this.watcher = chokidar.watch(
+        const watcher = chokidar.watch(
             this.configuration.path.slice(),
             this.configuration.chokidar,
         )
         .on('error', this.onError.bind(this))
         .on('all', this.onFileEvent.bind(this));
+        this.watcher = watcher;
         await new Promise<void>((resolve, reject): void => {
-            this.watcher
+            watcher
             .once('error', reject)
             .once('ready', (): void => {
-                this.watcher.removeListener('error', reject);
+                watcher.removeListener('error', reject);
                 this.onInitialScanCompletion()
                 .then(resolve)
                 .catch(this.onError.bind(this));

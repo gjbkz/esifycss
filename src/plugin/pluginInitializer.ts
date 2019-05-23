@@ -1,10 +1,8 @@
-import postcss = require('postcss');
+import * as postcss from 'postcss';
 import {IPluginParameter} from './types';
 import {getPluginConfiguration} from './getPluginConfiguration';
 
-export const createTransformer = (
-    parameters: IPluginParameter,
-): postcss.Transformer => {
+export const pluginInitializer: postcss.PluginInitializer<IPluginParameter> = (parameters?: IPluginParameter) => {
     const {
         output,
         mangler,
@@ -13,6 +11,7 @@ export const createTransformer = (
         root: postcss.Root,
         result: postcss.Result,
     ): Promise<void> => {
-
+        await process.stdout.write(JSON.stringify({output, mangler}, null, 2));
+        await process.stdout.write(JSON.stringify({root, result}, null, 2));
     };
 };

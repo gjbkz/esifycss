@@ -1,6 +1,6 @@
 import {ICSSParserParameters, ICSSParserConfigurations} from './types';
-import {readFile} from '../util/readFile';
-import {plugin} from '../plugin';
+import {plugin} from '../plugin/plugin';
+import {readFile} from '../util/fs';
 
 export const getCSSParserConfiguration = async (
     {

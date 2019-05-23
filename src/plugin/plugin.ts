@@ -1,3 +1,3 @@
-import postcss = require('postcss');
-import {createTransformer} from './createTransformer';
-export const plugin = postcss.plugin('esifycss', createTransformer);
+import * as postcss from 'postcss';
+import {pluginInitializer} from './pluginInitializer';
+export const plugin = postcss.plugin('esifycss', pluginInitializer);

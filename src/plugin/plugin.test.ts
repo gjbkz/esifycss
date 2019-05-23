@@ -1,6 +1,6 @@
 import test from 'ava';
 import {plugin} from './plugin';
-import postcss = require('postcss');
+import * as postcss from 'postcss';
 
 test('plugin', async (t): Promise<void> => {
     const css = '.foo{bar:baz}';

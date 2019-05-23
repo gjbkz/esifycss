@@ -9,8 +9,7 @@ export const getPluginOutput = (
     output: IPluginParameter['output'],
 ): IPluginOutput => {
     if (typeof output === 'string') {
-        return async (roots): Promise<void> => {
-
+        return async (_roots): Promise<void> => {
         };
     }
     if (typeof output === 'function') {
@@ -20,7 +19,7 @@ export const getPluginOutput = (
 };
 
 export const getPluginMangler = (
-    mangle: boolean,
+    _mangle?: boolean,
 ): IPluginMangler => (
     id: string,
     className: string,

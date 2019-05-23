@@ -1,4 +1,4 @@
-import postcss = require('postcss');
+import * as postcss from 'postcss';
 import {ICSSParserParameters} from './types';
 import {getCSSParserConfiguration} from './getCSSParserConfiguration';
 

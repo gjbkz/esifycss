@@ -8,13 +8,14 @@ export const createIdentifier = (
     return (
         key: string,
     ): number => {
-        if (!knownIds.has(key)) {
-            const newId = count++;
-            knownIds.set(key, newId);
+        let id = knownIds.get(key);
+        if (typeof id === 'undefined') {
+            id = count++;
+            knownIds.set(key, id);
             if (listener) {
-                listener(key, newId);
+                listener(key, id);
             }
         }
-        return knownIds.get(key);
+        return id;
     };
 };
