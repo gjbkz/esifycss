@@ -1,33 +1,26 @@
 import {
     IPluginParameter,
     IPluginConfiguration,
-    IPluginOutput,
     IPluginMangler,
 } from './types';
-
-export const getPluginOutput = (
-    output: IPluginParameter['output'],
-): IPluginOutput => {
-    if (typeof output === 'string') {
-        return async (_roots): Promise<void> => {
-        };
-    }
-    if (typeof output === 'function') {
-        return output;
-    }
-    return (): void => {};
-};
+import {createIdentifier} from './createIdentifier';
 
 export const getPluginMangler = (
-    _mangle?: boolean,
-): IPluginMangler => (
-    id: string,
-    className: string,
-): string => `_${id}_${className}`;
+    {
+        mangle = false,
+        identifier = createIdentifier(),
+    }: IPluginParameter,
+): IPluginMangler => {
+    if (mangle) {
+        return (id, type, name) => `_${identifier(`${id}-${type}-${name}`).toString(36)}`;
+    } else {
+        return (id, type, name) => `${id}-${type}-${name}`
+        .replace(/[^\w]/g, (c) => `_${c.codePointAt(0)}`);
+    }
+};
 
 export const getPluginConfiguration = (
     parameters: IPluginParameter = {},
 ): IPluginConfiguration => ({
-    output: getPluginOutput(parameters.output),
-    mangler: parameters.mangler || getPluginMangler(parameters.mangle),
+    mangler: parameters.mangler || getPluginMangler(parameters),
 });

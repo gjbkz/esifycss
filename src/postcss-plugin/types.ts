@@ -1,5 +1,3 @@
-import * as postcss from 'postcss';
-
 export interface IIdentifier {
     (key: string): number,
 }
@@ -11,31 +9,42 @@ export interface IIdListener {
     ): void,
 }
 
-export interface IPluginOutput {
-    (roots: Array<postcss.Root>): void | Promise<void>,
-}
-
 export interface IPluginMangler {
-    (id: string, className: string): string,
+    (
+        id: string,
+        type: string,
+        name: string,
+    ): string,
 }
 
 export interface IPluginParameter {
-    /**
-     * A path to concatenated css.
-     */
-    output?: string | IPluginOutput,
     /**
      * When it is true, this plugin minifies classnames.
      */
     mangle?: boolean,
     /**
-     * See the mangler section below. If it is set, the `mangle`
-     * option is ignored.
+     * A function returns an unique number from a given file id.
+     */
+    identifier?: IIdentifier,
+    /**
+     * See the mangler section below. If it is set, `mangle`
+     * and `identifier` options are ignored.
      */
     mangler?: IPluginMangler,
 }
 
 export interface IPluginConfiguration {
-    readonly output: IPluginOutput,
     readonly mangler: IPluginMangler,
+}
+
+export interface IEsifyCSSResult {
+    class: {
+        [name: string]: string | undefined,
+    },
+    id: {
+        [name: string]: string | undefined,
+    },
+    keyframes: {
+        [name: string]: string | undefined,
+    },
 }

@@ -1,10 +1,21 @@
-# esifycss
+# EsifyCSS
 
 [![CircleCI](https://circleci.com/gh/kei-ito/esifycss.svg?style=svg)](https://circleci.com/gh/kei-ito/esifycss)
 [![Build Status](https://travis-ci.com/kei-ito/esifycss.svg?branch=master)](https://travis-ci.com/kei-ito/esifycss)
 [![codecov](https://codecov.io/gh/kei-ito/esifycss/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/esifycss)
 
 Generates modules from CSS.
+
+EsifyCSS consists of a **PostCSS plugin** and a **Runner**.
+
+## PostCSS plugin
+
+The plugin converts the identifiers in CSS and minifies them.
+It outputs the result of minifications.
+
+## Runner
+
+A runner searches `.css` files in your project and process them with PostCSS.
 
 ## How it works
 
