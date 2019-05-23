@@ -51,8 +51,8 @@ workflows:
             branches: {ignore: master}
             tags: {ignore: /.*/}
       - build: {requires: [onBranch]}
-      - lint: {requires: [onBranch]}
       - test: {requires: [build]}
+      - lint: {requires: [build]}
   release:
     jobs:
       - isTagged:
@@ -64,12 +64,12 @@ workflows:
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
-      - lint:
-          requires: [isTagged]
+      - test:
+          requires: [build]
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
-      - test:
+      - lint:
           requires: [build]
           filters:
             branches: {ignore: /.*/}
