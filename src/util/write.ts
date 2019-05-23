@@ -1,5 +1,6 @@
 import * as util from 'util';
 import * as stream from 'stream';
+
 export const write = (
     stream: stream.Writable,
     messages: Array<Parameters<typeof util.inspect>[0]>,

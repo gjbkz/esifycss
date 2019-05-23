@@ -4,7 +4,6 @@ import {createDirectoryFor} from './createDirectoryFor';
 
 export const readFile = util.promisify(fs.readFile);
 export const stat = util.promisify(fs.stat);
-
 export const writeFile = (
     dest: string,
     data: string | Buffer,

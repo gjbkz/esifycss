@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
 export const createDirectoryFor = (filePath: string) => {
     const directory = path.dirname(filePath);
     try {
