@@ -17,7 +17,7 @@
         "esifycss": "bin/esifycss"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src test",
+        "lint": "eslint --ext .ts src",
         "build": "tsc",
         "test": "ava src/**/*.test.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
