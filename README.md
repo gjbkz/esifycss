@@ -1,6 +1,7 @@
 # esifycss
 
-[![Build Status](https://travis-ci.org/kei-ito/esifycss.svg?branch=master)](https://travis-ci.org/kei-ito/esifycss)
+[![CircleCI](https://circleci.com/gh/kei-ito/esifycss.svg?style=svg)](https://circleci.com/gh/kei-ito/esifycss)
+[![Build Status](https://travis-ci.com/kei-ito/esifycss.svg?branch=master)](https://travis-ci.com/kei-ito/esifycss)
 [![codecov](https://codecov.io/gh/kei-ito/esifycss/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/esifycss)
 
 Generates modules from CSS.
