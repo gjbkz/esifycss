@@ -1,5 +1,4 @@
 export * from './postcss-plugin/createIdentifier';
-export * from './postcss-plugin/pluginInitializer';
 export * from './postcss-plugin/getDependencies';
 export * from './postcss-plugin/getPluginConfiguration';
 export * from './postcss-plugin/plugin';
