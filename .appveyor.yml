@@ -1,0 +1,13 @@
+environment:
+  matrix:
+    # - nodejs_version: '12'
+    - nodejs_version: '10'
+cache:
+  - node_modules
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - npm ci
+test_script:
+  - npm run build
+  - npm run test
+build: 'off'
