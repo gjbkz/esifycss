@@ -1,5 +1,7 @@
 import * as postcss from 'postcss';
 import {IEsifyCSSResult} from './types';
+import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
+import {serializeCSSAnimationShorthand} from '../parser/serializeAnimationShorthand';
 
 export const transformDeclarations = (
     root: postcss.Root,
@@ -13,7 +15,12 @@ export const transformDeclarations = (
                 declaration.value = renamed;
             }
         } else if (prop === 'animation') {
-            console.log(declaration);
+            const animation = parseAnimationShorthand(declaration.value);
+            const renamed = transformResult.keyframes[animation.name];
+            if (renamed) {
+                animation.name = renamed;
+                declaration.value = serializeCSSAnimationShorthand(animation);
+            }
         }
     });
 };

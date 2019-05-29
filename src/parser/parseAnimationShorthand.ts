@@ -9,7 +9,7 @@ import {forEachProperty} from './forEachProperty';
 import {compileOverwrites} from './compileOverwrites';
 const tokenizeAnimation = createTokenizerFromNormalizedRuleList(CSSAnimationRules);
 
-export const parseCSSAnimationShorthand = (
+export const parseAnimationShorthand = (
     input: string,
 ): ICSSAnimation => {
     const result = tokenizeAnimation(input, 'SingleAnimation', 0, () => {});

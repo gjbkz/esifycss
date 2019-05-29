@@ -1,5 +1,5 @@
 import test from 'ava';
-import {parseCSSAnimationShorthand} from './AnimationShorthand';
+import {parseAnimationShorthand} from './parseAnimationShorthand';
 import {
     ICSSAnimation,
     CSSAnimationDirection,
@@ -246,11 +246,11 @@ interface ITest {
     test(`#${index} ${JSON.stringify(input)}`, (t) => {
         if (expected) {
             t.deepEqual(
-                parseCSSAnimationShorthand(input),
+                parseAnimationShorthand(input),
                 expected,
             );
         } else {
-            t.throws(() => parseCSSAnimationShorthand(input));
+            t.throws(() => parseAnimationShorthand(input));
         }
     });
 });
