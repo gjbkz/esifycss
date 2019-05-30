@@ -1,4 +1,4 @@
-import test from 'ava';
+import test, {ThrowsExpectation} from 'ava';
 import {parseAnimationShorthand} from './parseAnimationShorthand';
 import {
     ICSSAnimation,
@@ -20,11 +20,14 @@ const points = {
 
 interface ITest {
     input: string,
-    expected: ICSSAnimation | null,
+    expected: ICSSAnimation | {error: ThrowsExpectation},
 }
 
 ([
-    {input: '', expected: null},
+    {
+        input: '',
+        expected: {error: {message: 'Failed to tokenize SingleAnimation'}},
+    },
     {
         input: '3s none backwards',
         expected: {
@@ -42,11 +45,31 @@ interface ITest {
         },
     },
     {
-        input: '3s none backwards linear',
+        input: '3s 4s none backwards',
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
+            fillMode: CSSAnimationFillMode.none,
+            iterationCount: 1,
+            name: 'backwards',
+            playState: CSSAnimationPlayState.running,
+            timingFunction: {
+                type: CSSTimingFunctionType.cubicBezier,
+                points: points[CSSDefinedCubicBezierName.ease],
+            },
+        },
+    },
+    {
+        input: '3s 4s 5s none backwards',
+        expected: {error: {message: 'Unexpected delay: 5s'}},
+    },
+    {
+        input: '3s 4s none backwards linear',
+        expected: {
+            duration: 3,
+            direction: CSSAnimationDirection.normal,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 1,
             name: 'backwards',
@@ -66,7 +89,7 @@ interface ITest {
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 1,
             name: 'backwards',
@@ -78,11 +101,11 @@ interface ITest {
         },
     })),
     {
-        input: '3s none backwards cubic-bezier(0, 0.1, 0.2, 1)',
+        input: '3s 4s none backwards cubic-bezier(0, 0.1, 0.2, 1)',
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 1,
             name: 'backwards',
@@ -94,11 +117,11 @@ interface ITest {
         },
     },
     {
-        input: `3s none backwards ${CSSDefinedStepName.stepStart}`,
+        input: `3s 4s none backwards ${CSSDefinedStepName.stepStart}`,
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 1,
             name: 'backwards',
@@ -111,11 +134,11 @@ interface ITest {
         },
     },
     {
-        input: `3s none backwards ${CSSDefinedStepName.stepEnd}`,
+        input: `3s 4s none backwards ${CSSDefinedStepName.stepEnd}`,
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 1,
             name: 'backwards',
@@ -139,11 +162,11 @@ interface ITest {
             ...cases,
             ...[2, 20, 200]
             .map<ITest>((stepCount) => ({
-                input: `3s none backwards steps(${stepCount}, ${stepPosition})`,
+                input: `3s 4s none backwards steps(${stepCount}, ${stepPosition})`,
                 expected: {
                     duration: 3,
                     direction: CSSAnimationDirection.normal,
-                    delay: 0,
+                    delay: 4,
                     fillMode: CSSAnimationFillMode.none,
                     iterationCount: 1,
                     name: 'backwards',
@@ -159,11 +182,11 @@ interface ITest {
         [],
     ),
     {
-        input: '3s none backwards steps(5)',
+        input: '3s 4s none backwards steps(5)',
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 1,
             name: 'backwards',
@@ -176,15 +199,15 @@ interface ITest {
         },
     },
     {
-        input: '3s none backwards steps(1, jump-none)',
-        expected: null,
+        input: '3s 4s none backwards steps(1, jump-none)',
+        expected: {error: {message: 'Invalid stepFunction: steps(1, jump-none)'}},
     },
     {
-        input: '3s none backwards steps(5) 5',
+        input: '3s 4s none backwards steps(5) 5',
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.normal,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 5,
             name: 'backwards',
@@ -195,6 +218,10 @@ interface ITest {
                 stepPosition: CSSStepPosition.jumpEnd,
             },
         },
+    },
+    {
+        input: '3s 4s none backwards steps(5) 5 5',
+        expected: {error: {message: 'Unexpected iterationCount: 5'}},
     },
     ...[
         CSSAnimationDirection.alternate,
@@ -207,7 +234,7 @@ interface ITest {
         expected: {
             duration: 3,
             direction,
-            delay: 0,
+            delay: 4,
             fillMode: CSSAnimationFillMode.none,
             iterationCount: 5,
             name: 'backwards',
@@ -226,11 +253,11 @@ interface ITest {
         CSSAnimationFillMode.none,
     ]
     .map((fillMode) => ({
-        input: `3s steps(5) 5 alternate ${fillMode} Foo`,
+        input: `3s 4s steps(5) 5 alternate ${fillMode} Foo`,
         expected: {
             duration: 3,
             direction: CSSAnimationDirection.alternate,
-            delay: 0,
+            delay: 4,
             fillMode,
             iterationCount: 5,
             name: 'Foo',
@@ -243,14 +270,14 @@ interface ITest {
         },
     })),
 ] as Array<ITest>).forEach(({input, expected}, index) => {
-    test(`#${index} ${JSON.stringify(input)}`, (t) => {
-        if (expected) {
+    test(`#${index} ${JSON.stringify(input)}${'error' in expected ? ' → Error' : ''}`, (t) => {
+        if ('error' in expected) {
+            t.throws(() => parseAnimationShorthand(input), expected.error);
+        } else {
             t.deepEqual(
                 parseAnimationShorthand(input),
                 expected,
             );
-        } else {
-            t.throws(() => parseAnimationShorthand(input));
         }
     });
 });

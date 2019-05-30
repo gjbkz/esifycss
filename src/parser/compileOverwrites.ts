@@ -8,45 +8,54 @@ import {getFillMode} from './getFillMode';
 import {getTimingFunction} from './getTimingFunction';
 import {getDirection} from './getDirection';
 
+const overwrite = <TKey extends keyof ICSSAnimation>(
+    key: TKey,
+    value: ICSSAnimation[TKey],
+    overwrites: Partial<ICSSAnimation>,
+    property: INBNFASTRuleNode,
+) => {
+    if (key in overwrites) {
+        throw new Error(`Unexpected ${key}: ${nodeToString(property)}`);
+    }
+    overwrites[key] = value;
+};
+
 export const compileOverwrites = (
     overwrites: Partial<ICSSAnimation>,
     property: INBNFASTRuleNode,
 ) => {
     switch (property.name) {
     case 'Time':
-        if ('delay' in overwrites) {
-            throw new Error(`Unexpected <time>: ${nodeToString(property)}`);
-        }
         if ('duration' in overwrites) {
-            overwrites.delay = timeToNumber(property);
+            overwrite('delay', timeToNumber(property), overwrites, property);
         } else {
-            overwrites.duration = timeToNumber(property);
+            overwrite('duration', timeToNumber(property), overwrites, property);
         }
         break;
     case 'KeyframesName':
-        overwrites.name = nodeToString(property);
+        overwrite('name', nodeToString(property), overwrites, property);
         break;
     case 'SingleAnimationFillMode':
         if ('fillMode' in overwrites) {
-            overwrites.name = nodeToString(property);
+            overwrite('name', nodeToString(property), overwrites, property);
         } else {
-            overwrites.fillMode = getFillMode(nodeToString(property));
+            overwrite('fillMode', getFillMode(nodeToString(property)), overwrites, property);
         }
         break;
     case 'EasingFunction':
         if ('timingFunction' in overwrites) {
-            overwrites.name = nodeToString(property);
+            overwrite('name', nodeToString(property), overwrites, property);
         } else {
-            overwrites.timingFunction = getTimingFunction(property.nodes);
+            overwrite('timingFunction', getTimingFunction(property.nodes), overwrites, property);
         }
         break;
     case 'SingleAnimationIterationCount': {
         const value = nodeToString(property);
-        overwrites.iterationCount = value === 'infinite' ? Infinity : parseInt(value, 10);
+        overwrite('iterationCount', value === 'infinite' ? Infinity : parseInt(value, 10), overwrites, property);
         break;
     }
     case 'SingleAnimationDirection':
-        overwrites.direction = getDirection(nodeToString(property));
+        overwrite('direction', getDirection(nodeToString(property)), overwrites, property);
         break;
     default:
         throw new Error(`Invalid <single-animation>: ${nodeToString(property)}`);

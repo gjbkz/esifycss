@@ -64,7 +64,6 @@ export interface ICSSStepFunction {
 export type ICSSTimingFunction = ICSSLinearFunction | ICSSCubicBezierFunction | ICSSStepFunction;
 
 export interface ICSSAnimation {
-    name: string,
     duration: number,
     timingFunction: ICSSTimingFunction,
     delay: number,
@@ -72,4 +71,5 @@ export interface ICSSAnimation {
     direction: CSSAnimationDirection,
     fillMode: CSSAnimationFillMode,
     playState: CSSAnimationPlayState,
+    name: string,
 }
