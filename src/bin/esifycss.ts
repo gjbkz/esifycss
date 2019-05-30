@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const esifycss = require('..');
-const console = require('console');
-const program = require('commander');
-const packageData = require('../package.json');
+import * as program from 'commander';
+import * as packageData from '../../package.json';
+import {write} from '../util/write';
+import {Session} from '../runner/Session.js';
 
-program
+new program.Command()
 .version(packageData.version)
 .usage('[options] <include ...>')
 .option('--config <path>', 'A path to configuration files.')
@@ -19,8 +19,12 @@ program
 .parse(process.argv);
 
 program.patterns = program.args;
-esifycss[program.watch ? 'watch' : 'start'](program)
-.catch((error) => {
-    console.error(error);
+new Session({
+    include: [],
+    // watch: program.watch,
+})
+.start()
+.catch((error: Error) => {
+    write(process.stderr, [error]);
     process.exit(1);
 });

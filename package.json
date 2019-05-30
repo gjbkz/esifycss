@@ -14,7 +14,7 @@
     "repository": "kei-ito/esify",
     "main": "lib/index.js",
     "bin": {
-        "esifycss": "bin/esifycss"
+        "esifycss": "lib/bin/esifycss"
     },
     "scripts": {
         "lint": "eslint --ext .ts src",
