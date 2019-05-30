@@ -17,7 +17,7 @@ export const serializeTimingFunction = (
         ].find((name) => isSameCubicBezierPoints(
             timingFunction.points,
             knownCubicBezierPoints[name],
-        )) || `cubic-bezier(${timingFunction.points.join('')})`;
+        )) || `cubic-bezier(${timingFunction.points.join(',')})`;
     case CSSTimingFunctionType.step:
         if (timingFunction.stepCount === 1) {
             switch (timingFunction.stepPosition) {
