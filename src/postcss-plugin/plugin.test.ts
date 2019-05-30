@@ -6,7 +6,7 @@ test('plugin', async (t): Promise<void> => {
     const css = [
         '@keyframes aaa {0%{opacity:0}100%{opacity:1}}',
         '.foo:first-child[data-hello=abc]{animation-name: aaa}',
-        '#bar1,#bar2:nth-of-type(2):not([data-hello=abc]){animation: linear aaa 1s}',
+        '#bar1,#bar2:nth-of-type(2):not([data-hello=abc]){animation: linear aaa 1s 123ms}',
     ].join('\n');
     const from = 'a.css';
     const result = await postcss([plugin]).process(css, {from});
