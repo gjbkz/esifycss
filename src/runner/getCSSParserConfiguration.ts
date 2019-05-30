@@ -8,10 +8,11 @@ export const getCSSParserConfiguration = async (
         css,
         plugins = [],
         map = {},
+        parameters = {},
     }: ICSSParserParameters,
 ): Promise<ICSSParserConfigurations> => ({
     css: `${css || await readFile(file)}`,
-    plugins: plugins.concat(plugin),
+    plugins: plugins.concat(plugin(parameters)),
     options: {
         from: file,
         map,

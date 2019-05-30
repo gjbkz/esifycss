@@ -2,6 +2,7 @@ import * as anymatch from 'anymatch';
 import * as chokidar from 'chokidar';
 import * as postcss from 'postcss';
 import * as stream from 'stream';
+import {IPluginParameter} from '../postcss-plugin/types';
 
 export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
     awaitWriteFinish?: Readonly<chokidar.AwaitWriteFinishOptions> | boolean,
@@ -29,6 +30,7 @@ export interface ICSSParserParameters {
     css?: string | Buffer,
     plugins?: Array<postcss.AcceptedPlugin>,
     map?: postcss.SourceMapOptions,
+    parameters?: IPluginParameter,
 }
 
 export interface ICSSParserConfigurations {
