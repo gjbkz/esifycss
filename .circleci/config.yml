@@ -19,8 +19,9 @@ jobs:
     docker: [{image: "circleci/node:lts"}]
     steps:
       - attach_workspace: {at: .}
-      - run: sudo npm install -g nyc codecov
-      - run: nyc npm test
+      - run: sudo npm install -g codecov c8
+      - run: c8 npm test
+      - run: c8 report --reporter=text-lcov > coverage.lcov
       - run: codecov
   lint:
     docker: [{image: "circleci/node:lts"}]
