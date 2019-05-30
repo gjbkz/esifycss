@@ -39,7 +39,7 @@
         "@types/micromatch": "3.1.0",
         "@types/node": "^12.0.3",
         "@typescript-eslint/eslint-plugin": "^1.9.0",
-        "acorn": "6.1.1",
+        "acorn": "^6.1.1",
         "ava": "^1.4.1",
         "conventional-changelog-cli": "^2.0.21",
         "eslint": "^5.16.0",
@@ -64,7 +64,18 @@
         "env": {
             "es6": true,
             "node": true
-        }
+        },
+        "overrides": [
+            {
+                "files": [
+                    "src/dom/**/*.ts"
+                ],
+                "env": {
+                    "node": false,
+                    "browser": true
+                }
+            }
+        ]
     },
     "commitlint": {
         "extends": [

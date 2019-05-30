@@ -1,8 +1,13 @@
 import * as fs from 'fs';
 import * as chokidar from 'chokidar';
+import * as path from 'path';
 import {ISessionParameters, ISessionConfiguration} from './types';
 import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
+import {parseCSS} from './parseCSS';
+import {extractPluginResult} from './extractPluginResult';
+import {writeFile} from '../util/fs';
+import {generateScript} from '../scriptGenerator/generateScript';
 
 export class Session {
 
@@ -91,16 +96,24 @@ export class Session {
     protected onAdd(
         path: string,
         stats: fs.Stats,
-    ): void {
+    ): Promise<void> {
         return this.onChange(path, stats);
     }
 
-    protected onChange(
-        path: string,
+    protected async onChange(
+        filePath: string,
         stats: fs.Stats,
-    ): void {
-        if (this.configuration) {
-            path.slice(stats.size);
+    ): Promise<void> {
+        if (this.configuration && stats.isFile()) {
+            const postcssResult = await parseCSS({
+                ...this.configuration.pluginParameters,
+                file: filePath,
+            });
+            const pluginResult = extractPluginResult(postcssResult);
+            await writeFile(
+                path.join(`${filePath}${this.configuration.ext}`),
+                generateScript(pluginResult, postcssResult.css),
+            );
         }
     }
 

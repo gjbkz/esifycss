@@ -7,6 +7,6 @@ export const write = (
     inspectOptions: util.InspectOptions = {},
 ): void => {
     for (const message of messages) {
-        stream.write(util.inspect(message, inspectOptions));
+        stream.write(typeof message === 'string' ? message : util.inspect(message, inspectOptions));
     }
 };

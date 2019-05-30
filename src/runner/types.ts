@@ -2,7 +2,7 @@ import * as anymatch from 'anymatch';
 import * as chokidar from 'chokidar';
 import * as postcss from 'postcss';
 import * as stream from 'stream';
-import {IPluginParameter} from '../postcss-plugin/types';
+import {IPluginParameter} from '../postcssPlugin/types';
 
 export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
     awaitWriteFinish?: Readonly<chokidar.AwaitWriteFinishOptions> | boolean,
@@ -15,6 +15,8 @@ export interface ISessionParameters {
     chokidar?: chokidar.WatchOptions,
     stdout?: stream.Writable,
     stderr?: stream.Writable,
+    ext?: string,
+    pluginParameters?: IPluginParameter,
 }
 
 export interface ISessionConfiguration {
@@ -23,6 +25,8 @@ export interface ISessionConfiguration {
     readonly chokidar: IReadonlyWatchOptions,
     readonly stdout: stream.Writable,
     readonly stderr: stream.Writable,
+    readonly ext: string,
+    readonly pluginParameters: IPluginParameter,
 }
 
 export interface ICSSParserParameters {

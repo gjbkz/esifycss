@@ -1,5 +1,5 @@
 import {ICSSParserParameters, ICSSParserConfigurations} from './types';
-import {plugin} from '../postcss-plugin/plugin';
+import {plugin} from '../postcssPlugin/plugin';
 import {readFile} from '../util/fs';
 
 export const getCSSParserConfiguration = async (

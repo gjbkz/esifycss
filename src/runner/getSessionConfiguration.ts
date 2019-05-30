@@ -9,6 +9,8 @@ export const getSessionConfiguration = (
         watch = false,
         stdout = process.stdout,
         stderr = process.stderr,
+        ext = '.js',
+        pluginParameters = {},
     }: ISessionParameters,
 ): ISessionConfiguration => ({
     watch,
@@ -22,4 +24,6 @@ export const getSessionConfiguration = (
     },
     stdout,
     stderr,
+    ext,
+    pluginParameters,
 });
