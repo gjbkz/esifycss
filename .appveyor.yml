@@ -3,7 +3,7 @@ cache:
 install:
   - ps: Install-Product node 10
   - npm ci
-  - npm install codecov c8
+  - npm install -g codecov c8
 test_script:
   - npm run build
   - c8 npm run test
