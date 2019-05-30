@@ -200,7 +200,7 @@ interface ITest {
     },
     {
         input: '3s 4s none backwards steps(1, jump-none)',
-        expected: {error: {message: 'Invalid stepFunction: steps(1, jump-none)'}},
+        expected: {error: {message: 'Invalid <step-function>: steps(1, jump-none)'}},
     },
     {
         input: '3s 4s none backwards steps(5) 5',
