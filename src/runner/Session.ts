@@ -15,8 +15,11 @@ export class Session {
 
     protected watcher?: chokidar.FSWatcher;
 
+    protected processedFiles: Set<string>;
+
     public constructor(parameters: ISessionParameters) {
         this.configuration = getSessionConfiguration(parameters);
+        this.processedFiles = new Set();
     }
 
     public async start(): Promise<void> {
@@ -66,6 +69,7 @@ export class Session {
     protected async onInitialScanCompletion(): Promise<void> {
         if (!this.configuration.watch) {
             await this.stop();
+            await this.minify();
         }
     }
 
@@ -114,6 +118,7 @@ export class Session {
                 path.join(`${filePath}${this.configuration.ext}`),
                 generateScript(pluginResult, postcssResult.css),
             );
+            this.processedFiles.add(filePath);
         }
     }
 
@@ -124,6 +129,13 @@ export class Session {
         if (this.configuration) {
             path.slice(stats.size);
         }
+    }
+
+    /**
+     * creates a dictionary and save it into the helper script
+     */
+    protected async minify(): Promise<void> {
+        await this.configuration;
     }
 
 }
