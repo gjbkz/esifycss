@@ -199,6 +199,23 @@ interface ITest {
         },
     },
     {
+        input: '3s 4s none steps(5) ease',
+        expected: {
+            duration: 3,
+            direction: CSSAnimationDirection.normal,
+            delay: 4,
+            fillMode: CSSAnimationFillMode.none,
+            iterationCount: 1,
+            name: 'ease',
+            playState: CSSAnimationPlayState.running,
+            timingFunction: {
+                type: CSSTimingFunctionType.step,
+                stepCount: 5,
+                stepPosition: CSSStepPosition.jumpEnd,
+            },
+        },
+    },
+    {
         input: '3s 4s none backwards steps(1, jump-none)',
         expected: {error: {message: 'Invalid <step-function>: steps(1, jump-none)'}},
     },
