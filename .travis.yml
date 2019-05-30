@@ -1,21 +1,18 @@
 language: node_js
-cache:
-  directories:
-    - $HOME/.npm
-    - node_modules
-os:
-  # - linux
-  - osx
-  # - windows
-node_js:
-  - '12'
-  # - '10'
+cache: 'npm'
+os: 'osx'
+node_js: '12'
 install:
-  - npm install
+  - npm ci
+  - npm install -g codecov c8
 script:
   - npm run build
-  - npm test
-# after_success:
-#   - npm install -g codecov
-#   - tap --coverage-report=text-lcov > coverage.lcov
-#   - codecov
+  - c8 npm test
+  - c8 report --reporter=text-lcov > coverage.lcov
+  - codecov
+  - nvm install 10
+  - node --version
+  - npm run test
+  - nvm install 8
+  - node --version
+  - npm run test
