@@ -1,13 +1,16 @@
-environment:
-  matrix:
-    # - nodejs_version: '12'
-    - nodejs_version: '10'
 cache:
   - node_modules
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node 12
   - npm ci
+  - npm install codecov c8
 test_script:
   - npm run build
+  - c8 npm run test
+  - c8 report --reporter=text-lcov > coverage.lcov
+  - codecov
+  - ps: Install-Product node 10
+  - npm run test
+  - ps: Install-Product node 8
   - npm run test
 build: 'off'
