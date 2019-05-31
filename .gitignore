@@ -1,4 +1,5 @@
 .DS_Store
 node_modules
 lib
+temp
 .nyc_output

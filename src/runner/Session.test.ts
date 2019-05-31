@@ -1,6 +1,5 @@
 import * as path from 'path';
 import anyTest, {TestInterface} from 'ava';
-import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {ISessionParameters} from './types';
 import {writeFile, readFile} from '../util/fs';
 import {Session} from './Session';
@@ -9,8 +8,8 @@ const test = anyTest as TestInterface<{
     directory: string,
 }>;
 
-test.beforeEach(async (t) => {
-    t.context.directory = await createTemporaryDirectory();
+test.beforeEach((t) => {
+    t.context.directory = path.join(__dirname, `../../temp/${Date.now().toString(36)}`);
 });
 
 interface ITest {

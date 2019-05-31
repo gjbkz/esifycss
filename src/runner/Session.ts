@@ -36,7 +36,9 @@ export class Session {
     }
 
     protected async outputHelperScript() {
-        this.helperScript = await generateHelperScript();
+        this.helperScript = await generateHelperScript(
+            this.configuration.output,
+        );
         await writeFile(
             this.configuration.output,
             this.helperScript.content,
