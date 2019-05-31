@@ -68,7 +68,7 @@
         "overrides": [
             {
                 "files": [
-                    "src/dom/**/*.ts"
+                    "src/helper/**/*.ts"
                 ],
                 "env": {
                     "node": false,

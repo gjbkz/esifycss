@@ -8,12 +8,16 @@ import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
 import {writeFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
+import {generateHelperScript} from '../scriptGenerator/generateHelperScript';
+import {IHelperScript} from '../scriptGenerator/types';
 
 export class Session {
 
     public readonly configuration: Readonly<ISessionConfiguration>;
 
     protected watcher?: chokidar.FSWatcher;
+
+    protected helperScript?: IHelperScript;
 
     protected processedFiles: Set<string>;
 
@@ -23,6 +27,11 @@ export class Session {
     }
 
     public async start(): Promise<void> {
+        this.helperScript = await generateHelperScript();
+        await writeFile(
+            this.configuration.output,
+            this.helperScript.content,
+        );
         await this.startWatcher();
     }
 
@@ -108,18 +117,22 @@ export class Session {
         filePath: string,
         stats: fs.Stats,
     ): Promise<void> {
-        if (this.configuration && stats.isFile()) {
-            const postcssResult = await parseCSS({
-                ...this.configuration.pluginParameters,
-                file: filePath,
-            });
-            const pluginResult = extractPluginResult(postcssResult);
-            await writeFile(
-                path.join(`${filePath}${this.configuration.ext}`),
-                generateScript(pluginResult, postcssResult.css),
-            );
-            this.processedFiles.add(filePath);
+        if (!this.helperScript) {
+            throw new Error(`helperScript is ${this.helperScript}`);
         }
+        if (!stats.isFile()) {
+            throw new Error(`${filePath} is not a file.`);
+        }
+        const postcssResult = await parseCSS({
+            ...this.configuration.pluginParameters,
+            file: filePath,
+        });
+        const pluginResult = extractPluginResult(postcssResult);
+        await writeFile(
+            path.join(`${filePath}${path.extname(this.configuration.output)}`),
+            generateScript(this.helperScript, pluginResult, postcssResult.css),
+        );
+        this.processedFiles.add(filePath);
     }
 
     protected onUnlink(

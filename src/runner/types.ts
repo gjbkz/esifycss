@@ -9,23 +9,23 @@ export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
 }
 
 export interface ISessionParameters {
+    output: string,
     include: string | Array<string>,
     exclude?: anymatch.Matcher,
     watch?: boolean,
     chokidar?: chokidar.WatchOptions,
     stdout?: stream.Writable,
     stderr?: stream.Writable,
-    ext?: string,
     pluginParameters?: IPluginParameter,
 }
 
 export interface ISessionConfiguration {
     readonly watch: boolean,
+    readonly output: string,
     readonly path: ReadonlyArray<string>,
     readonly chokidar: IReadonlyWatchOptions,
     readonly stdout: stream.Writable,
     readonly stderr: stream.Writable,
-    readonly ext: string,
     readonly pluginParameters: IPluginParameter,
 }
 

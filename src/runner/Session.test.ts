@@ -42,15 +42,17 @@ interface ITest {
                 file.content.join('\n'),
             );
         }));
+        const output = path.join(t.context.directory, 'output.js');
         const session = new Session({
             ...parameters,
+            output,
             include: files.map((file) => path.join(t.context.directory, file.path)),
         });
         await session.start();
         await Promise.all(files.map(async (file) => {
             const codePath = path.join(
                 t.context.directory,
-                `${file.path}${session.configuration.ext}`,
+                `${file.path}${path.extname(output)}`,
             );
             const code = await readFile(codePath, 'utf8');
             t.truthy(code);
