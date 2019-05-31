@@ -1,30 +1,29 @@
 #!/usr/bin/env node
-
-import * as program from 'commander';
-import * as packageData from '../../package.json';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as commander from 'commander';
 import {write} from '../util/write';
 import {Session} from '../runner/Session.js';
+import {ISessionParameters} from '../runner/types.js';
 
-new program.Command()
+const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8'));
+
+export interface IEsifyCSSCommand extends commander.Command, ISessionParameters {}
+
+export const program = new commander.Command()
 .version(packageData.version)
 .usage('[options] <include ...>')
+.option('--output <path>', 'A path to the helper script.')
 .option('--config <path>', 'A path to configuration files.')
-.option('--dest <path>', 'A path to concatenated css.')
-.option('--watch', 'Watch files and update module automatically.')
-.option('--mangle', 'Minify classnames for production build.')
-.option('--ext <string>', 'An extension of generated modules.')
-.option('--baseDir <path>', 'A path which is used to generate modules to outputDir.')
-.option('--outputDir <path>', 'A path to a directory where modules are generated.')
-.option('--classesOnly', 'If it is true, a CSS file exports classes as default export. Otherwise, {classes, properties} is exported.', Boolean)
-.parse(process.argv);
+.option('--exclude <path ...>', 'Paths or patterns to be excluded.')
+.option('--watch', 'Watch files and update the modules automatically.') as IEsifyCSSCommand;
 
-program.patterns = program.args;
-new Session({
-    include: [],
-    // watch: program.watch,
-})
-.start()
-.catch((error: Error) => {
-    write(process.stderr, [error]);
-    process.exit(1);
-});
+if (!module.parent) {
+    program.parse(process.argv);
+    new Session(program)
+    .start()
+    .catch((error: Error) => {
+        write(process.stderr, [error]);
+        process.exit(1);
+    });
+}
