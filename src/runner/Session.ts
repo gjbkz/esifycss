@@ -92,6 +92,7 @@ export class Session {
         if (!this.initialProcesses) {
             throw new Error(`initialProcesses is ${this.initialProcesses}`);
         }
+        this.log(`Waiting for ${this.initialProcesses.length} processes`);
         await Promise.all(this.initialProcesses);
         this.initialProcesses = null;
     }
