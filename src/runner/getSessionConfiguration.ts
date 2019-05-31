@@ -27,6 +27,7 @@ export const getSessionConfiguration = (
                 ...ensureArray(chokidar.ignored),
                 ...ensureArray(exclude),
             ],
+            ignoreInitial: false,
         },
         stdout,
         stderr,
