@@ -19,7 +19,7 @@
     "scripts": {
         "lint": "eslint --ext .ts src",
         "build": "tsc",
-        "test": "ava lib/**/*.test.js",
+        "test": "ava -v lib/**/*.test.js",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "npm-run-all --sequential version:changelog version:add"
