@@ -27,16 +27,20 @@ export class Session {
     }
 
     public async start(): Promise<void> {
-        this.helperScript = await generateHelperScript();
-        await writeFile(
-            this.configuration.output,
-            this.helperScript.content,
-        );
+        await this.outputHelperScript();
         await this.startWatcher();
     }
 
     public async stop(): Promise<void> {
         await this.stopWatcher();
+    }
+
+    protected async outputHelperScript() {
+        this.helperScript = await generateHelperScript();
+        await writeFile(
+            this.configuration.output,
+            this.helperScript.content,
+        );
     }
 
     protected async startWatcher(): Promise<void> {
@@ -78,7 +82,6 @@ export class Session {
     protected async onInitialScanCompletion(): Promise<void> {
         if (!this.configuration.watch) {
             await this.stop();
-            await this.minify();
         }
     }
 
@@ -142,13 +145,6 @@ export class Session {
         if (this.configuration) {
             path.slice(stats.size);
         }
-    }
-
-    /**
-     * creates a dictionary and save it into the helper script
-     */
-    protected async minify(): Promise<void> {
-        await this.configuration;
     }
 
 }
