@@ -8,6 +8,8 @@ export const readdir = util.promisify(fs.readdir);
 export const mkdir = util.promisify(fs.mkdir);
 export const readFile = util.promisify(fs.readFile);
 export const stat = util.promisify(fs.stat);
+export const unlink = util.promisify(fs.unlink);
+export const rmdir = util.promisify(fs.rmdir);
 export const writeFile = (
     dest: string,
     data: string | Buffer,
