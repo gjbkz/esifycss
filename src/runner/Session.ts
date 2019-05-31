@@ -21,12 +21,12 @@ export class Session {
 
     protected processedFiles: Set<string>;
 
-    protected initialProcesses: Array<Promise<void>> | null;
+    protected initialTask: Array<Promise<void>> | null;
 
     public constructor(parameters: ISessionParameters) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
-        this.initialProcesses = null;
+        this.initialTask = null;
     }
 
     public async start(): Promise<void> {
@@ -50,23 +50,44 @@ export class Session {
 
     protected async startWatcher(): Promise<void> {
         this.stopWatcher();
-        this.initialProcesses = [];
-        const watcher = chokidar.watch(
+        this.initialTask = [];
+        this.watcher = chokidar.watch(
             this.configuration.path.slice(),
             this.configuration.chokidar,
         )
         .on('error', this.onError.bind(this))
         .on('all', this.onFileEvent.bind(this));
-        this.watcher = watcher;
-        await new Promise<void>((resolve, reject): void => {
-            watcher
-            .once('error', reject)
-            .once('ready', (): void => {
-                watcher.removeListener('error', reject);
-                this.onInitialScanCompletion()
-                .then(resolve)
-                .catch(this.onError.bind(this));
-            });
+        await this.waitForInitialTaskCompletion();
+        await this.onInitialScanCompletion();
+    }
+
+    protected waitForInitialTaskCompletion(): Promise<void> {
+        const {watcher} = this;
+        if (!watcher) {
+            throw new Error(`watcher is ${watcher}`);
+        }
+        return new Promise<void>((resolve, reject): void => {
+            const check = () => {
+                const currentProcesses = (this.initialTask || []).slice();
+                new Promise((resolve) => setTimeout(resolve, 500))
+                .then(() => Promise.all(currentProcesses))
+                .then(() => {
+                    if (this.initialTask) {
+                        const done = new WeakSet(currentProcesses);
+                        const filtered = this.initialTask.filter((process) => !done.has(process));
+                        this.initialTask = 0 < filtered.length ? filtered : null;
+                    }
+                    if (this.initialTask) {
+                        check();
+                    } else {
+                        watcher.removeListener('error', reject);
+                        resolve();
+                    }
+                })
+                .catch(reject);
+            };
+            watcher.once('error', reject);
+            check();
         });
     }
 
@@ -89,12 +110,10 @@ export class Session {
         if (!this.configuration.watch) {
             await this.stop();
         }
-        if (!this.initialProcesses) {
-            throw new Error(`initialProcesses is ${this.initialProcesses}`);
+        if (this.initialTask) {
+            throw new Error(`initialTask should be null: ${this.initialTask}`);
         }
-        this.log(`Waiting for ${this.initialProcesses.length} processes`);
-        await Promise.all(this.initialProcesses);
-        this.initialProcesses = null;
+        this.initialTask = null;
     }
 
     protected onError(error: Error): void {
@@ -110,8 +129,8 @@ export class Session {
         switch (eventName) {
         case 'add': {
             const promise = this.onAdd(path, stats);
-            if (this.initialProcesses) {
-                this.initialProcesses.push(promise);
+            if (this.initialTask) {
+                this.initialTask.push(promise);
             }
             break;
         }
