@@ -21,9 +21,12 @@ export class Session {
 
     protected processedFiles: Set<string>;
 
+    protected initialProcesses: Array<Promise<void>> | null;
+
     public constructor(parameters: ISessionParameters) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
+        this.initialProcesses = null;
     }
 
     public async start(): Promise<void> {
@@ -47,6 +50,7 @@ export class Session {
 
     protected async startWatcher(): Promise<void> {
         this.stopWatcher();
+        this.initialProcesses = [];
         const watcher = chokidar.watch(
             this.configuration.path.slice(),
             this.configuration.chokidar,
@@ -85,6 +89,11 @@ export class Session {
         if (!this.configuration.watch) {
             await this.stop();
         }
+        if (!this.initialProcesses) {
+            throw new Error(`initialProcesses is ${this.initialProcesses}`);
+        }
+        await Promise.all(this.initialProcesses);
+        this.initialProcesses = null;
     }
 
     protected onError(error: Error): void {
@@ -98,9 +107,13 @@ export class Session {
     ): void {
         this.log(`[${eventName}] ${path}`);
         switch (eventName) {
-        case 'add':
-            this.onAdd(path, stats);
+        case 'add': {
+            const promise = this.onAdd(path, stats);
+            if (this.initialProcesses) {
+                this.initialProcesses.push(promise);
+            }
             break;
+        }
         case 'change':
             this.onChange(path, stats);
             break;

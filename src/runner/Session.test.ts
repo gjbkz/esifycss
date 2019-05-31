@@ -3,13 +3,14 @@ import anyTest, {TestInterface} from 'ava';
 import {ISessionParameters} from './types';
 import {writeFile, readFile} from '../util/fs';
 import {Session} from './Session';
+import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 
 const test = anyTest as TestInterface<{
     directory: string,
 }>;
 
-test.beforeEach((t) => {
-    t.context.directory = path.join(__dirname, `../../temp/${Date.now().toString(36)}`);
+test.beforeEach(async (t) => {
+    t.context.directory = await createTemporaryDirectory();
 });
 
 interface ITest {
