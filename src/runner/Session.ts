@@ -66,17 +66,24 @@ export class Session {
         if (!watcher) {
             throw new Error(`watcher is ${watcher}`);
         }
+        this.log('waitForInitialTaskCompletion');
         return new Promise<void>((resolve, reject): void => {
             const check = () => {
+                this.log('waitForInitialTaskCompletion:check');
                 const currentProcesses = (this.initialTask || []).slice();
                 new Promise((resolve) => setTimeout(resolve, 500))
-                .then(() => Promise.all(currentProcesses))
                 .then(() => {
+                    this.log('waitForInitialTaskCompletion:task');
+                    return Promise.all(currentProcesses);
+                })
+                .then(() => {
+                    this.log('waitForInitialTaskCompletion:done');
                     if (this.initialTask) {
                         const done = new WeakSet(currentProcesses);
                         const filtered = this.initialTask.filter((process) => !done.has(process));
                         this.initialTask = 0 < filtered.length ? filtered : null;
                     }
+                    this.log(`waitForInitialTaskCompletion:${this.initialTask}`);
                     if (this.initialTask) {
                         check();
                     } else {
@@ -161,15 +168,18 @@ export class Session {
         if (!stats.isFile()) {
             throw new Error(`${filePath} is not a file.`);
         }
+        this.log('onChange:postcss');
         const postcssResult = await parseCSS({
             ...this.configuration.pluginParameters,
             file: filePath,
         });
+        this.log('onChange:esifycss');
         const pluginResult = extractPluginResult(postcssResult);
         await writeFile(
             path.join(`${filePath}${path.extname(this.configuration.output)}`),
             generateScript(this.helperScript, pluginResult, postcssResult.css),
         );
+        this.log('onChange:written');
         this.processedFiles.add(filePath);
     }
 
