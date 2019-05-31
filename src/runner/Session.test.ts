@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as acorn from 'acorn';
 import anyTest, {TestInterface} from 'ava';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {ISessionParameters} from './types';
@@ -56,9 +55,6 @@ interface ITest {
             );
             const code = await readFile(codePath, 'utf8');
             t.truthy(code);
-            const ast = acorn.parse(code, {sourceType: 'module'});
-            t.truthy(ast);
-            t.log(code);
         }));
     });
 });
