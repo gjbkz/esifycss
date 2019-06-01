@@ -67,7 +67,8 @@
         "overrides": [
             {
                 "files": [
-                    "src/helper/**/*"
+                    "src/helper/**/*",
+                    "test/*/src/*"
                 ],
                 "env": {
                     "node": false,
