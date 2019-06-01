@@ -38,9 +38,9 @@ const spawn = (
 
 const testDirectories = fs.readdirSync(__dirname)
 .map((name) => path.join(__dirname, name))
-.filter((filePath) => {
+.filter((testDirectory) => {
     try {
-        return fs.statSync(path.join(filePath, 'pacakge.json')).isFile();
+        return fs.statSync(path.join(testDirectory, 'package.json')).isFile();
     } catch (error) {
         return false;
     }
@@ -55,5 +55,7 @@ for (const testDirectory of testDirectories) {
         await spawn({command: 'npm install', options});
         await spawn({command: 'npm run build', options});
         t.is(typeof options, 'object');
+        const outputDirectory = path.join(testDirectory, 'output');
+        t.true(fs.statSync(outputDirectory).isDirectory());
     });
 }
