@@ -28,6 +28,7 @@ export const getSessionConfiguration = (
                 ...ensureArray(exclude),
             ],
             ignoreInitial: false,
+            useFsEvents: false,
         },
         stdout,
         stderr,

@@ -11,8 +11,6 @@ script:
   - c8 report --reporter=text-lcov > coverage.lcov
   - codecov
   - nvm install 10
-  - sleep 3
   - npm run test
   - nvm install 8
-  - sleep 3
   - npm run test
