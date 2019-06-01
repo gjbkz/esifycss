@@ -10,6 +10,7 @@ import {writeFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
 import {generateHelperScript} from '../scriptGenerator/generateHelperScript';
 import {IHelperScript} from '../scriptGenerator/types';
+import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 
 export class Session {
 
@@ -57,38 +58,12 @@ export class Session {
         )
         .on('error', this.onError.bind(this))
         .on('all', this.onFileEvent.bind(this));
-        await this.waitForInitialTaskCompletion();
-        await this.onInitialScanCompletion();
-    }
-
-    protected waitForInitialTaskCompletion(): Promise<void> {
-        const {watcher} = this;
-        if (!watcher) {
-            throw new Error(`watcher is ${watcher}`);
+        await waitForInitialScanCompletion(this.watcher);
+        await Promise.all(this.initialTask);
+        this.initialTask = null;
+        if (!this.configuration.watch) {
+            await this.stop();
         }
-        return new Promise<void>((resolve, reject): void => {
-            const check = () => {
-                const currentProcesses = (this.initialTask || []).slice();
-                new Promise((resolve) => setTimeout(resolve, 500))
-                .then(() => Promise.all(currentProcesses))
-                .then(() => {
-                    if (this.initialTask) {
-                        const done = new WeakSet(currentProcesses);
-                        const filtered = this.initialTask.filter((process) => !done.has(process));
-                        this.initialTask = 0 < filtered.length ? filtered : null;
-                    }
-                    if (this.initialTask) {
-                        check();
-                    } else {
-                        watcher.removeListener('error', reject);
-                        resolve();
-                    }
-                })
-                .catch(reject);
-            };
-            watcher.once('error', reject);
-            check();
-        });
     }
 
     protected log(...messages: Parameters<typeof write>[1]): void {
@@ -104,16 +79,6 @@ export class Session {
             this.watcher.close();
             delete this.watcher;
         }
-    }
-
-    protected async onInitialScanCompletion(): Promise<void> {
-        if (!this.configuration.watch) {
-            await this.stop();
-        }
-        if (this.initialTask) {
-            throw new Error(`initialTask should be null: ${this.initialTask}`);
-        }
-        this.initialTask = null;
     }
 
     protected onError(error: Error): void {
