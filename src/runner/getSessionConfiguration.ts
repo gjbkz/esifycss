@@ -3,35 +3,26 @@ import {ISessionConfiguration, ISessionParameters} from './types';
 import {ensureArray} from '../util/ensureArray';
 
 export const getSessionConfiguration = (
-    {
-        output,
-        include,
-        exclude,
-        chokidar = {},
-        watch = false,
-        stdout = process.stdout,
-        stderr = process.stderr,
-        pluginParameters = {},
-    }: ISessionParameters,
+    parameters: ISessionParameters,
 ): ISessionConfiguration => {
-    if (!path.extname(output)) {
-        throw new Error(`output should have an extension (e.g. ".js", ".ts"): ${output}`);
+    if (!path.extname(parameters.output)) {
+        throw new Error(`output should have an extension (e.g. ".js", ".ts"): ${parameters.output}`);
     }
     return {
-        watch,
-        output,
-        path: ensureArray(include),
+        watch: Boolean(parameters.watch),
+        output: parameters.output,
+        path: ensureArray(parameters.include),
         chokidar: {
-            ...chokidar,
+            ...parameters.chokidar,
             ignored: [
-                ...ensureArray(chokidar.ignored),
-                ...ensureArray(exclude),
+                ...ensureArray(parameters.chokidar && parameters.chokidar.ignored),
+                ...ensureArray(parameters.exclude),
             ],
             ignoreInitial: false,
             useFsEvents: false,
         },
-        stdout,
-        stderr,
-        pluginParameters,
+        stdout: parameters.stdout || process.stdout,
+        stderr: parameters.stderr || process.stderr,
+        pluginParameters: parameters.pluginParameters || {},
     };
 };

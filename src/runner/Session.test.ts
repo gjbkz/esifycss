@@ -35,12 +35,10 @@ interface ITest {
     },
 ] as Array<ITest>).forEach(({parameters, files}, index) => {
     test(`#${index}`, async (t) => {
-        await Promise.all(files.map(async (file) => {
-            await writeFile(
-                path.join(t.context.directory, file.path),
-                file.content.join('\n'),
-            );
-        }));
+        await Promise.all(files.map((file) => writeFile(
+            path.join(t.context.directory, file.path),
+            file.content.join('\n'),
+        )));
         const output = path.join(t.context.directory, 'output.js');
         const session = new Session({
             ...parameters,

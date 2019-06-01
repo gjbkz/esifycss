@@ -8,31 +8,19 @@ interface ITest {
 
 ([
     {
-        input: [
-            [0, 1, 2, 3],
-            [0, 1, 2, 3],
-        ],
+        input: [[0, 1, 2, 3], [0, 1, 2, 3]],
         expected: true,
     },
     {
-        input: [
-            [0, 1, 2, 3],
-            [0, 1, 2, 4],
-        ],
+        input: [[0, 1, 2, 3], [0, 1, 2, 4]],
         expected: false,
     },
     {
-        input: [
-            [0, 1, 2, 3],
-            undefined,
-        ],
+        input: [[0, 1, 2, 3], undefined],
         expected: false,
     },
     {
-        input: [
-            undefined,
-            undefined,
-        ],
+        input: [undefined, undefined],
         expected: false,
     },
 ] as Array<ITest>).forEach(({input, expected}) => {

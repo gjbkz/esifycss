@@ -6,7 +6,6 @@ import {write} from './write';
 
 export const readdir = util.promisify(fs.readdir);
 export const mkdtemp = util.promisify(fs.mkdtemp);
-export const realpath = util.promisify(fs.realpath);
 export const mkdir = util.promisify(fs.mkdir);
 export const readFile = util.promisify(fs.readFile);
 export const stat = util.promisify(fs.stat);

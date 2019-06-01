@@ -1,6 +1,8 @@
 import {CSSAnimationDirection} from './types';
 
-export const getDirection = (input: string): CSSAnimationDirection => {
+export const getDirection = (
+    input: string,
+): CSSAnimationDirection => {
     switch (input) {
     case CSSAnimationDirection.alternate:
         return CSSAnimationDirection.alternate;

@@ -20,9 +20,7 @@ export const program = new commander.Command()
 
 if (!module.parent) {
     program.parse(process.argv);
-    new Session(program)
-    .start()
-    .catch((error: Error) => {
+    new Session(program).start().catch((error: Error) => {
         write(process.stderr, [error]);
         process.exit(1);
     });

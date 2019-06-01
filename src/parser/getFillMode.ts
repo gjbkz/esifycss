@@ -1,6 +1,8 @@
 import {CSSAnimationFillMode} from './types';
 
-export const getFillMode = (input: string): CSSAnimationFillMode => {
+export const getFillMode = (
+    input: string,
+): CSSAnimationFillMode => {
     switch (input) {
     case CSSAnimationFillMode.none:
         return CSSAnimationFillMode.none;

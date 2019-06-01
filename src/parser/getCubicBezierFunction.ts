@@ -18,12 +18,7 @@ export const getCubicBezierFunction = (
             if (isASTRuleNode(node) && node.name === 'CubicBezierEasingFunctionCoordinate') {
                 buffer[index++] = parseFloat(nodeToString(node));
                 if (4 <= index) {
-                    points = [
-                        buffer[0],
-                        buffer[1],
-                        buffer[2],
-                        buffer[3],
-                    ];
+                    points = [buffer[0], buffer[1], buffer[2], buffer[3]];
                     break;
                 }
             }
@@ -31,11 +26,8 @@ export const getCubicBezierFunction = (
     } else {
         points = knownCubicBezierPoints[nodeToString(timingFunctionNode)] || null;
     }
-    if (points) {
-        return {
-            type: CSSTimingFunctionType.cubicBezier,
-            points,
-        };
+    if (!points) {
+        throw new Error(`Invalid <cubic-bezier-function>: ${nodeToString(timingFunctionNode)}`);
     }
-    throw new Error(`Invalid <cubic-bezier-function>: ${nodeToString(timingFunctionNode)}`);
+    return {type: CSSTimingFunctionType.cubicBezier, points};
 };

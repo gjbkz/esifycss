@@ -3,18 +3,12 @@ import {plugin} from '../postcssPlugin/plugin';
 import {readFile} from '../util/fs';
 
 export const getCSSParserConfiguration = async (
-    {
-        file,
-        css,
-        plugins = [],
-        map = {},
-        parameters = {},
-    }: ICSSParserParameters,
+    parameters: ICSSParserParameters,
 ): Promise<ICSSParserConfigurations> => ({
-    css: `${css || await readFile(file)}`,
-    plugins: plugins.concat(plugin(parameters)),
+    css: `${parameters.css || await readFile(parameters.file)}`,
+    plugins: (parameters.plugins || []).concat(plugin(parameters.parameters)),
     options: {
-        from: file,
-        map,
+        from: parameters.file,
+        map: parameters.map || {},
     },
 });

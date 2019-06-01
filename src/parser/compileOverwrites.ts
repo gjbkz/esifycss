@@ -1,7 +1,4 @@
-import {
-    nodeToString,
-    INBNFASTRuleNode,
-} from '@nlib/nbnf';
+import {nodeToString, INBNFASTRuleNode} from '@nlib/nbnf';
 import {ICSSAnimation} from './types';
 import {timeToNumber} from './timeToNumber';
 import {getFillMode} from './getFillMode';
