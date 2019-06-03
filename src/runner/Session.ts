@@ -147,11 +147,9 @@ export class Session {
 
     protected onUnlink(
         path: string,
-        stats: fs.Stats,
+        _stats: fs.Stats,
     ): void {
-        if (this.configuration) {
-            path.slice(stats.size);
-        }
+        this.processedFiles.delete(path);
     }
 
 }
