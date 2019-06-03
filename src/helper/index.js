@@ -1,5 +1,5 @@
 const style = document.createElement('style');
-const buffer = [];
+let buffer = [];
 const wordsToString = (
     words,
     dictionary,
@@ -20,16 +20,22 @@ export const addStyle = (words) => {
     }
     if (0 < buffer.length) {
         const {sheet} = style;
+        const skipped = [];
         while (1) {
             const words = buffer.shift();
             const type = typeof words;
             if (type === 'string') {
                 sheet.insertRule(words, sheet.cssRules.length);
             } else if (type === 'object') {
-                sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+                if (dictionary) {
+                    sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+                } else {
+                    skipped.push(words);
+                }
             } else {
                 break;
             }
         }
+        buffer = buffer.concat(skipped);
     }
 };

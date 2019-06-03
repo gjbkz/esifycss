@@ -1,0 +1,19 @@
+@keyframes foo {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(720deg);
+    }
+}
+
+#foo {
+    --foo1: foo1;
+    text-align: center;
+    animation: 2s infinite foo;
+}
+
+.foo {
+    --foo2: foo2;
+    font-size: 5vw;
+}

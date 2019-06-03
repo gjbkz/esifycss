@@ -23,7 +23,9 @@
         "build:tsc": "tsc",
         "build:bin": "ts-node scripts/chmodScripts.ts",
         "build": "run-s build:cleanup build:tsc build:helper build:bin",
-        "test": "ava -v --timeout=20s lib/**/*.test.js",
+        "test:unit": "ava -v lib/**/*.test.js",
+        "test:client": "ava -v test/run.ts",
+        "test": "run-p test:unit test:client",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "npm-run-all --sequential version:changelog version:add"

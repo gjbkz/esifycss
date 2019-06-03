@@ -1,7 +1,7 @@
 type Dictionary = Array<string>;
 type Words = Array<number>;
 const style = document.createElement('style');
-const buffer: Array<Words | string> = [];
+let buffer: Array<Words | string> = [];
 const wordsToString = (
     words: Words | string,
     dictionary: Dictionary,
@@ -22,15 +22,21 @@ export const addStyle = (words?: Words | string): void => {
     }
     if (0 < buffer.length) {
         const sheet = style.sheet as CSSStyleSheet;
+        const skipped: typeof buffer = [];
         while (1) {
             const words = buffer.shift();
             if (typeof words === 'string') {
                 sheet.insertRule(words, sheet.cssRules.length);
             } else if (words) {
-                sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+                if (dictionary) {
+                    sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+                } else {
+                    skipped.push(words);
+                }
             } else {
                 break;
             }
         }
+        buffer = buffer.concat(skipped);
     }
 };
