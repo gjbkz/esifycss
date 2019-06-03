@@ -9,12 +9,13 @@ install:
     if [[ $TRAVIS_OS_NAME = osx ]]; then
       export SUFFIX=mac64
     elif [[ $TRAVIS_OS_NAME = windows ]]; then
+      choco install unzip
       export SUFFIX=win32
     else
       export SUFFIX=linux64
     fi
   - wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_${SUFFIX}.zip
-  - unzip chromedriver_linux64.zip
+  - unzip chromedriver_${SUFFIX}.zip
   - npm ci
   - npm install -g codecov c8
 script:
