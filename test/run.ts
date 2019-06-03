@@ -47,6 +47,7 @@ const createRequestHandler = (
     return Object.assign(listener, {contentTypes});
 };
 
+let port = 3000;
 test.beforeEach(async (t) => {
     t.context.server = await new Promise((resolve, reject) => {
         const server = http.createServer()
@@ -55,7 +56,7 @@ test.beforeEach(async (t) => {
             server.removeListener('error', reject);
             resolve(server);
         });
-        server.listen(3456);
+        server.listen(port++);
     });
     const address = t.context.server.address();
     if (address && typeof address === 'object') {
