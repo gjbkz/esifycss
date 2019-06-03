@@ -12,6 +12,7 @@ install:
 script:
   - npm run build
   - c8 npm test
+  - c8 npm test-client
   - c8 report --reporter=text-lcov > coverage.lcov
   - codecov
   - nvm install 10
