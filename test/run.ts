@@ -9,6 +9,7 @@ import * as selenium from 'selenium-webdriver';
 const afs = fs.promises;
 
 const test = anyTest as TestInterface<{
+    driver?: selenium.ThenableWebDriver,
     server: http.Server,
     baseURL: URL,
 }>;
@@ -67,6 +68,9 @@ test.beforeEach(async (t) => {
 });
 
 test.afterEach(async (t) => {
+    if (t.context.driver) {
+        await t.context.driver.quit();
+    }
     await new Promise((resolve, reject) => {
         t.context.server.close((error) => {
             if (error) {
@@ -134,7 +138,7 @@ for (const testDirectory of testDirectories) {
         const outputDirectory = path.join(testDirectory, 'output');
         t.true(fs.statSync(outputDirectory).isDirectory());
         t.log('start browser');
-        const driver = new selenium.Builder()
+        const driver = t.context.driver = new selenium.Builder()
         .withCapabilities(
             selenium.Capabilities
             .chrome()
