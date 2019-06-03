@@ -9,10 +9,12 @@ import * as selenium from 'selenium-webdriver';
 import * as BrowserStack from 'browserstack-local';
 import {createRequestHandler} from './util/createRequestHandler';
 import {capabilities} from './util/capabilities';
-import {browserStack} from './util/browserStack';
+import {browserStack} from './util/constants';
 import {spawn} from './util/spawn';
 import {createBrowserStackLocal} from './util/createBrowserStackLocal';
 import {markResult} from './util/markResult';
+import {createLocalIdentifier} from './util/createLocalIdentifier';
+import {fillCapability} from './util/fillCapability';
 const afs = fs.promises;
 
 const test = anyTest as TestInterface<{
@@ -64,9 +66,7 @@ test.afterEach(async (t) => {
         });
     });
     if (t.context.bsLocal) {
-        await new Promise((resolve) => {
-            t.context.bsLocal.stop(resolve);
-        });
+        await new Promise((resolve) => t.context.bsLocal.stop(resolve));
     }
 });
 
@@ -84,34 +84,25 @@ for (const testDirectory of testDirectories) {
     const name = path.basename(testDirectory);
     for (const capability of capabilities) {
         test(name, async (t) => {
-            const options: childProcess.SpawnOptionsWithoutStdio = {
+            const spawnOptions: childProcess.SpawnOptionsWithoutStdio = {
                 cwd: testDirectory,
                 shell: true,
             };
-            t.log('npm install');
-            await spawn({command: 'npm install', options});
-            t.log('npm run build');
-            await spawn({command: 'npm run build', options});
-            t.is(typeof options, 'object');
+            await spawn({command: 'npm install', options: spawnOptions});
+            await spawn({command: 'npm run build', options: spawnOptions});
+
             const outputDirectory = path.join(testDirectory, 'output');
             t.true(fs.statSync(outputDirectory).isDirectory());
-            t.log('start browser');
-            t.context.server.on('request', createRequestHandler(outputDirectory, (message) => t.log(message)));
+            t.context.server.on('request', createRequestHandler(
+                outputDirectory,
+                (message) => t.log(message),
+            ));
 
-            const project = 'esifycss';
-            const build = `${project}#${process.env.CIRCLE_BUILD_NUM}/${name}`;
-            const localIdentifier = (`${build}${new Date().toISOString()}`).replace(/[^\w-]/g, '');
-            if (browserStack) {
-                Object.assign(capability, {
-                    project,
-                    build,
-                    'browserstack.local': true,
-                    'browserstack.localIdentifier': localIdentifier,
-                    'browserstack.user': browserStack.user,
-                    'browserstack.key': browserStack.key,
-                });
-            }
-            const builder = t.context.builder = new selenium.Builder().withCapabilities(capability);
+            const localIdentifier = createLocalIdentifier(name);
+            const builder = new selenium.Builder().withCapabilities(
+                fillCapability({capability, name, localIdentifier}),
+            );
+            t.context.builder = builder;
             if (browserStack) {
                 builder.usingServer(browserStack.server);
                 t.context.bsLocal = await createBrowserStackLocal({

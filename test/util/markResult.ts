@@ -1,6 +1,6 @@
 import * as https from 'https';
 import * as selenium from 'selenium-webdriver';
-import {browserStack} from './browserStack';
+import {browserStack} from './constants';
 
 export const markResult = async (
     session: selenium.Session,

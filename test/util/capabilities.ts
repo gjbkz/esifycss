@@ -1,4 +1,4 @@
-import {browserStack} from './browserStack';
+import {browserStack} from './constants';
 import * as selenium from 'selenium-webdriver';
 import {ICapability} from './types';
 

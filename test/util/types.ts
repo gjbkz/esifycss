@@ -12,6 +12,7 @@ export interface ICapability {
 export interface IFilledCapability extends ICapability {
     'project': string,
     'build': string,
+    'name': string,
     'browserstack.local': true,
     'browserstack.localIdentifier': string,
     'browserstack.user': string,
