@@ -120,9 +120,16 @@
             "eslint"
         ]
     },
-    "renovate-config": {
+    "renovate": {
         "extends": [
-            "github>nlibjs/renovate-config"
+            ":ignoreModulesAndTests",
+            ":unpublishSafe",
+            ":semanticPrefixChore",
+            ":prNotPending",
+            ":prConcurrentLimit10",
+            ":prHourlyLimitNone",
+            ":label(dependencies)",
+            ":automergeMinor"
         ]
     }
 }
