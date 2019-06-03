@@ -13,8 +13,7 @@ const log = (message: string, color: string | null = null) => {
     }
 };
 
-Promise.resolve()
-.then(() => {
+const test = () => {
     log(JSON.stringify(css, null, 2));
 
     const fooElement = document.body.appendChild(document.createElement('div'));
@@ -24,8 +23,11 @@ Promise.resolve()
 
     const computedStyle = getComputedStyle(fooElement);
     const result = [
-        {name: '--foo1', expected: 'foo1'},
-        {name: '--foo2', expected: 'foo2'},
+        {name: 'text-align', expected: 'center'},
+        {name: 'animation-duration', expected: '2s'},
+        {name: 'animation-iteration-count', expected: 'infinite'},
+        {name: 'animation-name', expected: css.keyframes.foo},
+        {name: 'font-size', expected: '30px'},
     ]
     .reduce((result, {name, expected}) => {
         const actual = (computedStyle.getPropertyValue(name) || '').trim();
@@ -35,5 +37,10 @@ Promise.resolve()
     const summary = result ? 'passed' : 'failed';
     document.title += ` → ${summary}`;
     log(summary);
-})
-.catch((error) => log(`${error.stack || error}`));
+};
+
+try {
+    test();
+} catch (error) {
+    log(`${error.stack || error}`);
+}

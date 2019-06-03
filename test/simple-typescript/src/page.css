@@ -8,12 +8,13 @@
 }
 
 #foo {
-    --foo1: foo1;
     text-align: center;
     animation: 2s infinite foo;
 }
 
 .foo {
-    --foo2: foo2;
-    font-size: 5vw;
+    width: 400px;
+    max-width: 90%;
+    margin: 0 auto;
+    font-size: 30px;
 }
