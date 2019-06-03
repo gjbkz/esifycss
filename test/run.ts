@@ -28,7 +28,13 @@ const test = anyTest as TestInterface<{
     passed: boolean,
 }>;
 
-let port = 3000;
+/**
+ * https://www.browserstack.com/question/664
+ * Question: What ports can I use to test development environments or private
+ * servers using BrowserStack?
+ * → We support all ports for all browsers other than Safari.
+ */
+let port = 9200;
 test.beforeEach(async (t) => {
     t.context.passed = false;
     t.context.server = await new Promise((resolve, reject) => {
