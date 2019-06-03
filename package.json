@@ -111,7 +111,8 @@
                     "test/**/*.ts"
                 ],
                 "rules": {
-                    "no-process-env": "off"
+                    "no-process-env": "off",
+                    "@typescript-eslint/no-triple-slash-reference": "off"
                 }
             }
         ]

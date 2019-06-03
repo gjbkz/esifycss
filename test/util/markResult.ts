@@ -6,20 +6,20 @@ export const markResult = async (
     session: selenium.Session,
     status: boolean,
 ): Promise<void> => {
-    if (!browserStack) {
-        return;
+    if (browserStack) {
+        const sessionId = session.getId();
+        const auth = `${browserStack.user}:${browserStack.key}`;
+        await new Promise((resolve, reject) => {
+            https.request({
+                method: 'PUT',
+                host: 'www.browserstack.com',
+                path: `/automate/sessions/${sessionId}.json`,
+                headers: {'Content-Type': 'application/json'},
+                auth,
+            })
+            .once('error', reject)
+            .once('response', resolve)
+            .end(JSON.stringify({status}));
+        });
     }
-    const sessionId = session.getId();
-    await new Promise((resolve, reject) => {
-        https.request({
-            method: 'PUT',
-            host: 'www.browserstack.com',
-            path: `/automate/sessions/${sessionId}.json`,
-            auth: `${browserStack.user}:${browserStack.key}`,
-            headers: {'Content-Type': 'application/json'},
-        })
-        .once('error', reject)
-        .once('response', resolve)
-        .end(JSON.stringify({status}));
-    });
 };
