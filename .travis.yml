@@ -1,8 +1,12 @@
 language: node_js
-cache: 'npm'
-os: 'osx'
+cache: npm
+os: osx
 node_js: '12'
+addons:
+  chrome: stable
 install:
+  - wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
   - npm ci
   - npm install -g codecov c8
 script:

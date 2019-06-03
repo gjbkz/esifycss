@@ -4,3 +4,5 @@ lib
 output
 .cache
 .nyc_output
+*.css.js
+*.css.ts

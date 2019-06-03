@@ -20,6 +20,7 @@ export const program = new commander.Command()
 
 if (!module.parent) {
     program.parse(process.argv);
+    program.include = program.args;
     new Session(program).start().catch((error: Error) => {
         write(process.stderr, [error]);
         process.exit(1);

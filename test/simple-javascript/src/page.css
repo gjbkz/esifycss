@@ -7,12 +7,12 @@
     }
 }
 
-#result {
+#foo {
     background-color: green;
     animation: 2s infinite foo;
 }
 
-.result {
+.foo {
     color: red;
     text-shadow: 0.1em 0.1em #ffffff;
 }
