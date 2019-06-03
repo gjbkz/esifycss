@@ -4,7 +4,7 @@ import * as stream from 'stream';
 export interface ICapability {
     os: string,
     os_version: string,
-    browserName: string,
+    browserName?: string,
     device?: string,
     realMobile?: string,
 }

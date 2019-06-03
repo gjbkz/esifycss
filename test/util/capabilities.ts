@@ -12,6 +12,8 @@ if (browserStack) {
     capabilities.push({os: 'Windows', os_version: '10', browserName: 'Edge'});
     capabilities.push({os: 'Windows', os_version: '10', browserName: 'Chrome'});
     capabilities.push({os: 'Windows', os_version: '10', browserName: 'Firefox'});
+    capabilities.push({os: 'ios', os_version: '12'});
+    capabilities.push({os: 'android', os_version: '9.0'});
 } else {
     capabilities.push(selenium.Capabilities.chrome().set('chromeOptions', {args: ['--headless']}));
 }

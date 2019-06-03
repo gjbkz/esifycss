@@ -80,10 +80,10 @@ const testDirectories = fs.readdirSync(__dirname)
     }
 });
 
-for (const testDirectory of testDirectories) {
+testDirectories.forEach((testDirectory, index1) => {
     const name = path.basename(testDirectory);
-    for (const capability of capabilities) {
-        test(name, async (t) => {
+    capabilities.forEach((capability, index2) => {
+        test(`#${index1}.${index2} ${name}`, async (t) => {
             const spawnOptions: childProcess.SpawnOptionsWithoutStdio = {
                 cwd: testDirectory,
                 shell: true,
@@ -125,5 +125,5 @@ for (const testDirectory of testDirectories) {
             t.true(passed);
             t.context.passed = passed;
         });
-    }
-}
+    });
+});
