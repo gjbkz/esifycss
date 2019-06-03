@@ -88,6 +88,14 @@
             },
             {
                 "files": [
+                    "src/helper/**/*"
+                ],
+                "rules": {
+                    "no-inline-comments": "off"
+                }
+            },
+            {
+                "files": [
                     "scripts/*"
                 ],
                 "rules": {

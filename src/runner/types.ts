@@ -16,7 +16,9 @@ export interface ISessionParameters {
     chokidar?: chokidar.WatchOptions,
     stdout?: stream.Writable,
     stderr?: stream.Writable,
-    pluginParameters?: IPluginParameter,
+    postcssPlugins?: Array<postcss.AcceptedPlugin>,
+    esifycssPluginParameter?: IPluginParameter,
+    minifyScript?: boolean,
 }
 
 export interface ISessionConfiguration {
@@ -27,15 +29,15 @@ export interface ISessionConfiguration {
     readonly chokidar: IReadonlyWatchOptions,
     readonly stdout: stream.Writable,
     readonly stderr: stream.Writable,
-    readonly pluginParameters: IPluginParameter,
+    readonly postcssPlugins: Array<postcss.AcceptedPlugin>,
+    readonly minifyScript: boolean,
 }
 
 export interface ICSSParserParameters {
     file: string,
     css?: string | Buffer,
-    plugins?: Array<postcss.AcceptedPlugin>,
+    plugins: Array<postcss.AcceptedPlugin>,
     map?: postcss.SourceMapOptions,
-    parameters?: IPluginParameter,
 }
 
 export interface ICSSParserConfigurations {

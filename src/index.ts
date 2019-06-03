@@ -1,4 +1,3 @@
-export * from './postcssPlugin/createIdentifier';
 export * from './postcssPlugin/getDependencies';
 export * from './postcssPlugin/getPluginConfiguration';
 export * from './postcssPlugin/plugin';
@@ -8,6 +7,7 @@ export * from './runner/getSessionConfiguration';
 export * from './runner/parseCSS';
 export * from './runner/types';
 export * from './runner/Session';
+export * from './util/createIdentifier';
 export * from './util/createDirectoryFor';
 export * from './util/createTemporaryDirectory';
 export * from './util/ensureArray';

@@ -3,7 +3,7 @@ import {
     IPluginConfiguration,
     IPluginMangler,
 } from './types';
-import {createIdentifier} from './createIdentifier';
+import {createIdentifier} from '../util/createIdentifier';
 
 export const getPluginMangler = (
     {

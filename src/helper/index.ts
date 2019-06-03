@@ -1,17 +1,10 @@
-type Dictionary = Array<string>;
 type Words = Array<number>;
 const style = document.createElement('style');
 let buffer: Array<Words | string> = [];
+const dictionary: Array<string> = [/* Dictionary */];
 const wordsToString = (
     words: Words | string,
-    dictionary: Dictionary,
 ): string => typeof words === 'string' ? words : words.map((index) => dictionary[index]).join('');
-let dictionary: Dictionary | null = null;
-
-export const setDictionary = (newDictionary: Dictionary) => {
-    dictionary = newDictionary;
-    addStyle();
-};
 
 export const addStyle = (words?: Words | string): void => {
     if (!style.parentNode) {
@@ -29,7 +22,7 @@ export const addStyle = (words?: Words | string): void => {
                 sheet.insertRule(words, sheet.cssRules.length);
             } else if (words) {
                 if (dictionary) {
-                    sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+                    sheet.insertRule(wordsToString(words), sheet.cssRules.length);
                 } else {
                     skipped.push(words);
                 }

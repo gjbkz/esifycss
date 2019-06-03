@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {ISessionConfiguration, ISessionParameters} from './types';
+import {plugin} from '../postcssPlugin/plugin';
 import {ensureArray} from '../util/ensureArray';
 import {getHash} from '../util/getHash';
 
@@ -27,6 +28,10 @@ export const getSessionConfiguration = (
         },
         stdout: parameters.stdout || process.stdout,
         stderr: parameters.stderr || process.stderr,
-        pluginParameters: parameters.pluginParameters || {},
+        postcssPlugins: [
+            ...ensureArray(parameters.postcssPlugins),
+            plugin(parameters.esifycssPluginParameter || {}),
+        ],
+        minifyScript: parameters.minifyScript || true,
     };
 };

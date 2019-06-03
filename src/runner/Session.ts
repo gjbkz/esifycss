@@ -11,6 +11,7 @@ import {generateScript} from '../scriptGenerator/generateScript';
 import {generateHelperScript} from '../scriptGenerator/generateHelperScript';
 import {IHelperScript} from '../scriptGenerator/types';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
+import {minifyScripts} from '../minifier/minifyScripts';
 
 export class Session {
 
@@ -63,6 +64,12 @@ export class Session {
         await Promise.all(this.initialTask);
         this.initialTask = null;
         if (!this.configuration.watch) {
+            if (this.configuration.minifyScript) {
+                await minifyScripts(
+                    this.configuration.output,
+                    [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
+                );
+            }
             await this.stop();
         }
     }
@@ -128,11 +135,11 @@ export class Session {
             throw new Error(`${filePath} is not a file.`);
         }
         const postcssResult = await parseCSS({
-            ...this.configuration.pluginParameters,
+            plugins: this.configuration.postcssPlugins,
             file: filePath,
         });
         const pluginResult = extractPluginResult(postcssResult);
-        const dest = path.join(`${filePath}${path.extname(this.helperScript.path)}`);
+        const dest = path.join(`${filePath}${this.configuration.ext}`);
         await writeFile(
             dest,
             generateScript(

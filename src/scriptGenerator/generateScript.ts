@@ -17,7 +17,7 @@ export const generateScript = (
     .replace(/\/index$/, '');
     return [
         `import {addStyle} from '${path.relative(path.dirname(dest), helperScriptPath).replace(/^([^./])/, './$1')}';`,
-        ...(root.nodes || []).map((node) => `addStyle(${JSON.stringify(node.toString())});`),
+        ...(root.nodes || []).map((node) => `addStyle(/* begin(css) */${JSON.stringify(node.toString())}/* end(css) */);`),
         `export const className = ${JSON.stringify(result.class, null, 4)};`,
         `export const id = ${JSON.stringify(result.id, null, 4)};`,
         `export const keyframes = ${JSON.stringify(result.keyframes, null, 4)};`,
