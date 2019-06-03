@@ -5,15 +5,13 @@ import {ICapability} from './types';
 export const capabilities: Array<selenium.Capabilities | ICapability> = [];
 
 if (browserStack) {
-    capabilities.push({
-        os: 'OS X',
-        os_version: 'High Sierra',
-        browserName: 'Chrome',
-    });
+    capabilities.push({os: 'OS X', os_version: 'Mojave', browserName: 'Chrome'});
+    capabilities.push({os: 'OS X', os_version: 'Mojave', browserName: 'Firefox'});
+    capabilities.push({os: 'OS X', os_version: 'Mojave', browserName: 'Safari'});
+    capabilities.push({os: 'Windows', os_version: '10', browserName: 'IE'});
+    capabilities.push({os: 'Windows', os_version: '10', browserName: 'Edge'});
+    capabilities.push({os: 'Windows', os_version: '10', browserName: 'Chrome'});
+    capabilities.push({os: 'Windows', os_version: '10', browserName: 'Firefox'});
 } else {
-    capabilities.push(
-        selenium.Capabilities
-        .chrome()
-        .set('chromeOptions', {args: ['--headless']}),
-    );
+    capabilities.push(selenium.Capabilities.chrome().set('chromeOptions', {args: ['--headless']}));
 }

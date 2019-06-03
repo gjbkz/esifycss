@@ -99,7 +99,7 @@ for (const testDirectory of testDirectories) {
             t.context.server.on('request', createRequestHandler(outputDirectory, (message) => t.log(message)));
 
             const project = 'esifycss';
-            const build = `${project}#${process.env.TRAVIS_BUILD_NUMBER}/${name}`;
+            const build = `${project}#${process.env.CIRCLE_BUILD_NUM}/${name}`;
             const localIdentifier = (`${build}${new Date().toISOString()}`).replace(/[^\w-]/g, '');
             if (browserStack) {
                 Object.assign(capability, {
