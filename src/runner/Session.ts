@@ -44,7 +44,7 @@ export class Session {
             this.configuration.output,
         );
         await writeFile(
-            this.configuration.output,
+            this.helperScript.path,
             this.helperScript.content,
         );
     }
@@ -132,9 +132,15 @@ export class Session {
             file: filePath,
         });
         const pluginResult = extractPluginResult(postcssResult);
+        const dest = path.join(`${filePath}${path.extname(this.helperScript.path)}`);
         await writeFile(
-            path.join(`${filePath}${path.extname(this.configuration.output)}`),
-            generateScript(this.helperScript, pluginResult, postcssResult.css),
+            dest,
+            generateScript(
+                dest,
+                this.helperScript,
+                pluginResult,
+                postcssResult.root,
+            ),
         );
         this.processedFiles.add(filePath);
     }

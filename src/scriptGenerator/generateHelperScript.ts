@@ -16,5 +16,5 @@ export const generateHelperScript = async (
     }
     const helperScriptPath = path.join(helperScriptDirectory, helperScriptFileName);
     const content = await readFile(helperScriptPath, 'utf8');
-    return {path: helperScriptPath, content};
+    return {path: dest, content};
 };

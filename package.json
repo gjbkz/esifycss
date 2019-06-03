@@ -18,9 +18,11 @@
     },
     "scripts": {
         "lint": "eslint --ext .ts src",
+        "build:cleanup": "rimraf lib",
         "build:helper": "cpy src/helper lib/helper",
         "build:tsc": "tsc",
-        "build": "run-p build:*",
+        "build:bin": "ts-node scripts/chmodScripts.ts",
+        "build": "run-s build:cleanup build:tsc build:helper build:bin",
         "test": "ava -v --timeout=20s lib/**/*.test.js",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
@@ -51,6 +53,7 @@
         "lint-staged": "^8.1.7",
         "npm-run-all": "^4.1.5",
         "postcss-nested": "4.1.2",
+        "rimraf": "^2.6.3",
         "selenium-webdriver": "^4.0.0-alpha.1",
         "ts-node": "^8.2.0",
         "typescript": "^3.5.1"
@@ -73,12 +76,21 @@
         "overrides": [
             {
                 "files": [
+                    "scripts/",
                     "src/helper/**/*",
                     "test/*/src/*"
                 ],
                 "env": {
                     "node": false,
                     "browser": true
+                }
+            },
+            {
+                "files": [
+                    "scripts/*"
+                ],
+                "rules": {
+                    "no-bitwise": "off"
                 }
             }
         ]

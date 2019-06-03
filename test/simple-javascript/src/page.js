@@ -1,38 +1,39 @@
 import * as css from './page.css.js';
 
-const outputElement = document.createElement('div');
+const outputElement = document.body.appendChild(document.createElement('div'));
 outputElement.id = 'output';
 outputElement.style.fontFamily = 'Consolas, Courier, monospace';
 outputElement.style.whiteSpace = 'pre-wrap';
-document.body.appendChild(outputElement);
-const log = (message) => {
-    outputElement.insertAdjacentText('beforeend', [message, ''].join('\n'));
+
+const log = (message, color = null) => {
+    const element = outputElement.appendChild(document.createElement('div'));
+    element.appendChild(document.createTextNode(message));
+    if (color) {
+        element.style.color = color;
+    }
 };
 
 Promise.resolve()
 .then(() => {
     log(JSON.stringify(css, null, 2));
 
-    const fooElement = document.createElement('div');
+    const fooElement = document.body.appendChild(document.createElement('div'));
     fooElement.id = css.id && css.id.foo;
     fooElement.classList.add(css.className && css.className.foo);
-    fooElement.textContent = JSON.stringify(css, null, 2);
-    document.body.appendChild(fooElement);
+    fooElement.textContent = 'FOO';
 
     const computedStyle = getComputedStyle(fooElement);
-    let result = true;
-    log(`background-color: ${computedStyle.backgroundColor}`);
-    result = result && computedStyle.backgroundColor === 'green';
-    log(`animation-duration: ${computedStyle.animationDuration}`);
-    result = result && computedStyle.backgroundColor === '2s';
-    log(`animation-iteration-count: ${computedStyle.animationIterationCount}`);
-    result = result && computedStyle.backgroundColor === 'infinite';
-    log(`animation-name: ${computedStyle.animationName}`);
-    result = result && computedStyle.backgroundColor === 'foo';
-    log(`color: ${computedStyle.color}`);
-    result = result && computedStyle.backgroundColor === 'red';
-    log(`text-shadow: ${computedStyle.textShadow}`);
-    result = result && computedStyle.backgroundColor === '0.1em 0.1em #ffffff';
-    document.title += ` → ${result ? 'passed' : 'failed'}`;
+    const result = [
+        {name: '--foo1', expected: 'foo1'},
+        {name: '--foo2', expected: 'foo2'},
+    ]
+    .reduce((result, {name, expected}) => {
+        const actual = (computedStyle.getPropertyValue(name) || '').trim();
+        log(JSON.stringify({name, actual, expected}));
+        return result && actual === expected;
+    }, true);
+    const summary = result ? 'passed' : 'failed';
+    document.title += ` → ${summary}`;
+    log(summary);
 })
 .catch((error) => log(`${error.stack || error}`));

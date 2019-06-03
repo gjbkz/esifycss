@@ -14,23 +14,23 @@ export const setDictionary = (newDictionary: Dictionary) => {
 };
 
 export const addStyle = (words?: Words | string): void => {
+    if (!style.parentNode) {
+        document.head.appendChild(style);
+    }
     if (words) {
         buffer.push(words);
     }
-    if (dictionary && 0 < buffer.length) {
+    if (0 < buffer.length) {
         const sheet = style.sheet as CSSStyleSheet;
         while (1) {
             const words = buffer.shift();
-            if (!words) {
+            if (typeof words === 'string') {
+                sheet.insertRule(words, sheet.cssRules.length);
+            } else if (words) {
+                sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+            } else {
                 break;
             }
-            sheet.insertRule(
-                wordsToString(words, dictionary),
-                sheet.cssRules.length,
-            );
-        }
-        if (!style.parentNode) {
-            document.head.appendChild(style);
         }
     }
 };

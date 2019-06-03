@@ -8,11 +8,12 @@
 }
 
 #foo {
-    background-color: green;
+    --foo1: foo1;
+    text-align: center;
     animation: 2s infinite foo;
 }
 
 .foo {
-    color: red;
-    text-shadow: 0.1em 0.1em #ffffff;
+    --foo2: foo2;
+    font-size: 5vw;
 }

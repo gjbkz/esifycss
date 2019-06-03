@@ -12,23 +12,24 @@ export const setDictionary = (newDictionary) => {
 };
 
 export const addStyle = (words) => {
+    if (!style.parentNode) {
+        document.head.appendChild(style);
+    }
     if (words) {
         buffer.push(words);
     }
-    if (dictionary && 0 < buffer.length) {
+    if (0 < buffer.length) {
         const {sheet} = style;
         while (1) {
             const words = buffer.shift();
-            if (!words) {
+            const type = typeof words;
+            if (type === 'string') {
+                sheet.insertRule(words, sheet.cssRules.length);
+            } else if (type === 'object') {
+                sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
+            } else {
                 break;
             }
-            sheet.insertRule(
-                wordsToString(words, dictionary),
-                sheet.cssRules.length,
-            );
-        }
-        if (!style.parentNode) {
-            document.head.appendChild(style);
         }
     }
 };

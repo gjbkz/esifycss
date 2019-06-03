@@ -22,6 +22,7 @@ export interface ISessionParameters {
 export interface ISessionConfiguration {
     readonly watch: boolean,
     readonly output: string,
+    readonly ext: string,
     readonly path: ReadonlyArray<string>,
     readonly chokidar: IReadonlyWatchOptions,
     readonly stdout: stream.Writable,
