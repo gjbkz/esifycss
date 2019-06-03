@@ -23,6 +23,11 @@ jobs:
       - run: c8 npm test
       - run: c8 report --reporter=text-lcov > coverage.lcov
       - run: codecov
+  test-client:
+    docker: [{image: "circleci/node:lts"}]
+    steps:
+      - attach_workspace: {at: .}
+      - run: npm run test-client
   lint:
     docker: [{image: "circleci/node:lts"}]
     steps:
@@ -53,6 +58,7 @@ workflows:
             tags: {ignore: /.*/}
       - build: {requires: [onBranch]}
       - test: {requires: [build]}
+      - test-client: {requires: [build]}
       - lint: {requires: [build]}
   release:
     jobs:
@@ -66,6 +72,11 @@ workflows:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
       - test:
+          requires: [build]
+          filters:
+            branches: {ignore: /.*/}
+            tags: {only: /^v.*/}
+      - test-client:
           requires: [build]
           filters:
             branches: {ignore: /.*/}

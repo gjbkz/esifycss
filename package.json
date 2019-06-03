@@ -47,6 +47,7 @@
         "@types/selenium-webdriver": "^4.0.0",
         "@typescript-eslint/eslint-plugin": "^1.9.0",
         "ava": "^2.0.0",
+        "browserstack-local": "^1.4.0",
         "conventional-changelog-cli": "^2.0.21",
         "cpy-cli": "^2.0.0",
         "eslint": "^5.16.0",
@@ -103,6 +104,14 @@
                 ],
                 "rules": {
                     "no-bitwise": "off"
+                }
+            },
+            {
+                "files": [
+                    "test/**/*.ts"
+                ],
+                "rules": {
+                    "no-process-env": "off"
                 }
             }
         ]
