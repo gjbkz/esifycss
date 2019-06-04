@@ -6,14 +6,14 @@ export interface ICapability {
     os_version: string,
     browserName?: string,
     device?: string,
-    real_mobile?: string,
+    real_mobile?: 'true' | 'false',
 }
 
 export interface IFilledCapability extends ICapability {
     'project': string,
     'build': string,
     'name': string,
-    'real_mobile': 'true' | 'false',
+    'real_mobile'?: 'true' | 'false',
     'browserstack.local': 'true' | 'false',
     'browserstack.localIdentifier': string,
     'browserstack.user': string,

@@ -12,16 +12,17 @@ export const fillCapability = (
     parameters: IParameters,
 ): ICapability | IFilledCapability | selenium.Capabilities => {
     if ('browserName' in parameters.capability && browserStack) {
-        return {
+        const filled: IFilledCapability = {
             ...parameters.capability,
             'project': projectName,
             'build': buildId,
             'name': parameters.name,
-            'browserstack.local': true,
+            'browserstack.local': 'true',
             'browserstack.localIdentifier': parameters.localIdentifier,
             'browserstack.user': browserStack.user,
             'browserstack.key': browserStack.key,
         };
+        return filled;
     }
     return parameters.capability;
 };
