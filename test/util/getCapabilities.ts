@@ -36,7 +36,7 @@ export const getBrowserStackCapabilities = (
 ): Array<ReturnType<typeof mergeCapability>> => {
     const capabilities = [];
     for (const name of names) {
-        const commonBStackOptions: IBrowsetStackOptions = {
+        const commonOptions: IBrowsetStackOptions = {
             projectName,
             buildName,
             sessionName: name,
@@ -46,35 +46,13 @@ export const getBrowserStackCapabilities = (
             userName,
             accessKey,
         };
-        capabilities.push(mergeCapability(
-            {
-                ...commonBStackOptions,
-                os: 'Windows',
-                osVersion: '10',
-            },
-            {
-                'browserName': 'Chrome',
-                'browserVersion': '74.0',
-            },
-        ));
-        capabilities.push(mergeCapability(
-            {
-                ...commonBStackOptions,
-                osVersion: '12',
-                deviceName: 'iPhone 8',
-                realMobile: 'true',
-            },
-            {browserName: 'Safari'},
-        ));
-        capabilities.push(mergeCapability(
-            {
-                ...commonBStackOptions,
-                osVersion: '12',
-                deviceName: 'iPhone 8',
-                realMobile: 'true',
-            },
-            {browserName: 'safari'},
-        ));
+        capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Chrome', browserVersion: '74.0'}));
+        capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Chrome'}));
+        // capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Firefox'}));
+        // capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Edge'}));
+        // capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'IE'}));
+        // capabilities.push(mergeCapability({...commonOptions, osVersion: '12', deviceName: 'iPhone 8', realMobile: 'true'}, {browserName: 'Safari'}));
+        // capabilities.push(mergeCapability({...commonOptions, osVersion: '9.0', deviceName: 'Google Pixel 3', realMobile: 'true'}, {browserName: 'Chrome'}));
     }
     return capabilities;
 };
@@ -84,12 +62,12 @@ export const getLocalCapabilities = (
 ): Array<ReturnType<typeof mergeCapability>> => {
     const capabilities = [];
     for (const name of names) {
-        const commonBStackOptions: IBrowsetStackOptions = {
+        const commonOptions: IBrowsetStackOptions = {
             sessionName: name,
             localIdentifier: `${name}-${capabilities.length}-${Date.now()}`,
         };
         capabilities.push(mergeCapability(
-            commonBStackOptions,
+            commonOptions,
             {browserName: 'chrome'},
         ));
     }
