@@ -47,7 +47,7 @@ test.beforeEach(async (t) => {
     const address = t.context.server.address();
     if (address && typeof address === 'object') {
         t.context.port = address.port;
-        t.context.baseURL = new URL(`http://127.0.0.1:${address.port}`);
+        t.context.baseURL = new URL(`http://localhost:${address.port}`);
     } else {
         throw new Error(`Invalid address: ${address}`);
     }
