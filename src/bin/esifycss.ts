@@ -4,11 +4,16 @@ import * as fs from 'fs';
 import * as commander from 'commander';
 import {write} from '../util/write';
 import {Session} from '../runner/Session.js';
-import {ISessionParameters} from '../runner/types.js';
+import {loadParameters} from '../util/loadParameters';
 
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8'));
 
-export interface IEsifyCSSCommand extends commander.Command, ISessionParameters {}
+export interface IEsifyCSSCommand extends commander.Command {
+    output: string,
+    config: string,
+    exclude: Array<string>,
+    watch: boolean,
+}
 
 export const program = new commander.Command()
 .version(packageData.version)
@@ -20,8 +25,9 @@ export const program = new commander.Command()
 
 if (!module.parent) {
     program.parse(process.argv);
-    program.include = program.args;
-    new Session(program).start().catch((error: Error) => {
+    loadParameters(program)
+    .then((parameters) => new Session(parameters).start())
+    .catch((error: Error) => {
         write(process.stderr, [error]);
         process.exit(1);
     });
