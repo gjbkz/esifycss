@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as stream from 'stream';
@@ -25,9 +26,29 @@ export const writeFile = (
             if (error) {
                 reject(error);
             } else {
-                write(stdout, [`write ${dest} (${buffer.length})`]);
+                write(stdout, [`written: ${dest} (${buffer.length})`]);
                 resolve();
             }
         },
     );
 });
+export const deleteFile = async (
+    filePath: string,
+    stdout: stream.Writable = process.stdout,
+): Promise<void> => {
+    try {
+        await unlink(filePath);
+    } catch (error) {
+        if (error.code === 'ENOENT') {
+            return;
+        }
+        if (error.code === 'EISDIR' || error.code === 'EPERM') {
+            const files = (await readdir(filePath)).map((name) => path.join(filePath, name));
+            await Promise.all(files.map((file) => deleteFile(file, stdout)));
+            await rmdir(filePath);
+        } else {
+            throw error;
+        }
+    }
+    write(stdout, [`deleted: ${filePath}`]);
+};

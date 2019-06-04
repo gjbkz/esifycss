@@ -6,7 +6,7 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile} from '../util/fs';
+import {writeFile, deleteFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
 import {generateHelperScript} from '../scriptGenerator/generateHelperScript';
 import {IHelperScript} from '../scriptGenerator/types';
@@ -47,6 +47,7 @@ export class Session {
         await writeFile(
             this.helperScript.path,
             this.helperScript.content,
+            this.configuration.stdout,
         );
     }
 
@@ -139,24 +140,27 @@ export class Session {
             file: filePath,
         });
         const pluginResult = extractPluginResult(postcssResult);
-        const dest = path.join(`${filePath}${this.configuration.ext}`);
+        const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
+        this.processedFiles.add(filePath);
         await writeFile(
-            dest,
+            scriptPath,
             generateScript(
-                dest,
+                scriptPath,
                 this.helperScript,
                 pluginResult,
                 postcssResult.root,
             ),
+            this.configuration.stdout,
         );
-        this.processedFiles.add(filePath);
     }
 
-    protected onUnlink(
-        path: string,
+    protected async onUnlink(
+        filePath: string,
         _stats: fs.Stats,
-    ): void {
-        this.processedFiles.delete(path);
+    ): Promise<void> {
+        const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
+        this.processedFiles.delete(filePath);
+        await deleteFile(scriptPath, this.configuration.stdout);
     }
 
 }
