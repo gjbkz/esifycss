@@ -130,8 +130,6 @@ getCapabilities(testDirectories).forEach((capability, index) => {
         const base64 = await driver.takeScreenshot();
         const screenShot = Buffer.from(base64, 'base64');
         await afs.writeFile(path.join(outputDirectory, `${Date.now()}.png`), screenShot);
-        const output = await driver.findElement(selenium.By.css('#output'));
-        t.log(`Text:\n${await output.getText()}`);
         const title = await driver.getTitle();
         const passed = title === `${path.basename(testDirectory)} → passed`;
         t.true(passed);
