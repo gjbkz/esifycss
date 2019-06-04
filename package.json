@@ -7,42 +7,70 @@
         "email": "kei.itof@gmail.com",
         "url": "https://github.com/kei-ito"
     },
-    "license": "MIT",
+    "license": "Apache-2.0",
     "engines": {
         "node": ">=8"
     },
     "repository": "kei-ito/esify",
     "main": "lib/index.js",
     "bin": {
-        "esifycss": "bin/esifycss"
-    },
-    "dependencies": {
-        "@nlib/afs": "^0.2.4",
-        "chokidar": "^2.1.5",
-        "commander": "^2.19.0",
-        "glob": "^7.1.3",
-        "minimatch": "^3.0.4",
-        "postcss": "^7.0.14"
-    },
-    "devDependencies": {
-        "@commitlint/cli": "7.5.2",
-        "@commitlint/config-conventional": "7.5.0",
-        "@nlib/lint": "^3.5.0",
-        "acorn": "^6.1.1",
-        "conventional-changelog-cli": "2.0.12",
-        "eslint": "5.16.0",
-        "husky": "1.3.1",
-        "lint-staged": "8.1.5",
-        "npm-run-all": "4.1.5",
-        "postcss-nested": "4.1.2",
-        "tap": "12.6.1"
+        "esifycss": "lib/bin/esifycss.js"
     },
     "scripts": {
-        "lint": "eslint bin/esifycss lib test",
-        "test": "tap --coverage test/*/test.js",
+        "lint": "eslint --ext .ts src",
+        "build:cleanup": "rimraf lib",
+        "build:helper": "cpy src/helper lib/helper",
+        "build:tsc": "tsc",
+        "build:bin": "ts-node scripts/chmodScripts.ts",
+        "build": "run-s build:cleanup build:tsc build:helper build:bin",
+        "test": "ava -v",
+        "test-client": "ava -v test/run.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "npm-run-all --sequential version:changelog version:add"
+    },
+    "dependencies": {
+        "@nlib/nbnf": "^3.9.3",
+        "chokidar": "^3.0.0",
+        "commander": "^2.20.0",
+        "postcss": "^7.0.16",
+        "postcss-selector-parser": "^6.0.2"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^8.0.0",
+        "@commitlint/config-conventional": "^8.0.0",
+        "@nlib/lint": "^3.8.0",
+        "@types/anymatch": "^1.3.1",
+        "@types/jsdom": "^12.2.3",
+        "@types/micromatch": "3.1.0",
+        "@types/node": "^12.0.4",
+        "@types/selenium-webdriver": "^4.0.0",
+        "@typescript-eslint/eslint-plugin": "^1.9.0",
+        "ava": "^2.0.0",
+        "browserstack-local": "^1.4.0",
+        "conventional-changelog-cli": "^2.0.21",
+        "cpy-cli": "^2.0.0",
+        "eslint": "^5.16.0",
+        "husky": "^2.3.0",
+        "lint-staged": "^8.1.7",
+        "npm-run-all": "^4.1.5",
+        "postcss-nested": "4.1.2",
+        "rimraf": "^2.6.3",
+        "selenium-webdriver": "^4.0.0-alpha.1",
+        "ts-node": "^8.2.0",
+        "typescript": "^3.5.1"
+    },
+    "ava": {
+        "compileEnhancements": false,
+        "extensions": [
+            "ts"
+        ],
+        "require": [
+            "ts-node/register"
+        ],
+        "files": [
+            "lib/**/*.test.js"
+        ]
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
@@ -52,9 +80,39 @@
         },
         "overrides": [
             {
-                "files": "lib/index.js",
+                "files": [
+                    "scripts/",
+                    "src/helper/**/*",
+                    "test/*/src/*"
+                ],
+                "env": {
+                    "node": false,
+                    "browser": true
+                }
+            },
+            {
+                "files": [
+                    "src/helper/**/*"
+                ],
                 "rules": {
-                    "global-require": "off"
+                    "no-inline-comments": "off"
+                }
+            },
+            {
+                "files": [
+                    "scripts/*"
+                ],
+                "rules": {
+                    "no-bitwise": "off"
+                }
+            },
+            {
+                "files": [
+                    "test/**/*.ts"
+                ],
+                "rules": {
+                    "no-process-env": "off",
+                    "@typescript-eslint/no-triple-slash-reference": "off"
                 }
             }
         ]
@@ -75,9 +133,16 @@
             "eslint"
         ]
     },
-    "renovate-config": {
+    "renovate": {
         "extends": [
-            "github>nlibjs/renovate-config"
+            ":ignoreModulesAndTests",
+            ":unpublishSafe",
+            ":semanticPrefixChore",
+            ":prNotPending",
+            ":prConcurrentLimit10",
+            ":prHourlyLimitNone",
+            ":label(dependencies)",
+            ":automergeMinor"
         ]
     }
 }

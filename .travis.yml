@@ -1,27 +1,32 @@
 language: node_js
-node_js:
-- '10'
-- '8'
-before_install:
-- export GREENKEEPER=$([[ $(node -v) == v10.* ]]; echo $?)
-- if [[ ${GREENKEEPER} -eq 0 ]]; then npm install -g greenkeeper-lockfile; fi
+cache: npm
+os: osx
+node_js: '12'
+addons:
+  chrome: stable
 install:
-- npm install
-before_script:
-- if [[ ${GREENKEEPER} -eq 0 ]]; then greenkeeper-lockfile-update; fi
+  - |
+    if [[ $TRAVIS_OS_NAME = osx ]]; then
+      export SUFFIX=mac64
+    elif [[ $TRAVIS_OS_NAME = windows ]]; then
+      choco install unzip
+      export SUFFIX=win32
+    else
+      export SUFFIX=linux64
+    fi
+  - wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_${SUFFIX}.zip
+  - unzip chromedriver_${SUFFIX}.zip
+  - npm ci
+  - npm install -g codecov c8
 script:
-- npm run test
-- npm run lint
-after_success:
-- if [[ ${GREENKEEPER} -eq 0 ]]; then greenkeeper-lockfile-upload; fi
-- npm install -g codecov
-- tap --coverage-report=text-lcov > coverage.lcov
-- codecov
-deploy:
-  provider: npm
-  email: kei.itof@gmail.com
-  api_key:
-    secure: w+G5VAxFmt7VRnd2hOH6JC7gAS2wsFB9RNPsbiZsNsHWAvoztNae7eILq/Lnz+uhoHRJDrQO+rLAQ5K51+QdnRCEqGdd2nwCol8vIROxYrB2LslXS5fZG31B6fvS6i70QK9FrcaTaypzcIJAiT7wN1OSSJPA6JQVedT0YqTgUCb5V2HWw5XJj2zN8WeDvIbL7ptvFks9tsCi1NFjKBU13JaBxoLPnm0FTOHxe6rS0ggXm0UtSsj7zgCWIvrZpCh7MtMuAujMNhr2hwwj2nUgSvmI1ZSJSCbigmkufjjTb33utM0VmXbp29H37UmpQoMuxbmyP6YodqouOaM9Qn9k+4ykysbTQ3WWWo5xJRMmdcffDcguuReZPMuEoGolIuzqV1fswkGPylZ/3tV7SH5xrOMwZpq92AAfHVEkPXSoeZDu5L+ZApCCTqw34w/Zyia/yguYF6IX0sZOq6dnxrknbug6FUKI0SpeMfbNfl0GCs1ArLUno0m/nvIgGBBjAmenqzyPVR9EhHyRzpJ6dYFCEh1n0L5gq8Bw+Bp6qPNQ0mRZZnHTFMK3uBL9knC9QE/q6MbaBfm/xqMYQiKveyRYlG3sXriEqMzfdRkbHOx0yqQgbs1y/jNOZZ1IAESuYxA284edEvJOnFzJ1eexHCgUpgLY+N3TnUorHA9VXhDA8kg=
-  on:
-    tags: true
-    repo: kei-ito/esifycss
+  - npm run build
+  - c8 npm run test
+  - c8 report --reporter=text-lcov > coverage.lcov
+  - codecov
+  - c8 npm run test-client
+  - c8 report --reporter=text-lcov > coverage.lcov
+  - codecov
+  - nvm install 10
+  - npm run test
+  - nvm install 8
+  - npm run test
