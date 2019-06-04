@@ -19,13 +19,13 @@ interface IBrowsetStackOptions {
 }
 
 interface ICapability {
-    'browserName'?: string,
-    'browserVersion'?: string,
+    browserName: string,
+    browserVersion?: string,
 }
 
 export const mergeCapability = (
     browserStackOptions: IBrowsetStackOptions,
-    capability: ICapability = {},
+    capability: ICapability = {browserName: 'chrome'},
 ) => ({
     ...capability,
     'bstack:options': browserStackOptions,

@@ -86,7 +86,11 @@ const testDirectories = fs.readdirSync(__dirname)
 getCapabilities(testDirectories).forEach((capability, index) => {
     const name = capability['bstack:options'].sessionName;
     const testDirectory = path.join(__dirname, name);
-    test.serial(`#${index + 1} ${name}`, async (t) => {
+    const subTitle = [
+        capability['bstack:options'].os || capability['bstack:options'].deviceName || '-',
+        capability.browserName,
+    ].join(' ');
+    test.serial(`#${index + 1} ${name} ${subTitle}`, async (t) => {
         const spawnOptions: childProcess.SpawnOptionsWithoutStdio = {
             cwd: testDirectory,
             shell: true,
@@ -112,8 +116,9 @@ getCapabilities(testDirectories).forEach((capability, index) => {
             });
         }
         const driver = t.context.driver = builder.build();
+        const baseURL = (/safari/i).test(capability.browserName) ? new URL(`http://bs-local.com:${t.context.port}`) : t.context.baseURL;
         t.context.session = await driver.getSession();
-        await driver.get(`${new URL('/index.html', t.context.baseURL)}`);
+        await driver.get(`${new URL('/index.html', baseURL)}`);
         await driver.wait(selenium.until.titleMatches(/(?:passed|failed)$/), 10000);
         const base64 = await driver.takeScreenshot();
         const screenShot = Buffer.from(base64, 'base64');
