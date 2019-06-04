@@ -89,7 +89,7 @@ const testDirectories = fs.readdirSync(__dirname)
 testDirectories.forEach((testDirectory, index1) => {
     const name = path.basename(testDirectory);
     capabilities.forEach((capability, index2) => {
-        test.serial(`#${index1}.${index2} ${name}`, async (t) => {
+        test.serial(`#${index1 + 1}.${index2 + 1} ${name}`, async (t) => {
             const spawnOptions: childProcess.SpawnOptionsWithoutStdio = {
                 cwd: testDirectory,
                 shell: true,
