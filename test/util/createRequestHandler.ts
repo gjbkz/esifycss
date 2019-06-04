@@ -15,7 +15,6 @@ export const createRequestHandler = (
     const listener: http.RequestListener = (req, res) => {
         const url = new URL(req.url || '/', 'https://example.com');
         url.pathname = url.pathname.replace(/\/$/, '/index.html');
-        callback(`${req.method} ${url.pathname}`);
         const filePath = path.join(directory, url.pathname);
         Promise.resolve()
         .then(async () => {
@@ -24,7 +23,11 @@ export const createRequestHandler = (
                 'content-type': contentTypes.get(path.extname(filePath)) || 'text/plain',
                 'content-length': stats.size,
             });
-            fs.createReadStream(filePath).pipe(res);
+            if (req.method === 'HEAD') {
+                res.end();
+            } else {
+                fs.createReadStream(filePath).pipe(res);
+            }
         })
         .catch((error) => {
             if (error.code === 'ENOENT') {
@@ -33,6 +36,9 @@ export const createRequestHandler = (
                 res.statusCode = 500;
             }
             res.end(`${error}`);
+        })
+        .finally(() => {
+            callback(`${req.method} ${url.pathname} → ${res.statusCode}`);
         });
     };
     return Object.assign(listener, {contentTypes});
