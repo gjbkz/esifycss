@@ -42,7 +42,6 @@ export const getBrowserStackCapabilities = (
             sessionName: name,
             local: 'true',
             localIdentifier: `${name}-${capabilities.length}-${Date.now()}`,
-            seleniumVersion: '3.5.2',
             userName,
             accessKey,
         };
@@ -53,7 +52,6 @@ export const getBrowserStackCapabilities = (
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Chrome'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Firefox'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Safari'}));
-        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Opera'}));
         capabilities.push(mergeCapability({...commonOptions, osVersion: '12', deviceName: 'iPhone 8', realMobile: 'true'}, {browserName: 'Safari'}));
         capabilities.push(mergeCapability({...commonOptions, osVersion: '9.0', deviceName: 'Google Pixel 3', realMobile: 'true'}, {browserName: 'Chrome'}));
     }

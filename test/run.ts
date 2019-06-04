@@ -83,28 +83,35 @@ const testDirectories = fs.readdirSync(__dirname)
     }
 });
 
-getCapabilities(testDirectories).forEach((capability, index) => {
-    const name = capability['bstack:options'].sessionName;
-    const testDirectory = path.join(__dirname, name);
-    const subTitle = [
-        capability['bstack:options'].os || capability['bstack:options'].deviceName || '-',
-        capability.browserName,
-    ].join(' ');
-    test.serial(`#${index + 1} ${name} ${subTitle}`, async (t) => {
+const builtProjects = new Set<string>();
+const build = async (
+    testDirectory: string,
+) => {
+    if (!builtProjects.has(testDirectory)) {
         const spawnOptions: childProcess.SpawnOptionsWithoutStdio = {
             cwd: testDirectory,
             shell: true,
         };
         await spawn({command: 'npm install', options: spawnOptions});
         await spawn({command: 'npm run build', options: spawnOptions});
+        builtProjects.add(testDirectory);
+    }
+};
 
-        const outputDirectory = path.join(testDirectory, 'output');
-        t.true(fs.statSync(outputDirectory).isDirectory());
+getCapabilities(testDirectories).forEach((capability, index) => {
+    const name = capability['bstack:options'].sessionName;
+    const testDirectory = path.join(__dirname, name);
+    const outputDirectory = path.join(testDirectory, 'output');
+    const subTitle = [
+        capability['bstack:options'].os || capability['bstack:options'].deviceName || '-',
+        capability.browserName,
+    ].join(' ');
+    test.serial(`#${index + 1} ${name} ${subTitle}`, async (t) => {
+        await build(testDirectory);
         t.context.server.on('request', createRequestHandler(
             outputDirectory,
             (message) => t.log(message),
         ));
-
         const builder = new selenium.Builder().withCapabilities(capability);
         t.context.builder = builder;
         if (browserStack) {
