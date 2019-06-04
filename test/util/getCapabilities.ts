@@ -57,6 +57,14 @@ export const getBrowserStackCapabilities = (
                 'browserVersion': '74.0',
             },
         ));
+        capabilities.push(mergeCapability(
+            {
+                ...commonBStackOptions,
+                osVersion: '12',
+                deviceName: 'iPhone 8',
+                realMobile: 'true',
+            },
+        ));
     }
     return capabilities;
 };
