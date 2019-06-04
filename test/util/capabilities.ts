@@ -1,8 +1,7 @@
 import {browserStack} from './constants';
 import * as selenium from 'selenium-webdriver';
-import {ICapability} from './types';
 
-export const capabilities: Array<selenium.Capabilities | ICapability> = [];
+export const capabilities: Array<selenium.Capabilities> = [];
 
 if (browserStack) {
     // capabilities.push({os: 'OS X', os_version: 'Mojave', browserName: 'Chrome'});
@@ -12,7 +11,7 @@ if (browserStack) {
     // capabilities.push({os: 'Windows', os_version: '10', browserName: 'Edge'});
     // capabilities.push({os: 'Windows', os_version: '10', browserName: 'Chrome'});
     // capabilities.push({os: 'Windows', os_version: '10', browserName: 'Firefox'});
-    capabilities.push({os_version: '12', device: 'iPhone 8', real_mobile: 'true'});
+    capabilities.push(selenium.Capabilities.iphone());
 } else {
     capabilities.push(selenium.Capabilities.chrome().set('chromeOptions', {args: ['--headless']}));
 }

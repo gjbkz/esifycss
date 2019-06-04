@@ -1,28 +1,24 @@
 import * as selenium from 'selenium-webdriver';
 import {browserStack, projectName, buildId} from './constants';
-import {ICapability, IFilledCapability} from './types';
 
 interface IParameters {
-    capability: ICapability | selenium.Capabilities,
+    capability: selenium.Capabilities,
     name: string,
     localIdentifier: string,
 }
 
 export const fillCapability = (
     parameters: IParameters,
-): ICapability | IFilledCapability | selenium.Capabilities => {
-    if ('browserName' in parameters.capability && browserStack) {
-        const filled: IFilledCapability = {
-            ...parameters.capability,
-            'project': projectName,
-            'build': buildId,
-            'name': parameters.name,
-            'browserstack.local': 'true',
-            'browserstack.localIdentifier': parameters.localIdentifier,
-            'browserstack.user': browserStack.user,
-            'browserstack.key': browserStack.key,
-        };
-        return filled;
+): selenium.Capabilities => {
+    const capability = new selenium.Capabilities(parameters.capability);
+    capability.set('project', projectName);
+    capability.set('build', buildId);
+    capability.set('name', parameters.name);
+    if (browserStack) {
+        capability.set('browserstack.local', 'true');
+        capability.set('browserstack.localIdentifier', parameters.localIdentifier);
+        capability.set('browserstack.user', browserStack.user);
+        capability.set('browserstack.key', browserStack.key);
     }
-    return parameters.capability;
+    return capability;
 };
