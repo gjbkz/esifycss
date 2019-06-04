@@ -1,19 +1,9 @@
 import {readFile, writeFile} from '../util/fs';
-import {IParseResult} from './types';
+import {IParseResult, IParseScriptsResult, IScriptData} from './types';
 import {parseScript} from './parseScript';
 import {tokenizeString} from '../util/tokenizeString';
 import {createIdentifier, IIdentifier} from '../util/createIdentifier';
 import {encodeString} from '../util/encodeString';
-
-interface IScriptData {
-    script: string,
-    cssRanges: Array<IParseResult>,
-}
-
-interface IParseScriptsResult {
-    scripts: Map<string, IScriptData>,
-    tokens: Map<string, number>,
-}
 
 const parseScripts = async (
     files: Array<string>,
@@ -43,7 +33,7 @@ const createOptimizedIdentifier = (
     return identifier;
 };
 
-const minifyScript = async (
+const minifyCssInScript = async (
     file: string,
     script: string,
     cssRanges: Array<IParseResult>,
@@ -61,16 +51,14 @@ const minifyScript = async (
     await writeFile(file, minified);
 };
 
-const updateHelperScript = async (
-    file: string,
+const setDictionary = async (
+    filePath: string,
     words: Array<string>,
-): Promise<void> => writeFile(
-    file,
-    (await readFile(file, 'utf8')).replace(
-        /\[\/\*\s*Dictionary\s*\*\/\]/,
-        JSON.stringify(words),
-    ),
-);
+): Promise<void> => {
+    const code = await readFile(filePath, 'utf8');
+    const newCode = code.replace(/\[\/\*\s*Dictionary\s*\*\/\]/, JSON.stringify(words));
+    return writeFile(filePath, newCode);
+};
 
 export const minifyScripts = async (
     helperScript: string,
@@ -78,6 +66,6 @@ export const minifyScripts = async (
 ): Promise<void> => {
     const parseResult = await parseScripts(files);
     const identifier = createOptimizedIdentifier(parseResult.tokens);
-    await Promise.all([...parseResult.scripts].map(([file, {script, cssRanges}]) => minifyScript(file, script, cssRanges, identifier)));
-    await updateHelperScript(helperScript, identifier.idList);
+    await Promise.all([...parseResult.scripts].map(([file, {script, cssRanges}]) => minifyCssInScript(file, script, cssRanges, identifier)));
+    await setDictionary(helperScript, identifier.idList);
 };

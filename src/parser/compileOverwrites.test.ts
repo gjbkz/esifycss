@@ -8,10 +8,7 @@ interface ITest {
 
 ([
     {
-        input: [
-            {},
-            {name: 'foo', nodes: []},
-        ],
+        input: [{}, {name: 'foo', nodes: []}],
         expected: {error: /^Invalid <single-animation>/},
     },
 ] as Array<ITest>).forEach(({input, expected}) => {

@@ -6,14 +6,16 @@ import {write} from '../util/write';
 import {Session} from '../runner/Session.js';
 import {loadParameters} from '../util/loadParameters';
 
-const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8'));
-
 export interface IEsifyCSSCommand extends commander.Command {
     output: string,
     config: string,
     exclude: Array<string>,
     watch: boolean,
 }
+
+const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8')) as {
+    version: string,
+};
 
 export const program = new commander.Command()
 .version(packageData.version)
