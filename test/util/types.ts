@@ -2,18 +2,19 @@ import * as childProcess from 'child_process';
 import * as stream from 'stream';
 
 export interface ICapability {
-    os: string,
+    os?: string,
     os_version: string,
     browserName?: string,
     device?: string,
-    realMobile?: string,
+    real_mobile?: string,
 }
 
 export interface IFilledCapability extends ICapability {
     'project': string,
     'build': string,
     'name': string,
-    'browserstack.local': true,
+    'real_mobile': 'true' | 'false',
+    'browserstack.local': 'true' | 'false',
     'browserstack.localIdentifier': string,
     'browserstack.user': string,
     'browserstack.key': string,
