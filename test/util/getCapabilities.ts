@@ -64,6 +64,16 @@ export const getBrowserStackCapabilities = (
                 deviceName: 'iPhone 8',
                 realMobile: 'true',
             },
+            {browserName: 'Safari'},
+        ));
+        capabilities.push(mergeCapability(
+            {
+                ...commonBStackOptions,
+                osVersion: '12',
+                deviceName: 'iPhone 8',
+                realMobile: 'true',
+            },
+            {browserName: 'safari'},
         ));
     }
     return capabilities;
