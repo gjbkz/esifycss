@@ -30,7 +30,7 @@
         "test-client": "ava -v test/run.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
-        "version": "npm-run-all --sequential version:changelog version:add"
+        "version": "run-s version:changelog version:add"
     },
     "dependencies": {
         "@nlib/nbnf": "^3.10.0",
