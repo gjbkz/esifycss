@@ -36,10 +36,9 @@ jobs:
   deploy:
     docker: [{image: "circleci/node:lts"}]
     steps:
-      - attach_workspace:
-          at: .
+      - attach_workspace: {at: .}
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run: npx lerna publish from-package --no-git-reset --yes
+      - run: npm publish
   onBranch:
     docker: [{image: "circleci/node:lts"}]
     steps:
