@@ -13,6 +13,9 @@
     },
     "repository": "kei-ito/esify",
     "main": "lib/index.js",
+    "files": [
+        "lib"
+    ],
     "bin": {
         "esifycss": "lib/bin/esifycss.js"
     },
