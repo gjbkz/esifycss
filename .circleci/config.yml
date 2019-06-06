@@ -87,7 +87,7 @@ workflows:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
       - deploy:
-          requires: [test, lint]
+          requires: [test, test-client, lint]
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
