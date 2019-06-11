@@ -13,49 +13,49 @@ EsifyCSS consists of a **PostCSS plugin** and a **Runner**.
 ## PostCSS plugin
 
 The plugin converts the identifiers in CSS and minifies them.
-It outputs the result of minifications.
+It outputs the result of minifications using [Root.warn()].
+
+[Root.warn()]: http://api.postcss.org/Root.html#warn
 
 ## Runner
 
-A runner searches `.css` files in your project and process them with PostCSS.
+A runner process `.css` files in your project with PostCSS and output the results to `.css.js` or `.css.ts`.
 
-## How it works
+## Example
 
 Assume you have following [`foo.css`](sample/foo.css):
 
 ```css
-:root {
-    --myColor: red;
-}
-
 .foo {
-    color: var(--myColor);
+  color: #000000;
+}
+#bar {
+  color: #111111;
+}
+@keyframes baz {
+  0% {
+    color: #222222;
+  }
+  100% {
+    color: #333333;
+  }
 }
 ```
 
 Then, run the command:
 
 ```
-$ esifycss --mangle --dest output.css
+$ esifycss foo.css
 ```
 
 You'll get following files:
 
 ```javascript
 // foo.css.js
-export const classes = {"foo":"_0"};
-export const properties = {"myColor":"red"};
-export default {classes, properties};
-```
-
-```css
-/* output.css */
-:root {
-  --myColor: red;
-}
-._0 {
-  color: var(--myColor);
-}
+// TODO: update the example codes
+export const className = {"foo":"_0"};
+export const id = {"bar":"_1"};
+export const keyframes = {"baz": "_2"};
 ```
 
 Class names are minified uniquely and it makes styles modular.
@@ -70,19 +70,15 @@ npm install --save-dev esifycss
 ## Usage
 
 ```
-Usage: esifycss [options] <patterns ...>
+Usage: esifycss [options] <include ...>
 
 Options:
-  -V, --version       output the version number.
-  --config <path>     A path to configuration files.
-  --dest <path>       A path to concatenated css.
-  --watch             Watch files and update module automatically.
-  --mangle            Minify classnames for production build.
-  --ext <string>      An extension of generated modules.
-  --baseDir <path>    A path which is used to generate modules to outputDir.
-  --outputDir <path>  A path to a directory where modules are generated.
-  --classesOnly       If it is true, a CSS file exports classes as default export. Otherwise, {classes, properties} is exported.
-  -h, --help          output usage information.
+  -V, --version         output the version number
+  --output <path>       A path to the helper script.
+  --config <path>       A path to configuration files.
+  --exclude <path ...>  Paths or patterns to be excluded.
+  --watch               Watch files and update the modules automatically.
+  -h, --help            output usage information
 ```
 
 ## `@import` Syntax
