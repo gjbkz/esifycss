@@ -32,6 +32,6 @@ export const getSessionConfiguration = (
             ...ensureArray(parameters.postcssPlugins),
             plugin(parameters.esifycssPluginParameter || {}),
         ],
-        minifyScript: parameters.minifyScript || true,
+        minifyScript: typeof parameters.minifyScript === 'undefined' ? true : Boolean(parameters.minifyScript),
     };
 };

@@ -11,7 +11,11 @@ export const loadParameters = async (
         include: program.args,
         output: program.output,
         exclude: program.exclude,
+        esifycssPluginParameter: {
+            mangle: !program.noMangle,
+        },
         watch: program.watch,
+        minifyScript: !program.noMangle,
     };
     if (program.config) {
         const configPath = path.isAbsolute(program.config) ? program.config : path.join(directory, program.config);

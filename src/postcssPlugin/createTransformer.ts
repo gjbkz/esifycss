@@ -36,6 +36,7 @@ export const createTransformer = (
                 rule.selector = newSelector;
             }),
         );
+        Object.assign(rule.raws, {before: '', between: '', after: ''});
     });
     root.walkAtRules((rule) => {
         const {name} = rule;
@@ -44,7 +45,9 @@ export const createTransformer = (
             const after = mangler(id, name, before);
             rule.params = transformResult[name][before] = after;
         }
+        Object.assign(rule.raws, {before: '', between: '', after: ''});
     });
+    root.walkDecls((rule) => Object.assign(rule.raws, {before: '', between: ':', after: ''}));
     await Promise.all(processes);
     transformDeclarations(root, transformResult);
     return transformResult;

@@ -5,13 +5,7 @@ import * as commander from 'commander';
 import {write} from '../util/write';
 import {Session} from '../runner/Session.js';
 import {loadParameters} from '../util/loadParameters';
-
-export interface IEsifyCSSCommand extends commander.Command {
-    output: string,
-    config: string,
-    exclude: Array<string>,
-    watch: boolean,
-}
+import {IEsifyCSSCommand} from '../util/types';
 
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8')) as {
     version: string,
@@ -23,6 +17,7 @@ export const program = new commander.Command()
 .option('--output <path>', 'A path to the helper script.')
 .option('--config <path>', 'A path to configuration files.')
 .option('--exclude <path ...>', 'Paths or patterns to be excluded.')
+.option('--noMangle', 'Disable minification.')
 .option('--watch', 'Watch files and update the modules automatically.') as IEsifyCSSCommand;
 
 if (!module.parent) {

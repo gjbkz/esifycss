@@ -4,7 +4,7 @@ const wordsToString = (
     words,
     dictionary,
 ) => typeof words === 'string' ? words : words.map((index) => dictionary[index]).join('');
-const dictionary = ["_","{","}","4",":",";"," ","animation","s","0","%","transform","rotate","(","deg",")","#","1","2",".","3","@","keyframes","100","720"];
+const dictionary = [/* Dictionary */];
 
 export const addStyle = (words) => {
     if (!style.parentNode) {
