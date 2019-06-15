@@ -1,0 +1,24 @@
+@keyframes foo {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(720deg);
+    }
+}
+
+#bar1 {
+    animation: 1s foo;
+}
+
+#bar2 {
+    animation: 2s foo;
+}
+
+.baz1 {
+    animation: 3s foo;
+}
+
+.baz2 {
+    animation: 4s foo;
+}

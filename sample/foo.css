@@ -1,7 +1,0 @@
-:root {
-    --myColor: red;
-}
-
-.foo {
-    color: var(--myColor);
-}

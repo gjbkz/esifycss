@@ -25,7 +25,11 @@
         "build:helper": "cpy src/helper lib/helper",
         "build:tsc": "tsc",
         "build:bin": "ts-node scripts/chmodScripts.ts",
-        "build": "run-s build:cleanup build:tsc build:helper build:bin",
+        "build:sample:cleanup": "rimraf sample/01-mangle",
+        "build:sample:cpy": "cpy sample/00-src sample/01-mangle",
+        "build:sample:esifycss": "./lib/bin/esifycss.js --output sample/01-mangle/helper.js 'sample/01-mangle/**/*.css'",
+        "build:sample": "run-s build:sample:cleanup build:sample:cpy build:sample:esifycss",
+        "build": "run-s build:cleanup build:tsc build:helper build:bin build:sample",
         "test": "ava -v",
         "test-client": "ava -v test/run.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
@@ -49,6 +53,7 @@
         "@types/node": "^12.0.8",
         "@types/selenium-webdriver": "^4.0.0",
         "@typescript-eslint/eslint-plugin": "^1.10.2",
+        "@typescript-eslint/parser": "^1.10.2",
         "ava": "^2.1.0",
         "browserstack-local": "^1.4.0",
         "conventional-changelog-cli": "^2.0.21",
@@ -117,6 +122,14 @@
                     "no-process-env": "off",
                     "@typescript-eslint/no-triple-slash-reference": "off"
                 }
+            },
+            {
+                "files": [
+                    "sample/**/*"
+                ],
+                "rules": {
+                    "no-console": "off"
+                }
             }
         ]
     },
@@ -132,7 +145,7 @@
         }
     },
     "lint-staged": {
-        "*.js": [
+        "*.ts": [
             "eslint"
         ]
     },
