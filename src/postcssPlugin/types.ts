@@ -39,3 +39,5 @@ export interface IEsifyCSSResult {
         [name: string]: string | undefined,
     },
 }
+
+export interface IImports extends Map<string, string> {}
