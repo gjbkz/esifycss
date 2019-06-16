@@ -13,6 +13,7 @@ export const getImports = (
             const parsed = parseImport(rule.params, id);
             if (parsed) {
                 imports.set(parsed.localName, parsed.from);
+                rule.remove();
             }
         }
         Object.assign(rule.raws, {before: '', between: '', after: ''});

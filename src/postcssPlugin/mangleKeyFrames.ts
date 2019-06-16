@@ -13,9 +13,9 @@ export const mangleKeyFrames = (
     root.walkAtRules((rule) => {
         const {name} = rule;
         if (name === 'keyframes') {
-            const {params: before} = rule;
-            const after = mangler(id, name, before);
-            rule.params = keyframes[before] = after;
+            const {params: value} = rule;
+            const after = mangler(id, name, value);
+            rule.params = keyframes[value] = after;
         }
     });
     return keyframes;

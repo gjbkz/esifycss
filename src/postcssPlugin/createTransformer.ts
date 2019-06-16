@@ -18,7 +18,7 @@ export const createTransformer = (
         ...(await mangleIdentifiers({id, root, mangler, imports})),
         keyframes: mangleKeyFrames({id, root, mangler, imports}),
     };
-    transformDeclarations(root, transformResult);
+    transformDeclarations({root, mangler, imports, transformResult});
     minify(root);
     return transformResult;
 };
