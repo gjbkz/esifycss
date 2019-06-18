@@ -1,3 +1,15 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/kei-ito/esify/compare/v0.1.16...v1.0.0) (2019-06-18)
+
+
+### Features
+
+* add noMangle option ([c5377fa](https://github.com/kei-ito/esify/commit/c5377fa))
+* parse [@import](https://github.com/import) and transform identifiers ([71805e8](https://github.com/kei-ito/esify/commit/71805e8))
+* rewrite and reconfigure Renovate ([#19](https://github.com/kei-ito/esify/issues/19)) ([914f7ff](https://github.com/kei-ito/esify/commit/914f7ff))
+
+
+
 <a name="0.1.16"></a>
 ## [0.1.16](https://github.com/kei-ito/esify/compare/v0.1.15...v0.1.16) (2019-01-24)
 
