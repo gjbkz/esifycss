@@ -1,5 +1,5 @@
-<a name="1.0.0"></a>
-# [1.0.0](https://github.com/kei-ito/esify/compare/v0.1.16...v1.0.0) (2019-06-18)
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/kei-ito/esify/compare/v0.1.16...v1.0.1) (2019-06-18)
 
 
 ### Features
