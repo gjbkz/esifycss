@@ -7,7 +7,7 @@ import {createIdentifier} from '../util/createIdentifier';
 
 export const getPluginMangler = (
     {
-        mangle = false,
+        mangle = true,
         identifier = createIdentifier(),
     }: IPluginParameter,
 ): IPluginMangler => {

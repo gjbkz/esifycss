@@ -25,7 +25,15 @@
         "build:helper": "cpy src/helper lib/helper",
         "build:tsc": "tsc",
         "build:bin": "ts-node scripts/chmodScripts.ts",
-        "build": "run-s build:cleanup build:tsc build:helper build:bin",
+        "build:sample1:cleanup": "rimraf sample/01-mangle",
+        "build:sample1:cpy": "cpy sample/00-src sample/01-mangle",
+        "build:sample1:esifycss": "node ./lib/bin/esifycss.js --output sample/01-mangle/helper.js 'sample/01-mangle/**/*.css'",
+        "build:sample1": "run-s build:sample1:cleanup build:sample1:cpy build:sample1:esifycss",
+        "build:sample2:cleanup": "rimraf sample/02-no-mangle",
+        "build:sample2:cpy": "cpy sample/00-src sample/02-no-mangle",
+        "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --output sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
+        "build:sample2": "run-s build:sample2:cleanup build:sample2:cpy build:sample2:esifycss",
+        "build": "run-s build:cleanup build:tsc build:helper build:bin build:sample*",
         "test": "ava -v",
         "test-client": "ava -v test/run.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
@@ -46,22 +54,23 @@
         "@types/anymatch": "^1.3.1",
         "@types/jsdom": "^12.2.3",
         "@types/micromatch": "3.1.0",
-        "@types/node": "^12.0.7",
+        "@types/node": "^12.0.8",
         "@types/selenium-webdriver": "^4.0.0",
-        "@typescript-eslint/eslint-plugin": "^1.9.0",
-        "ava": "^2.0.0",
+        "@typescript-eslint/eslint-plugin": "^1.10.2",
+        "@typescript-eslint/parser": "^1.10.2",
+        "ava": "^2.1.0",
         "browserstack-local": "^1.4.0",
         "conventional-changelog-cli": "^2.0.21",
         "cpy-cli": "^2.0.0",
         "eslint": "^5.16.0",
-        "husky": "^2.4.0",
-        "lint-staged": "^8.2.0",
+        "husky": "^2.4.1",
+        "lint-staged": "^8.2.1",
         "npm-run-all": "^4.1.5",
         "postcss-nested": "4.1.2",
         "rimraf": "^2.6.3",
-        "selenium-webdriver": "^4.0.0-alpha.1",
-        "ts-node": "^8.2.0",
-        "typescript": "^3.5.1"
+        "selenium-webdriver": "^4.0.0-alpha.3",
+        "ts-node": "^8.3.0",
+        "typescript": "^3.5.2"
     },
     "ava": {
         "compileEnhancements": false,
@@ -117,6 +126,14 @@
                     "no-process-env": "off",
                     "@typescript-eslint/no-triple-slash-reference": "off"
                 }
+            },
+            {
+                "files": [
+                    "sample/**/*"
+                ],
+                "rules": {
+                    "no-console": "off"
+                }
             }
         ]
     },
@@ -132,7 +149,7 @@
         }
     },
     "lint-staged": {
-        "*.js": [
+        "*.ts": [
             "eslint"
         ]
     },
