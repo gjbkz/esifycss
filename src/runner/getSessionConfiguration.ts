@@ -7,11 +7,11 @@ import {getHash} from '../util/getHash';
 export const getSessionConfiguration = (
     parameters: ISessionParameters,
 ): ISessionConfiguration => {
-    if (!path.extname(parameters.output)) {
-        throw new Error(`output should have an extension (e.g. ".js", ".ts"): ${parameters.output}`);
-    }
-    const include = ensureArray(parameters.include);
+    const include = ensureArray(parameters.include || '**/*.css');
     const output = parameters.output || `helper.${getHash(include.join(','))}.css.js`;
+    if (!path.extname(output)) {
+        throw new Error(`output should have an extension (e.g. ".js", ".ts"): ${output}`);
+    }
     return {
         watch: Boolean(parameters.watch),
         output,

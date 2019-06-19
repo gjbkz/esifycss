@@ -9,8 +9,8 @@ export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
 }
 
 export interface ISessionParameters {
-    output: string,
-    include: string | Array<string>,
+    include?: string | Array<string>,
+    output?: string,
     exclude?: anymatch.Matcher,
     watch?: boolean,
     chokidar?: chokidar.WatchOptions,
