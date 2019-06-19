@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "build:esifycss": "esifycss --output src/helper.css.js src/**/*.css",
+        "build:esifycss": "esifycss src/**/*.css",
         "build:parcel": "parcel build src/index.html --no-minify --out-dir output",
         "build": "run-s build:esifycss build:parcel"
     },
