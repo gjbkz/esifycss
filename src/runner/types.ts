@@ -10,7 +10,7 @@ export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
 
 export interface ISessionParameters {
     include?: string | Array<string>,
-    output?: string,
+    helper?: string,
     exclude?: anymatch.Matcher,
     watch?: boolean,
     chokidar?: chokidar.WatchOptions,
@@ -23,7 +23,7 @@ export interface ISessionParameters {
 
 export interface ISessionConfiguration {
     readonly watch: boolean,
-    readonly output: string,
+    readonly helper: string,
     readonly ext: string,
     readonly path: ReadonlyArray<string>,
     readonly chokidar: IReadonlyWatchOptions,

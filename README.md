@@ -138,6 +138,18 @@ You can also name the imports.
 
 ## Options
 
+- `include`: `string | Array<string>`. 
+- `output`: `string`.
+- `exclude`: `anymatch.Matcher`.
+- `watch`: `boolean`.
+- `chokidar`: `chokidar.WatchOptions`.
+- `stdout`: `stream.Writable`.
+- `stderr`: `stream.Writable`.
+- `postcssPlugins`: `Array<postcss.AcceptedPlugin>`.
+- `esifycssPluginParameter`: `IPluginParameter`.
+- `minifyScript`: `boolean`.
+
+
 - `config`: `string`. A path to configuration files.
 - `dest`: `string`. A path to concatenated css.
 - `watch`: `boolean`. Watch files and update module automatically.

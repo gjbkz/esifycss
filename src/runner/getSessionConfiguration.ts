@@ -8,14 +8,14 @@ export const getSessionConfiguration = (
     parameters: ISessionParameters,
 ): ISessionConfiguration => {
     const include = ensureArray(parameters.include || '**/*.css');
-    const output = parameters.output || `helper.${getHash(include.join(','))}.css.js`;
-    if (!path.extname(output)) {
-        throw new Error(`output should have an extension (e.g. ".js", ".ts"): ${output}`);
+    const helper = parameters.helper || `helper.${getHash(include.join(','))}.css.js`;
+    if (!path.extname(helper)) {
+        throw new Error(`helper should have an extension (e.g. ".js", ".ts"): ${helper}`);
     }
     return {
         watch: Boolean(parameters.watch),
-        output,
-        ext: path.extname(output),
+        helper,
+        ext: path.extname(helper),
         path: include,
         chokidar: {
             ...parameters.chokidar,

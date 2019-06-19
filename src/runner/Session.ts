@@ -42,7 +42,7 @@ export class Session {
 
     protected async outputHelperScript() {
         this.helperScript = await generateHelperScript(
-            this.configuration.output,
+            this.configuration.helper,
         );
         await writeFile(
             this.helperScript.path,
@@ -67,7 +67,7 @@ export class Session {
         if (!this.configuration.watch) {
             if (this.configuration.minifyScript) {
                 await minifyScripts(
-                    this.configuration.output,
+                    this.configuration.helper,
                     [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
                 );
             }
