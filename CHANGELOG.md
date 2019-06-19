@@ -1,3 +1,13 @@
+<a name="1.1.2"></a>
+## [1.1.2](https://github.com/kei-ito/esify/compare/v1.1.1...v1.1.2) (2019-06-19)
+
+
+### Features
+
+* add processCSS and hide the public handlers ([8425ef2](https://github.com/kei-ito/esify/commit/8425ef2))
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/kei-ito/esify/compare/v1.1.0...v1.1.1) (2019-06-19)
 
