@@ -1,3 +1,15 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/kei-ito/esify/compare/v1.0.1...v1.1.0) (2019-06-19)
+
+
+### Features
+
+* all options are optional ([4375f02](https://github.com/kei-ito/esify/commit/4375f02))
+* rename output to helper ([b26dce5](https://github.com/kei-ito/esify/commit/b26dce5))
+* the 1st arg of the constructor is optional ([b3bbb86](https://github.com/kei-ito/esify/commit/b3bbb86))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/kei-ito/esify/compare/v0.1.16...v1.0.1) (2019-06-18)
 
