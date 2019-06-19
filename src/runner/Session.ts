@@ -25,7 +25,7 @@ export class Session {
 
     protected initialTask: Array<Promise<void>> | null;
 
-    public constructor(parameters: ISessionParameters) {
+    public constructor(parameters: ISessionParameters = {}) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
         this.initialTask = null;
