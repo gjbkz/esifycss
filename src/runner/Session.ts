@@ -40,22 +40,22 @@ export class Session {
         await this.stopWatcher();
     }
 
-    public onAdd(
-        path: string,
-        stats: fs.Stats,
-    ): Promise<void> {
-        return this.onChange(path, stats);
+    public async outputHelperScript() {
+        this.helperScript = await generateHelperScript(
+            this.configuration.helper,
+        );
+        await writeFile(
+            this.helperScript.path,
+            this.helperScript.content,
+            this.configuration.stdout,
+        );
     }
 
-    public async onChange(
+    public async processCSS(
         filePath: string,
-        stats: fs.Stats,
     ): Promise<void> {
         if (!this.helperScript) {
             throw new Error(`helperScript is ${this.helperScript}`);
-        }
-        if (!stats.isFile()) {
-            throw new Error(`${filePath} is not a file.`);
         }
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
@@ -76,24 +76,13 @@ export class Session {
         );
     }
 
-    public async onUnlink(
-        filePath: string,
-        _stats: fs.Stats,
-    ): Promise<void> {
-        const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
-        this.processedFiles.delete(filePath);
-        await deleteFile(scriptPath, this.configuration.stdout);
-    }
-
-    protected async outputHelperScript() {
-        this.helperScript = await generateHelperScript(
-            this.configuration.helper,
-        );
-        await writeFile(
-            this.helperScript.path,
-            this.helperScript.content,
-            this.configuration.stdout,
-        );
+    public async minifyScripts() {
+        if (this.configuration.minifyScript) {
+            await minifyScripts(
+                this.configuration.helper,
+                [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
+            );
+        }
     }
 
     protected async startWatcher(): Promise<void> {
@@ -110,12 +99,7 @@ export class Session {
         await Promise.all(this.initialTask);
         this.initialTask = null;
         if (!this.configuration.watch) {
-            if (this.configuration.minifyScript) {
-                await minifyScripts(
-                    this.configuration.helper,
-                    [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
-                );
-            }
+            await this.minifyScripts();
             await this.stop();
         }
     }
@@ -161,6 +145,32 @@ export class Session {
             break;
         default:
         }
+    }
+
+    protected onAdd(
+        path: string,
+        stats: fs.Stats,
+    ): Promise<void> {
+        return this.onChange(path, stats);
+    }
+
+    protected async onChange(
+        filePath: string,
+        stats: fs.Stats,
+    ): Promise<void> {
+        if (!stats.isFile()) {
+            throw new Error(`${filePath} is not a file.`);
+        }
+        await this.processCSS(filePath);
+    }
+
+    protected async onUnlink(
+        filePath: string,
+        _stats: fs.Stats,
+    ): Promise<void> {
+        const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
+        this.processedFiles.delete(filePath);
+        await deleteFile(scriptPath, this.configuration.stdout);
     }
 
 }
