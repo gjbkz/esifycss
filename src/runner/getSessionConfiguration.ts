@@ -7,15 +7,15 @@ import {getHash} from '../util/getHash';
 export const getSessionConfiguration = (
     parameters: ISessionParameters,
 ): ISessionConfiguration => {
-    if (!path.extname(parameters.output)) {
-        throw new Error(`output should have an extension (e.g. ".js", ".ts"): ${parameters.output}`);
+    const include = ensureArray(parameters.include || '**/*.css');
+    const helper = parameters.helper || `helper.${getHash(include.join(','))}.css.js`;
+    if (!path.extname(helper)) {
+        throw new Error(`helper should have an extension (e.g. ".js", ".ts"): ${helper}`);
     }
-    const include = ensureArray(parameters.include);
-    const output = parameters.output || `helper.${getHash(include.join(','))}.css.js`;
     return {
         watch: Boolean(parameters.watch),
-        output,
-        ext: path.extname(output),
+        helper,
+        ext: path.extname(helper),
         path: include,
         chokidar: {
             ...parameters.chokidar,

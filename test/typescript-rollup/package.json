@@ -1,7 +1,7 @@
 {
     "private": true,
     "scripts": {
-        "build:esifycss": "esifycss --output src/helper.css.ts src/**/*.css",
+        "build:esifycss": "esifycss --helper src/helper.css.ts src/**/*.css",
         "build:tsc": "tsc",
         "build:rollup": "rollup temp/page.js --format iife --file output/page.js",
         "build:html": "cpy src/index.html output",

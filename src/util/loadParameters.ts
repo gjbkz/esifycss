@@ -9,7 +9,7 @@ export const loadParameters = async (
 ): Promise<ISessionParameters> => {
     const parameters: Partial<ISessionParameters> = {
         include: program.args,
-        output: program.output,
+        helper: program.helper,
         exclude: program.exclude,
         esifycssPluginParameter: {
             mangle: !program.noMangle,
@@ -22,12 +22,5 @@ export const loadParameters = async (
         const configJSON = await readFile(configPath, 'utf8');
         Object.assign(parameters, JSON.parse(configJSON) as ISessionParameters);
     }
-    const {output, include} = parameters;
-    if (!output) {
-        throw new Error(`Invalid output: ${output}`);
-    }
-    if (!include) {
-        throw new Error(`Invalid include : ${include}`);
-    }
-    return {output, include, ...parameters};
+    return parameters;
 };

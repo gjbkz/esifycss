@@ -48,17 +48,17 @@ interface ITest {
             path.join(t.context.directory, file.path),
             file.content.join('\n'),
         )));
-        const output = path.join(t.context.directory, 'output.js');
+        const helper = path.join(t.context.directory, 'helper.js');
         const session = t.context.session = new Session({
             ...parameters,
-            output,
+            helper,
             include: files.map((file) => path.join(t.context.directory, file.path)),
         });
         await session.start();
         await Promise.all(files.map(async (file) => {
             const codePath = path.join(
                 t.context.directory,
-                `${file.path}${path.extname(output)}`,
+                `${file.path}${path.extname(helper)}`,
             );
             const code = await readFile(codePath, 'utf8');
             t.truthy(code);
@@ -68,12 +68,12 @@ interface ITest {
 
 test('#watch', async (t) => {
     const cssPath = path.join(t.context.directory, '/components/style.css');
-    const output = path.join(t.context.directory, 'output.js');
-    const codePath = `${cssPath}${path.extname(output)}`;
+    const helper = path.join(t.context.directory, 'helper.js');
+    const codePath = `${cssPath}${path.extname(helper)}`;
     await writeFile(cssPath, '.foo {color: red}');
     const messageListener = new events.EventEmitter();
     const session = t.context.session = new Session({
-        output,
+        helper,
         watch: true,
         include: [cssPath],
         stdout: new stream.Writable({

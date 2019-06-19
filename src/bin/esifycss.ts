@@ -14,7 +14,7 @@ const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../packa
 export const program = new commander.Command()
 .version(packageData.version)
 .usage('[options] <include ...>')
-.option('--output <path>', 'A path to the helper script.')
+.option('--helper <path>', 'A path to the helper script.')
 .option('--config <path>', 'A path to configuration files.')
 .option('--exclude <path ...>', 'Paths or patterns to be excluded.')
 .option('--noMangle', 'Disable minification.')
