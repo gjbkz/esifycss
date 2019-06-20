@@ -19,7 +19,8 @@ It outputs the result of minifications using [Root.warn()].
 
 ## Runner
 
-A runner process `.css` files in your project with PostCSS and output the results to `.css.js` or `.css.ts`.
+A runner process `.css` files in your project with PostCSS and output the
+results to `.css.js` or `.css.ts`.
 
 ## Example
 
@@ -34,21 +35,17 @@ Assume you have following [`sample.css`](sample/00-src/sample.css):
         transform: rotate(720deg);
     }
 }
-
 #bar1 {
     animation: 1s foo;
 }
-
 #bar2 {
     animation: 2s foo;
 }
-
 .baz1 {
     animation: 3s foo;
 }
-
 .baz2 {
-    animation: 4s bon;
+    animation: 4s bar;
 }
 ```
 
@@ -63,26 +60,30 @@ You'll get the following file:
 ```javascript
 // sample.css.js
 import {addStyle} from './helper.js';
-addStyle(/* begin(css) */"@keyframes sample_46css_45keyframes_45foo{0%{transform:rotate(0deg);}100%{transform:rotate(720deg);}}"/* end(css) */);
-addStyle(/* begin(css) */"#sample_46css_45id_45bar1{animation:1s sample_46css_45keyframes_45foo;}"/* end(css) */);
-addStyle(/* begin(css) */"#sample_46css_45id_45bar2{animation:2s sample_46css_45keyframes_45foo;}"/* end(css) */);
-addStyle(/* begin(css) */".sample_46css_45class_45baz1{animation:3s sample_46css_45keyframes_45foo;}"/* end(css) */);
-addStyle(/* begin(css) */".sample_46css_45class_45baz2{animation:4s bon;}"/* end(css) */);
+addStyle([
+  "qBsBKAMCSUCWGYaSceIEuBUCWGYawBceIEE",
+  "gBASCOGiBQKAMIE",
+  "gBAiBCOGkBQKAMIE",
+  "mBAkBCOGoBQKAMIE",
+  "mBAoBCOGMQKyBIE"
+]);
 export const className = {
-    "baz1": "sample_46css_45class_45baz1",
-    "baz2": "sample_46css_45class_45baz2"
+    "baz1": "_2",
+    "baz2": "_3"
 };
 export const id = {
-    "bar1": "sample_46css_45id_45bar1",
-    "bar2": "sample_46css_45id_45bar2"
+    "bar1": "_0",
+    "bar2": "_1"
 };
 export const keyframes = {
-    "foo": "sample_46css_45keyframes_45foo"
+    "foo": "_4"
 };
 ```
 
-Class names are minified uniquely and it makes styles modular.
-This means you don't have to think about naming somethings.
+Each string given to `addStyle` represents a CSS string.
+They are inserted to the document's stylesheet by the helper script.
+Classnames, identifiers, and keyframes are shortened uniquely and it makes
+styles modular. This means you don't have to concern about naming somethings.
 
 ## Installation
 
@@ -106,34 +107,31 @@ Options:
 
 ## `@import` Syntax
 
-You can use `@import` syntax when the style declarations requires class names in external files (e.g. `.a>.b`).
+You can use `@import` syntax when the style declarations requires names in external files.
+
+Example: Assume you have the following `a.css` and `b.css`.
 
 ```css
 /* a.css */
-.classA {...}
+.container {...} /* → ._0 */
 ```
 
 ```css
 /* b.css */
-.classB {...}
+.container {...} /* → ._1 */
 ```
 
-```css
-@import './a.css';
-@import './b.css';
-.sample>$1.classA {...}
-.sample>$2.classB {...}
-```
-
-Imports are named automatically as $1, $2, ...
-
-You can also name the imports.
+The `container` class names will be shortened to unique names like
+`_0` and `_1`.
+You can import the shortened names with the `@import` syntax.
 
 ```css
-@import './a.css' modA;
-@import './b.css' modB;
-.sample>modA.classA {...}
-.sample>modB.classB {...}
+/* "modA-" is prefix for a.css */
+@import './a.css' modA-;
+/* "bbbb" is prefix for b.css */
+@import './b.css' BBB;
+.wrapper>.modA-container {...} /* → ._2>._0 */
+.wrapper>.BBBcontainer {...}   /* → ._2>._1 */
 ```
 
 ## JavaScript API

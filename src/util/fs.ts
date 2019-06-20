@@ -12,6 +12,7 @@ export const readFile = util.promisify(fs.readFile);
 export const stat = util.promisify(fs.stat);
 export const unlink = util.promisify(fs.unlink);
 export const rmdir = util.promisify(fs.rmdir);
+export const copyFile = util.promisify(fs.copyFile);
 export const writeFile = (
     dest: string,
     data: string | Buffer,

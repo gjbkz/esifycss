@@ -1,36 +1,60 @@
+const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('')
+    .reduce((map, char, index) => {
+    map[char] = index;
+    return map;
+}, {});
+const decode = (string) => {
+    const result = [];
+    let value = 0;
+    let shift = 0;
+    for (const char of string) {
+        let integer = charToInteger[char];
+        if (0 <= integer) {
+            const hasContinuationBit = integer & 32;
+            integer &= 31;
+            value += integer << shift;
+            if (hasContinuationBit) {
+                shift += 5;
+            }
+            else {
+                const shouldNegate = value & 1;
+                value >>= 1;
+                result.push(shouldNegate ? -value : value);
+                value = shift = 0;
+            }
+        }
+        else {
+            throw new Error(`Invalid character (${char})`);
+        }
+    }
+    return result;
+};
 const style = document.createElement('style');
 let buffer = [];
-const wordsToString = (
-    words,
-    dictionary,
-) => typeof words === 'string' ? words : words.map((index) => dictionary[index]).join('');
-const dictionary = [/* Dictionary */];
-
-export const addStyle = (words) => {
+const dictionary = ["_","45","sample","4702","no","mangle","47","46","css","{","}",":",";","keyframes"," ","foo","animation","s","bar","1","2","0","%","transform","rotate","(","deg",")","#","id",".","class","baz","@","100","720","3","4"];
+const wordsToString = (words) => decode(words).map((index) => dictionary[index]).join('');
+export const addStyle = (rules) => {
     if (!style.parentNode) {
         document.head.appendChild(style);
     }
-    if (words) {
-        buffer.push(words);
+    if (rules) {
+        buffer = buffer.concat(rules);
     }
-    if (0 < buffer.length) {
-        const {sheet} = style;
-        const skipped = [];
-        while (1) {
-            const words = buffer.shift();
-            const type = typeof words;
-            if (type === 'string') {
-                sheet.insertRule(words, sheet.cssRules.length);
-            } else if (type === 'object') {
-                if (dictionary) {
-                    sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
-                } else {
-                    skipped.push(words);
-                }
-            } else {
-                break;
+    const sheet = style.sheet;
+    const skipped = [];
+    while (1) {
+        const words = buffer.shift();
+        if (words) {
+            if (dictionary) {
+                sheet.insertRule(wordsToString(words), sheet.cssRules.length);
+            }
+            else {
+                skipped.push(words);
             }
         }
-        buffer = buffer.concat(skipped);
+        else {
+            break;
+        }
     }
+    buffer = buffer.concat(skipped);
 };

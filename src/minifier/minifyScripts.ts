@@ -56,7 +56,7 @@ const setDictionary = async (
     words: Array<string>,
 ): Promise<void> => {
     const code = await readFile(filePath, 'utf8');
-    const newCode = code.replace(/\[\/\*\s*Dictionary\s*\*\/\]/, JSON.stringify(words));
+    const newCode = code.replace(/\[\s*(['"])DICTIONARY\1\s*\]/, JSON.stringify(words));
     return writeFile(filePath, newCode);
 };
 
