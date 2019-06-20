@@ -1,3 +1,6 @@
+const style = document.createElement('style');
+let buffer = [];
+const dictionary = ["_","{","}",":",";"," ","4","animation","s","0","%","transform","rotate","(","deg",")","#","1","2",".","3","@","keyframes","100","720","bar"];
 const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('')
     .reduce((map, char, index) => {
     map[char] = index;
@@ -7,8 +10,9 @@ const decode = (string) => {
     const result = [];
     let value = 0;
     let shift = 0;
-    for (const char of string) {
-        let integer = charToInteger[char];
+    const { length } = string;
+    for (let index = 0; index < length; index++) {
+        let integer = charToInteger[string[index]];
         if (0 <= integer) {
             const hasContinuationBit = integer & 32;
             integer &= 31;
@@ -17,22 +21,17 @@ const decode = (string) => {
                 shift += 5;
             }
             else {
-                const shouldNegate = value & 1;
                 value >>= 1;
-                result.push(shouldNegate ? -value : value);
+                result.push(dictionary[value]);
                 value = shift = 0;
             }
         }
         else {
-            throw new Error(`Invalid character (${char})`);
+            throw new Error(`Invalid character (${string[index]})`);
         }
     }
-    return result;
+    return result.join('');
 };
-const style = document.createElement('style');
-let buffer = [];
-const dictionary = ["_","{","}",":",";"," ","4","animation","s","0","%","transform","rotate","(","deg",")","#","1","2",".","3","@","keyframes","100","720","bar"];
-const wordsToString = (words) => decode(words).map((index) => dictionary[index]).join('');
 export const addStyle = (rules) => {
     if (!style.parentNode) {
         document.head.appendChild(style);
@@ -46,7 +45,7 @@ export const addStyle = (rules) => {
         const words = buffer.shift();
         if (words) {
             if (dictionary) {
-                sheet.insertRule(wordsToString(words), sheet.cssRules.length);
+                sheet.insertRule(decode(words), sheet.cssRules.length);
             }
             else {
                 skipped.push(words);
