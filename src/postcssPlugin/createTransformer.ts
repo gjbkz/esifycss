@@ -6,6 +6,7 @@ import {minify} from './minify';
 import {mangleIdentifiers} from './mangleIdentifiers';
 import {mangleKeyFrames} from './mangleKeyFrames';
 import {removeImportsAndRaws} from './removeImportsAndRaws';
+import {normalizePath} from '../util/normalizePath';
 
 export const createTransformer = (
     {mangler, rawPrefix}: IPluginConfiguration,
@@ -13,7 +14,7 @@ export const createTransformer = (
     root: postcss.Root,
     result: postcss.Result,
 ): Promise<IEsifyCSSResult> => {
-    const id = (result.opts && result.opts.from) || Date.now().toString(36);
+    const id = normalizePath((result.opts && result.opts.from) || Date.now().toString(36));
     const imports = getImports(root, id);
     const transformResult: IEsifyCSSResult = {
         ...(await mangleIdentifiers({id, root, mangler, imports, rawPrefix})),
