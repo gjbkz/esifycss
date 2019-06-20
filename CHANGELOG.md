@@ -1,3 +1,18 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/kei-ito/esify/compare/v1.1.2...v1.2.0) (2019-06-20)
+
+
+### Bug Fixes
+
+* add normalizePath ([38fd430](https://github.com/kei-ito/esify/commit/38fd430))
+
+
+### Features
+
+* add rawPrefix option ([86783ad](https://github.com/kei-ito/esify/commit/86783ad))
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/kei-ito/esify/compare/v1.1.1...v1.1.2) (2019-06-19)
 
