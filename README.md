@@ -136,21 +136,37 @@ You can import the shortened names with the `@import` syntax.
 
 ## JavaScript API
 
-TBW
+```javascript
+import {Session} from 'esifycss';
+new Session(options).start()
+.then(() => console.log('Done'))
+.catch((error) => console.error(error));
+```
 
 ## Options
 
-TBW
-
 - `include`: `string | Array<string>`.
+  Default: `**/*.css`.
+  Pattern(s) to be included.
+- `exclude`: `anymatch.Matcher`. Pattern(s) to be excluded.
 - `helper`: `string`.
-- `exclude`: `anymatch.Matcher`.
+  Default: `helper.{hash}.css.js`.
+  Where this plugin outputs the helper script.
+  The hash is calculated from the include.
 - `watch`: `boolean`.
+  Default: `false`.
+  If it is true, a watcher is enabled.
 - `chokidar`: `chokidar.WatchOptions`.
+  Options passed to chokidar.
 - `stdout`: `stream.Writable`.
 - `stderr`: `stream.Writable`.
 - `postcssPlugins`: `Array<postcss.AcceptedPlugin>`.
-- `esifycssPluginParameter`: `IPluginParameter`.
+  An array of postcss plugins.
+- `esifycssPluginParameter`:
+  - `mangle`: `boolean`,
+  - `identifier`: `IIdentifier`,
+  - `mangler`: `IPluginMangler`,
+  - `rawPrefix`: `string`,
 - `minifyScript`: `boolean`.
 
 ## LICENSE
