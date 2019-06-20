@@ -1,4 +1,5 @@
 import * as path from 'path';
+import {normalizePath} from '../util/normalizePath';
 
 export const parseImport = (
     parameter: string,
@@ -9,7 +10,7 @@ export const parseImport = (
         const from = importFrom.slice(1, -1);
         if (from.startsWith('.')) {
             return {
-                from: path.join(path.dirname(id), ...from.split(/\//)),
+                from: normalizePath(path.join(path.dirname(id), ...from.split(/\//))),
                 localName,
             };
         }

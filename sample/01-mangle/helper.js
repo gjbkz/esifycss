@@ -1,36 +1,59 @@
 const style = document.createElement('style');
 let buffer = [];
-const wordsToString = (
-    words,
-    dictionary,
-) => typeof words === 'string' ? words : words.map((index) => dictionary[index]).join('');
-const dictionary = ["_","{","}",":",";"," ","4","animation","s","0","%","transform","rotate","(","deg",")","#","1","2",".","3","@","keyframes","100","720","bon"];
-
-export const addStyle = (words) => {
+const dictionary = ["_","{","}",":",";"," ","4","animation","s","0","%","transform","rotate","(","deg",")","#","1","2",".","3","@","keyframes","100","720","bar"];
+const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('')
+    .reduce((map, char, index) => {
+    map[char] = index;
+    return map;
+}, {});
+const decode = (string) => {
+    const result = [];
+    let value = 0;
+    let shift = 0;
+    const { length } = string;
+    for (let index = 0; index < length; index++) {
+        let integer = charToInteger[string[index]];
+        if (0 <= integer) {
+            const hasContinuationBit = integer & 32;
+            integer &= 31;
+            value += integer << shift;
+            if (hasContinuationBit) {
+                shift += 5;
+            }
+            else {
+                value >>= 1;
+                result.push(dictionary[value]);
+                value = shift = 0;
+            }
+        }
+        else {
+            throw new Error(`Invalid character (${string[index]})`);
+        }
+    }
+    return result.join('');
+};
+export const addStyle = (rules) => {
     if (!style.parentNode) {
         document.head.appendChild(style);
     }
-    if (words) {
-        buffer.push(words);
+    if (rules) {
+        buffer = buffer.concat(rules);
     }
-    if (0 < buffer.length) {
-        const {sheet} = style;
-        const skipped = [];
-        while (1) {
-            const words = buffer.shift();
-            const type = typeof words;
-            if (type === 'string') {
-                sheet.insertRule(words, sheet.cssRules.length);
-            } else if (type === 'object') {
-                if (dictionary) {
-                    sheet.insertRule(wordsToString(words, dictionary), sheet.cssRules.length);
-                } else {
-                    skipped.push(words);
-                }
-            } else {
-                break;
+    const sheet = style.sheet;
+    const skipped = [];
+    while (1) {
+        const words = buffer.shift();
+        if (words) {
+            if (dictionary) {
+                sheet.insertRule(decode(words), sheet.cssRules.length);
+            }
+            else {
+                skipped.push(words);
             }
         }
-        buffer = buffer.concat(skipped);
+        else {
+            break;
+        }
     }
+    buffer = buffer.concat(skipped);
 };

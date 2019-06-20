@@ -6,10 +6,8 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile, deleteFile} from '../util/fs';
+import {writeFile, deleteFile, copyFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
-import {generateHelperScript} from '../scriptGenerator/generateHelperScript';
-import {IHelperScript} from '../scriptGenerator/types';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
 
@@ -18,8 +16,6 @@ export class Session {
     public readonly configuration: Readonly<ISessionConfiguration>;
 
     protected watcher?: chokidar.FSWatcher;
-
-    protected helperScript?: IHelperScript;
 
     protected processedFiles: Set<string>;
 
@@ -41,22 +37,16 @@ export class Session {
     }
 
     public async outputHelperScript() {
-        this.helperScript = await generateHelperScript(
+        const srcDirectory = path.join(__dirname, '..', 'helper');
+        await copyFile(
+            path.join(srcDirectory, `index${this.configuration.ext}`),
             this.configuration.helper,
-        );
-        await writeFile(
-            this.helperScript.path,
-            this.helperScript.content,
-            this.configuration.stdout,
         );
     }
 
     public async processCSS(
         filePath: string,
     ): Promise<void> {
-        if (!this.helperScript) {
-            throw new Error(`helperScript is ${this.helperScript}`);
-        }
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
             file: filePath,
@@ -68,7 +58,7 @@ export class Session {
             scriptPath,
             generateScript(
                 scriptPath,
-                this.helperScript,
+                this.configuration.helper,
                 pluginResult,
                 postcssResult.root,
             ),
@@ -77,12 +67,10 @@ export class Session {
     }
 
     public async minifyScripts() {
-        if (this.configuration.minifyScript) {
-            await minifyScripts(
-                this.configuration.helper,
-                [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
-            );
-        }
+        await minifyScripts(
+            this.configuration.helper,
+            [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
+        );
     }
 
     protected async startWatcher(): Promise<void> {

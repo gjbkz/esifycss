@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as postcss from 'postcss';
 import {IEsifyCSSResult} from '../postcssPlugin/types';
-import {IHelperScript} from './types';
 
 /**
  * Returns a (TypeScript-compatible) JavaScript code that exports className,
@@ -10,8 +9,8 @@ import {IHelperScript} from './types';
  * @param outputFilePath
  * The destination of the output. The relative path to the helper script is
  * calculated from this value.
- * @param helperScript
- * helperScript.path is required to get a relative path to the helper script.
+ * @param helperScriptPath
+ * Path to the helperScript which is required to get a relative path to the helper script.
  * @param esifycssResult
  * The main contents of the output script.
  * @param postcssRoot
@@ -19,19 +18,19 @@ import {IHelperScript} from './types';
  */
 export const generateScript = (
     outputFilePath: string,
-    helperScript: IHelperScript,
+    helperScriptPath: string,
     esifycssResult: IEsifyCSSResult,
     postcssRoot?: postcss.Root,
 ): string => {
     if (!postcssRoot) {
         throw new Error(`No root: ${postcssRoot}`);
     }
-    const helperScriptPath = helperScript.path
+    const helperPath = path.relative(path.dirname(outputFilePath), helperScriptPath)
     .replace(/\.ts$/, '')
-    .replace(/\/index$/, '');
+    .replace(/^([^./])/, './$1');
     return [
-        `import {addStyle} from '${path.relative(path.dirname(outputFilePath), helperScriptPath).replace(/^([^./])/, './$1')}';`,
-        ...(postcssRoot.nodes || []).map((node) => `addStyle(/* begin(css) */${JSON.stringify(node.toString())}/* end(css) */);`),
+        `import {addStyle} from '${helperPath}';`,
+        `addStyle([${(postcssRoot.nodes || []).map((node) => `/* begin(css) */${JSON.stringify(node.toString())}/* end(css) */`).join(',')}]);`,
         `export const className = ${JSON.stringify(esifycssResult.class, null, 4)};`,
         `export const id = ${JSON.stringify(esifycssResult.id, null, 4)};`,
         `export const keyframes = ${JSON.stringify(esifycssResult.keyframes, null, 4)};`,

@@ -22,22 +22,22 @@ export interface IPluginParameter {
      * and `identifier` options are ignored.
      */
     mangler?: IPluginMangler,
+    rawPrefix?: string,
 }
 
 export interface IPluginConfiguration {
     readonly mangler: IPluginMangler,
+    readonly rawPrefix: string,
+}
+
+export interface IIdentifierMap {
+    [name: string]: string | undefined,
 }
 
 export interface IEsifyCSSResult {
-    class: {
-        [name: string]: string | undefined,
-    },
-    id: {
-        [name: string]: string | undefined,
-    },
-    keyframes: {
-        [name: string]: string | undefined,
-    },
+    class: IIdentifierMap,
+    id: IIdentifierMap,
+    keyframes: IIdentifierMap,
 }
 
 export interface IImports extends Map<string, string> {}
