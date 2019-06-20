@@ -23,4 +23,5 @@ export const getPluginConfiguration = (
     parameters: IPluginParameter = {},
 ): IPluginConfiguration => ({
     mangler: parameters.mangler || getPluginMangler(parameters),
+    rawPrefix: parameters.rawPrefix || 'raw-',
 });

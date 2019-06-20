@@ -5,9 +5,10 @@ import {getImports} from './getImports';
 import {minify} from './minify';
 import {mangleIdentifiers} from './mangleIdentifiers';
 import {mangleKeyFrames} from './mangleKeyFrames';
+import {removeImportsAndRaws} from './removeImportsAndRaws';
 
 export const createTransformer = (
-    {mangler}: IPluginConfiguration,
+    {mangler, rawPrefix}: IPluginConfiguration,
 ) => async (
     root: postcss.Root,
     result: postcss.Result,
@@ -15,10 +16,14 @@ export const createTransformer = (
     const id = (result.opts && result.opts.from) || Date.now().toString(36);
     const imports = getImports(root, id);
     const transformResult: IEsifyCSSResult = {
-        ...(await mangleIdentifiers({id, root, mangler, imports})),
-        keyframes: mangleKeyFrames({id, root, mangler, imports}),
+        ...(await mangleIdentifiers({id, root, mangler, imports, rawPrefix})),
+        keyframes: mangleKeyFrames({id, root, mangler, imports, rawPrefix}),
     };
-    transformDeclarations({root, mangler, imports, transformResult});
+    transformDeclarations({root, mangler, imports, transformResult, rawPrefix});
     minify(root);
-    return transformResult;
+    return removeImportsAndRaws({
+        result: transformResult,
+        imports,
+        rawPrefix,
+    });
 };

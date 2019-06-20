@@ -4,11 +4,12 @@ import {IEsifyCSSResult, IImports, IPluginMangler} from './types';
 import {getMatchedImport} from './getMatchedImport';
 
 export const mangleIdentifiers = async (
-    {id, root, mangler, imports}: {
+    {id, root, mangler, imports, rawPrefix}: {
         id: string,
         root: postcss.Root,
         mangler: IPluginMangler,
         imports: IImports,
+        rawPrefix: string,
     },
 ): Promise<{id: IEsifyCSSResult['id'], class: IEsifyCSSResult['class']}> => {
     const result: {id: IEsifyCSSResult['id'], class: IEsifyCSSResult['class']} = {
@@ -18,14 +19,20 @@ export const mangleIdentifiers = async (
     const parser = selectorParser((selectors) => {
         selectors.walk((selector) => {
             if (selectorParser.isClassName(selector) || selectorParser.isIdentifier(selector)) {
-                const {value} = selector;
-                if (value) {
-                    const imported = getMatchedImport(value, imports);
-                    if (imported) {
-                        selector.value = mangler(imported.from, selector.type, imported.key);
+                const {value: before} = selector;
+                if (before) {
+                    let after = before;
+                    if (before.startsWith(rawPrefix)) {
+                        after = before.slice(rawPrefix.length);
                     } else {
-                        selector.value = result[selector.type][value] = mangler(id, selector.type, value);
+                        const imported = getMatchedImport(before, imports);
+                        if (imported) {
+                            after = mangler(imported.from, selector.type, imported.key);
+                        } else {
+                            after = mangler(id, selector.type, before);
+                        }
                     }
+                    selector.value = result[selector.type][before] = after;
                 }
             }
         });

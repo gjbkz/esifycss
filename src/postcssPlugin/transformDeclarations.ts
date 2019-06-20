@@ -5,14 +5,18 @@ import {serializeCSSAnimationShorthand} from '../parser/serializeAnimationShorth
 import {getMatchedImport} from './getMatchedImport';
 
 export const transformDeclarations = (
-    {root, transformResult, mangler, imports}: {
+    {root, transformResult, mangler, imports, rawPrefix}: {
         root: postcss.Root,
         transformResult: IEsifyCSSResult,
         mangler: IPluginMangler,
         imports: IImports,
+        rawPrefix: string,
     },
 ): void => {
     const getRenamed = (name: string): string | undefined => {
+        if (name.startsWith(rawPrefix)) {
+            return name.slice(rawPrefix.length);
+        }
         const imported = getMatchedImport(name, imports);
         if (imported) {
             return mangler(imported.from, 'keyframes', imported.key);
