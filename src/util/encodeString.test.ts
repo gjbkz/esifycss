@@ -35,7 +35,6 @@ interface ITest {
             }
         }
         const actual = encodeString(input, identifier);
-        t.log({actual});
         t.is(actual, expected);
         t.deepEqual(
             identifier.idList,
