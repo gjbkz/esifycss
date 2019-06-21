@@ -1,7 +1,7 @@
 import {readFile} from '../util/fs';
 import {IParseScriptsResult, IScriptData} from './types';
 import {extractCSSFromScript} from './extractCSSFromScript';
-import {countTokens} from './countTokens';
+import {tokenizeString} from '../util/tokenizeString';
 
 export const parseScripts = async (
     files: Array<string>,
@@ -12,8 +12,8 @@ export const parseScripts = async (
         const script = (await readFile(file, 'utf8'));
         const cssRanges = extractCSSFromScript(script);
         for (const {css} of cssRanges) {
-            for (const [token, count] of countTokens(css)) {
-                tokens.set(token, (tokens.get(token) || 0) + count);
+            for (const token of tokenizeString(css)) {
+                tokens.set(token, (tokens.get(token) || 0) + 1);
             }
         }
         scripts.set(file, {script, cssRanges});
