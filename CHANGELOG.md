@@ -1,3 +1,13 @@
+<a name="1.2.4"></a>
+## [1.2.4](https://github.com/kei-ito/esify/compare/v1.2.3...v1.2.4) (2019-06-21)
+
+
+### Features
+
+* export some modules for minification ([372197d](https://github.com/kei-ito/esify/commit/372197d))
+
+
+
 <a name="1.2.3"></a>
 ## [1.2.3](https://github.com/kei-ito/esify/compare/v1.2.2...v1.2.3) (2019-06-21)
 
