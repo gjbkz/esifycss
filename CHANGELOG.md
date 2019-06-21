@@ -1,3 +1,13 @@
+<a name="1.2.6"></a>
+## [1.2.6](https://github.com/kei-ito/esify/compare/v1.2.5...v1.2.6) (2019-06-21)
+
+
+### Features
+
+* export createOptimizedIdentifier ([64d3ed8](https://github.com/kei-ito/esify/commit/64d3ed8))
+
+
+
 <a name="1.2.5"></a>
 ## [1.2.5](https://github.com/kei-ito/esify/compare/v1.2.4...v1.2.5) (2019-06-21)
 
