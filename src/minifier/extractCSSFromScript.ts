@@ -1,6 +1,6 @@
 import {IParseResult} from './types';
 
-export const parseScript = (
+export const extractCSSFromScript = (
     script: string,
 ): Array<IParseResult> => {
     const RegExpCSS = /(\/\*\s*begin\(css\)\s*\*\/\s*)("[\s\S]*?")(\s*\/\*\s*end\(css\)\s*\*\/)/g;

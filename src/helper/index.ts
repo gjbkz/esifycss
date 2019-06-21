@@ -1,6 +1,6 @@
 const style = document.createElement('style');
 let buffer: Array<string> = [];
-const dictionary: Array<string> = ['DICTIONARY'];
+const dictionary: Array<string> = ['ESIFYCSS DICTIONARY'];
 const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('')
 .reduce<{[char: string]: number}>(
     (map, char, index) => {
