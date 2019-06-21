@@ -1,3 +1,13 @@
+<a name="1.2.7"></a>
+## [1.2.7](https://github.com/kei-ito/esify/compare/v1.2.6...v1.2.7) (2019-06-21)
+
+
+### Features
+
+* export tokenizeString and delete countTokens ([2883942](https://github.com/kei-ito/esify/commit/2883942))
+
+
+
 <a name="1.2.6"></a>
 ## [1.2.6](https://github.com/kei-ito/esify/compare/v1.2.5...v1.2.6) (2019-06-21)
 
