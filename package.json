@@ -1,6 +1,6 @@
 {
     "name": "esifycss",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "description": "Generates .js or .ts exports class names and custom properties",
     "author": {
         "name": "Kei Ito",

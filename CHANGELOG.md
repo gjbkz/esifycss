@@ -1,3 +1,13 @@
+<a name="1.2.3"></a>
+## [1.2.3](https://github.com/kei-ito/esify/compare/v1.2.2...v1.2.3) (2019-06-21)
+
+
+### Bug Fixes
+
+* add safe-base64 encoding and make it default ([37fde07](https://github.com/kei-ito/esify/commit/37fde07))
+
+
+
 <a name="1.2.2"></a>
 ## [1.2.2](https://github.com/kei-ito/esify/compare/v1.2.1...v1.2.2) (2019-06-21)
 
