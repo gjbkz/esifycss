@@ -1,3 +1,13 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/kei-ito/esify/compare/v1.2.0...v1.2.1) (2019-06-21)
+
+
+### Features
+
+* delete the minifyScript option ([b0b1a24](https://github.com/kei-ito/esify/commit/b0b1a24))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/kei-ito/esify/compare/v1.1.2...v1.2.0) (2019-06-20)
 
