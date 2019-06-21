@@ -1,3 +1,13 @@
+<a name="1.2.5"></a>
+## [1.2.5](https://github.com/kei-ito/esify/compare/v1.2.4...v1.2.5) (2019-06-21)
+
+
+### Bug Fixes
+
+* rename ([9bbdcfc](https://github.com/kei-ito/esify/commit/9bbdcfc))
+
+
+
 <a name="1.2.4"></a>
 ## [1.2.4](https://github.com/kei-ito/esify/compare/v1.2.3...v1.2.4) (2019-06-21)
 
