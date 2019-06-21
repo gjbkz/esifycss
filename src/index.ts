@@ -9,3 +9,4 @@ export * from './minifier/extractCSSFromScript';
 export * from './minifier/countTokens';
 export * from './minifier/setDictionary';
 export * from './minifier/minifyCSSInScript';
+export * from './minifier/createOptimizedIdentifier';
