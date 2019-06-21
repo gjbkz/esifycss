@@ -134,7 +134,7 @@ You can import the shortened names with the `@import` syntax.
 .wrapper>.BBBcontainer {...}   /* → ._2>._1 */
 ```
 
-## JavaScript API
+## JavaScript API for Runner
 
 ```javascript
 import {Session} from 'esifycss';
@@ -143,7 +143,7 @@ new Session(options).start()
 .catch((error) => console.error(error));
 ```
 
-## Options
+### Options
 
 - `include`: `string | Array<string>`.
   Default: `**/*.css`.
@@ -162,12 +162,16 @@ new Session(options).start()
 - `stderr`: `stream.Writable`.
 - `postcssPlugins`: `Array<postcss.AcceptedPlugin>`.
   An array of postcss plugins.
-- `esifycssPluginParameter`:
-  - `mangle`: `boolean`,
-  - `identifier`: `IIdentifier`,
-  - `mangler`: `IPluginMangler`,
-  - `rawPrefix`: `string`,
-- `minifyScript`: `boolean`.
+- `esifycssPluginParameter`: See the next section.
+
+## JavaScript API for Plugin
+
+### Options
+
+- `mangle`: `boolean`,
+- `identifier`: `IIdentifier`,
+- `mangler`: `IPluginMangler`,
+- `rawPrefix`: `string`,
 
 ## LICENSE
 

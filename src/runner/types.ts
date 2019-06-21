@@ -18,7 +18,6 @@ export interface ISessionParameters {
     stderr?: stream.Writable,
     postcssPlugins?: Array<postcss.AcceptedPlugin>,
     esifycssPluginParameter?: IPluginParameter,
-    minifyScript?: boolean,
 }
 
 export interface ISessionConfiguration {
@@ -30,7 +29,6 @@ export interface ISessionConfiguration {
     readonly stdout: stream.Writable,
     readonly stderr: stream.Writable,
     readonly postcssPlugins: Array<postcss.AcceptedPlugin>,
-    readonly minifyScript: boolean,
 }
 
 export interface ICSSParserParameters {

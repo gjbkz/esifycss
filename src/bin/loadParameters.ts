@@ -15,7 +15,6 @@ export const loadParameters = async (
             mangle: !program.noMangle,
         },
         watch: program.watch,
-        minifyScript: !program.noMangle,
     };
     if (program.config) {
         const configPath = path.isAbsolute(program.config) ? program.config : path.join(directory, program.config);
