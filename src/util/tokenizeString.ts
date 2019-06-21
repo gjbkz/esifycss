@@ -1,3 +1,7 @@
+/**
+ * Splits the input string for minifying CSS strings.
+ * If the input is "width:100px", the output will be "width" ":" "100" "px"
+ */
 export const tokenizeString = function* (
     string: string,
 ): IterableIterator<string> {
