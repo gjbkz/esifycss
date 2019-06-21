@@ -1,5 +1,5 @@
 import {
-    IPluginParameter,
+    IPluginOptions,
     IPluginConfiguration,
     IPluginMangler,
 } from './types';
@@ -9,7 +9,7 @@ export const getPluginMangler = (
     {
         mangle = true,
         identifier = createIdentifier(),
-    }: IPluginParameter,
+    }: IPluginOptions,
 ): IPluginMangler => {
     if (mangle) {
         return (id, type, name) => `_${identifier(`${id}-${type}-${name}`).toString(36)}`;
@@ -20,7 +20,7 @@ export const getPluginMangler = (
 };
 
 export const getPluginConfiguration = (
-    parameters: IPluginParameter = {},
+    parameters: IPluginOptions = {},
 ): IPluginConfiguration => ({
     mangler: parameters.mangler || getPluginMangler(parameters),
     rawPrefix: parameters.rawPrefix || 'raw-',

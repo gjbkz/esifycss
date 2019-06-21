@@ -2,7 +2,7 @@ import * as path from 'path';
 import anyTest, {TestInterface} from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
-import {ISessionParameters} from './types';
+import {ISessionOptions} from './types';
 import {writeFile, readFile, deleteFile, stat} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
@@ -23,7 +23,7 @@ test.afterEach(async (t) => {
 });
 
 interface ITest {
-    parameters: Partial<ISessionParameters>,
+    parameters: Partial<ISessionOptions>,
     files: Array<{
         path: string,
         content: Array<string>,

@@ -145,33 +145,130 @@ new Session(options).start()
 
 ### Options
 
-- `include`: `string | Array<string>`.
-  Default: `**/*.css`.
-  Pattern(s) to be included.
-- `exclude`: `anymatch.Matcher`. Pattern(s) to be excluded.
-- `helper`: `string`.
-  Default: `helper.{hash}.css.js`.
-  Where this plugin outputs the helper script.
-  The hash is calculated from the include.
-- `watch`: `boolean`.
-  Default: `false`.
-  If it is true, a watcher is enabled.
-- `chokidar`: `chokidar.WatchOptions`.
-  Options passed to chokidar.
-- `stdout`: `stream.Writable`.
-- `stderr`: `stream.Writable`.
-- `postcssPlugins`: `Array<postcss.AcceptedPlugin>`.
-  An array of postcss plugins.
-- `esifycssPluginParameter`: See the next section.
+```typescript
+export interface ISessionOptions {
+  /**
+   * Pattern(s) to be included
+   * @default "** / *.css"
+   */
+  include?: string | Array<string>,
+  /**
+   * Pattern(s) to be excluded.
+   * @default []
+   */
+  exclude?: anymatch.Matcher,
+  /**
+   * Where this plugin outputs the helper script.
+   * The hash in the default value is calculated from the include.
+   * @default "helper.{hash}.css.js"
+   */
+  helper?: string,
+  /**
+   * It it is true, a watcher is enabled.
+   * @default false
+   */
+  watch?: boolean,
+  /**
+   * Options passed to chokidar.
+   * You can't set ignoreInitial to true.
+   * @default {
+   *   ignore: exclude,
+   *   ignoreInitial: false,
+   *   useFsEvents: false,
+   * }
+   */
+  chokidar?: chokidar.WatchOptions,
+  /**
+   * An array of postcss plugins.
+   * esifycss.plugin is appended to this array.
+   * @default []
+   */
+  postcssPlugins?: Array<postcss.AcceptedPlugin>,
+  /**
+   * Parameters for esifycss.plugin.
+   */
+  esifycssPluginParameter?: IPluginOptions,
+  /**
+   * A stream where the runner outputs logs.
+   * @default process.stdout
+   */
+  stdout?: stream.Writable,
+  /**
+   * A stream where the runner outputs errorlogs.
+   * @default process.stderr
+   */
+  stderr?: stream.Writable,
+}
+```
+
+Source: [src/runner/types.ts](src/runner/types.ts)
 
 ## JavaScript API for Plugin
 
+```javascript
+const postcss = require('postcss');
+const esifycss = require('esifycss');
+postcss([
+  esifycss.plugin({/* Plugin Options */}),
+])
+.process(css, {from: '/foo/bar.css'})
+.then((result) => {
+  const pluginResult = esifycss.extractPluginResult(result);
+  console.log(pluginResult);
+  // → {
+  //   class: {bar: '_1'},
+  //   id: {foo: '_0'},
+  //   keyframes: {aaa: '_2'},
+  // }
+});
+```
+
+The code is at [sample/plugin.js](sample/plugin.js).
+You can run it by `node sample/plugin.js` after cloning this repository and
+running `npm run build`.
+
 ### Options
 
-- `mangle`: `boolean`,
-- `identifier`: `IIdentifier`,
-- `mangler`: `IPluginMangler`,
-- `rawPrefix`: `string`,
+```typescript
+export interface IPluginOptions {
+    /**
+     * When it is true, this plugin minifies classnames.
+     * @default true
+     */
+    mangle?: boolean,
+    /**
+     * A function returns an unique number from a given file id. If you process
+     * CSS files in multiple postcss processes, you should create an identifier
+     * outside the processes and pass it as this value to keep the uniqueness
+     * of mangled outputs.
+     * @default esifycss.createIdentifier()
+     */
+    identifier?: IIdentifier,
+    /**
+     * Names starts with this value are not passed to mangler but replaced with
+     * unprefixed names.
+     * @default "raw-"
+     */
+    rawPrefix?: string,
+    /**
+     * A custom mangler: (*id*, *type*, *name*) => string.
+     * - *id*: string. A filepath to the CSS.
+     * - *type*: 'id' | 'class' | 'keyframes'. The type of *name*
+     * - *name*: string. An identifier in the style.
+     *
+     * If mangler is set, `mangle` and `identifier` options are ignored.
+     *
+     * For example, If the plugin processes `.foo{color:green}` in `/a.css`,
+     * The mangler is called with `("/a.css", "class", "foo")`. A mangler should
+     * return an unique string for each input pattern or the styles will be
+     * overwritten unexpectedly.
+     * @default undefined
+     */
+    mangler?: IPluginMangler,
+}
+```
+
+Source: [src/postcssPlugin/types.ts](src/postcssPlugin/types.ts)
 
 ## LICENSE
 

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as chokidar from 'chokidar';
 import * as path from 'path';
-import {ISessionParameters, ISessionConfiguration} from './types';
+import {ISessionOptions, ISessionConfiguration} from './types';
 import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
@@ -21,7 +21,7 @@ export class Session {
 
     protected initialTask: Array<Promise<void>> | null;
 
-    public constructor(parameters: ISessionParameters = {}) {
+    public constructor(parameters: ISessionOptions = {}) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
         this.initialTask = null;

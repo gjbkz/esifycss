@@ -1,5 +1,5 @@
 import * as postcss from 'postcss';
-import {IPluginParameter} from './types';
+import {IPluginOptions} from './types';
 import {getPluginConfiguration} from './getPluginConfiguration';
 import {createTransformer} from './createTransformer';
 
@@ -9,7 +9,7 @@ import {createTransformer} from './createTransformer';
 export const pluginName = 'esifycss';
 export const plugin = postcss.plugin(
     pluginName,
-    (parameters?: IPluginParameter) => {
+    (parameters?: IPluginOptions) => {
         const transform = createTransformer(getPluginConfiguration(parameters));
         return async (
             root: postcss.Root,

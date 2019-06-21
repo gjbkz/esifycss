@@ -98,7 +98,6 @@
         "overrides": [
             {
                 "files": [
-                    "scripts/",
                     "src/helper/**/*",
                     "test/*/src/*"
                 ],
@@ -117,10 +116,10 @@
             },
             {
                 "files": [
-                    "scripts/*"
+                    "*.test.ts"
                 ],
                 "rules": {
-                    "no-bitwise": "off"
+                    "max-lines-per-function": "off"
                 }
             },
             {
@@ -134,10 +133,10 @@
             },
             {
                 "files": [
-                    "*.test.ts"
+                    "sample/*"
                 ],
                 "rules": {
-                    "max-lines-per-function": "off"
+                    "no-console": "off"
                 }
             }
         ]

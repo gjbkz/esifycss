@@ -1,13 +1,13 @@
 import * as path from 'path';
-import {ISessionParameters} from '../runner/types.js';
+import {ISessionOptions} from '../runner/types.js';
 import {readFile} from '../util/fs';
 import {IEsifyCSSCommand} from './types';
 
 export const loadParameters = async (
     program: IEsifyCSSCommand,
     directory: string = process.cwd(),
-): Promise<ISessionParameters> => {
-    const parameters: Partial<ISessionParameters> = {
+): Promise<ISessionOptions> => {
+    const parameters: Partial<ISessionOptions> = {
         include: program.args,
         helper: program.helper,
         exclude: program.exclude,
@@ -19,7 +19,7 @@ export const loadParameters = async (
     if (program.config) {
         const configPath = path.isAbsolute(program.config) ? program.config : path.join(directory, program.config);
         const configJSON = await readFile(configPath, 'utf8');
-        Object.assign(parameters, JSON.parse(configJSON) as ISessionParameters);
+        Object.assign(parameters, JSON.parse(configJSON) as ISessionOptions);
     }
     return parameters;
 };
