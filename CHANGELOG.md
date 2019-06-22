@@ -1,3 +1,13 @@
+<a name="1.2.8"></a>
+## [1.2.8](https://github.com/kei-ito/esify/compare/v1.2.7...v1.2.8) (2019-06-22)
+
+
+### Bug Fixes
+
+* class → className ([9d3b3c1](https://github.com/kei-ito/esify/commit/9d3b3c1))
+
+
+
 <a name="1.2.7"></a>
 ## [1.2.7](https://github.com/kei-ito/esify/compare/v1.2.6...v1.2.7) (2019-06-21)
 
