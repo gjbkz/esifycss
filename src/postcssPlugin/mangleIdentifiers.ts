@@ -11,10 +11,10 @@ export const mangleIdentifiers = async (
         imports: IImports,
         rawPrefix: string,
     },
-): Promise<{id: IEsifyCSSResult['id'], class: IEsifyCSSResult['class']}> => {
-    const result: {id: IEsifyCSSResult['id'], class: IEsifyCSSResult['class']} = {
+): Promise<{id: IEsifyCSSResult['id'], className: IEsifyCSSResult['className']}> => {
+    const result: {id: IEsifyCSSResult['id'], className: IEsifyCSSResult['className']} = {
         id: {},
-        class: {},
+        className: {},
     };
     const parser = selectorParser((selectors) => {
         selectors.walk((selector) => {
@@ -32,7 +32,8 @@ export const mangleIdentifiers = async (
                             after = mangler(id, selector.type, before);
                         }
                     }
-                    selector.value = result[selector.type][before] = after;
+                    const type = selector.type === 'id' ? 'id' : 'className';
+                    selector.value = result[type][before] = after;
                 }
             }
         });

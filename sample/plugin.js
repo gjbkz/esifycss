@@ -21,7 +21,7 @@ postcss([
     const pluginResult = esifycss.extractPluginResult(result);
     console.log(pluginResult);
     // → {
-    //     class: {bar: '_1'},
+    //     className: {bar: '_1'},
     //     id: {foo: '_0'},
     //     keyframes: {aaa: '_2'},
     // }

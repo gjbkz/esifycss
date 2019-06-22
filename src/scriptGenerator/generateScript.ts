@@ -31,7 +31,7 @@ export const generateScript = (
     return [
         `import {addStyle} from '${helperPath}';`,
         `addStyle([${(postcssRoot.nodes || []).map((node) => `/* begin(css) */${JSON.stringify(node.toString())}/* end(css) */`).join(',')}]);`,
-        `export const className = ${JSON.stringify(esifycssResult.class, null, 4)};`,
+        `export const className = ${JSON.stringify(esifycssResult.className, null, 4)};`,
         `export const id = ${JSON.stringify(esifycssResult.id, null, 4)};`,
         `export const keyframes = ${JSON.stringify(esifycssResult.keyframes, null, 4)};`,
         '',

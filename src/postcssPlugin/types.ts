@@ -55,7 +55,7 @@ export interface IIdentifierMap {
 }
 
 export interface IEsifyCSSResult {
-    class: IIdentifierMap,
+    className: IIdentifierMap,
     id: IIdentifierMap,
     keyframes: IIdentifierMap,
 }

@@ -21,7 +21,7 @@ export const removeImportsAndRaws = (
         {},
     );
     return {
-        class: filter(maps.class),
+        className: filter(maps.className),
         id: filter(maps.id),
         keyframes: filter(maps.keyframes),
     };

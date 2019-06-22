@@ -36,11 +36,11 @@ test('plugin', async (t): Promise<void> => {
     const mapB = extractPluginResult(resultB);
     {
         const identifiers = [
-            mapA.class.foo,
+            mapA.className.foo,
             mapA.id.bar1,
             mapA.id.bar2,
             mapA.keyframes.aaa,
-            mapB.class.foo,
+            mapB.className.foo,
             mapB.id.bar,
             mapB.keyframes.aaa,
         ];
@@ -61,7 +61,7 @@ test('plugin', async (t): Promise<void> => {
     {
         const node = nodes[index++] as postcss.Rule;
         t.is(node.type, 'rule');
-        t.is(node.selector, `.${mapA.class.foo}:first-child[data-hello=abc]`);
+        t.is(node.selector, `.${mapA.className.foo}:first-child[data-hello=abc]`);
         {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation-name');
@@ -84,7 +84,7 @@ test('plugin', async (t): Promise<void> => {
     {
         const node = nodes[index++] as postcss.Rule;
         t.is(node.type, 'rule');
-        t.is(node.selector, `.${mapB.class.foo}>.foo`);
+        t.is(node.selector, `.${mapB.className.foo}>.foo`);
         {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation-name');
@@ -110,7 +110,7 @@ test('plugin', async (t): Promise<void> => {
     {
         const node = nodes[index++] as postcss.Rule;
         t.is(node.type, 'rule');
-        t.is(node.selector, `.${mapB.class.foo}`);
+        t.is(node.selector, `.${mapB.className.foo}`);
         {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation-name');
