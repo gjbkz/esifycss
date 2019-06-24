@@ -72,7 +72,7 @@ test('#watch', async (t) => {
     const codePath = `${cssPath}${path.extname(helper)}`;
     await writeFile(cssPath, '.foo {color: red}');
     const messageListener = new events.EventEmitter();
-    const session = t.context.session = new Session({
+    const session = new Session({
         helper,
         watch: true,
         include: [cssPath],
@@ -83,6 +83,7 @@ test('#watch', async (t) => {
             },
         }),
     });
+    Object.assign(t.context, {session});
     const waitForMessage = (
         expected: string | RegExp,
     ) => new Promise((resolve, reject) => {
