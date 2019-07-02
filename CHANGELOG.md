@@ -1,3 +1,14 @@
+<a name="1.2.9"></a>
+## [1.2.9](https://github.com/kei-ito/esify/compare/v1.2.8...v1.2.9) (2019-07-02)
+
+
+### Features
+
+* add the extensions option ([7c81df8](https://github.com/kei-ito/esify/commit/7c81df8))
+* update mangler function ([de49888](https://github.com/kei-ito/esify/commit/de49888))
+
+
+
 <a name="1.2.8"></a>
 ## [1.2.8](https://github.com/kei-ito/esify/compare/v1.2.7...v1.2.8) (2019-06-22)
 
