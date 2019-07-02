@@ -1,6 +1,6 @@
 const style = document.createElement('style');
 let buffer = [];
-const dictionary = ["_","{","}",":",";"," ","4","animation","s","0","%","transform","rotate","(","deg",")","#","1","2",".","3","@","keyframes","100","720","bar"];
+const dictionary = [":","{","}","_",";","-","0","animation"," ","%","1","@","keyframes","3","opacity","100","4","transform","rotate","(","deg",")","s","linear",".","360","#","display","flex","0.2","duration","iteration","count","infinite","timing","function","1.","2","name"];
 const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='.split('')
     .reduce((map, char, index) => {
     map[char] = index;
