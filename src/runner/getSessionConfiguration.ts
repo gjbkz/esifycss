@@ -1,8 +1,20 @@
 import * as path from 'path';
-import {ISessionConfiguration, ISessionOptions} from './types';
+import {ISessionConfiguration, ISessionOptions, IReadonlyWatchOptions} from './types';
 import {plugin} from '../postcssPlugin/plugin';
 import {ensureArray} from '../util/ensureArray';
 import {getHash} from '../util/getHash';
+
+export const getChokidarOptions = (
+    parameters: ISessionOptions,
+): IReadonlyWatchOptions => ({
+    useFsEvents: false,
+    ...parameters.chokidar,
+    ignored: [
+        ...ensureArray(parameters.chokidar && parameters.chokidar.ignored),
+        ...ensureArray(parameters.exclude),
+    ],
+    ignoreInitial: false,
+});
 
 export const getSessionConfiguration = (
     parameters: ISessionOptions,
@@ -19,15 +31,7 @@ export const getSessionConfiguration = (
         extensions,
         ext: path.extname(helper),
         path: include,
-        chokidar: {
-            useFsEvents: false,
-            ...parameters.chokidar,
-            ignored: [
-                ...ensureArray(parameters.chokidar && parameters.chokidar.ignored),
-                ...ensureArray(parameters.exclude),
-            ],
-            ignoreInitial: false,
-        },
+        chokidar: getChokidarOptions(parameters),
         stdout: parameters.stdout || process.stdout,
         stderr: parameters.stderr || process.stderr,
         postcssPlugins: [
