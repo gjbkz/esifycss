@@ -76,7 +76,7 @@ export class Session {
     protected async startWatcher(): Promise<void> {
         this.stopWatcher();
         this.initialTask = [];
-        this.log(`watching:\n${this.configuration.path.join('\n')}`);
+        this.log(`watching: ${this.configuration.path.join(', ')}`);
         const watcher = this.watcher = chokidar.watch(
             this.configuration.path.slice(),
             this.configuration.chokidar,
