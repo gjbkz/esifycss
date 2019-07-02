@@ -77,12 +77,18 @@ export class Session {
         this.stopWatcher();
         this.initialTask = [];
         this.log(`watching:\n${this.configuration.path.join('\n')}`);
-        this.watcher = chokidar.watch(
+        const watcher = this.watcher = chokidar.watch(
             this.configuration.path.slice(),
             this.configuration.chokidar,
         )
         .on('error', this.onError.bind(this))
-        .on('all', this.onFileEvent.bind(this));
+        .on('all', (eventName, file, stats) => {
+            if (this.configuration.extensions.has(path.extname(file))) {
+                this.onFileEvent(eventName, file, stats);
+            } else {
+                watcher.unwatch(file);
+            }
+        });
         await waitForInitialScanCompletion(this.watcher);
         await Promise.all(this.initialTask);
         this.initialTask = null;
@@ -113,51 +119,53 @@ export class Session {
 
     protected onFileEvent(
         eventName: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir',
-        path: string,
-        stats: fs.Stats,
+        file: string,
+        stats?: fs.Stats,
     ): void {
-        this.log(`[${eventName}] ${path}`);
+        this.log(`[${eventName}] ${file}`);
         switch (eventName) {
         case 'add': {
-            const promise = this.onAdd(path, stats);
+            const promise = this.onAdd(file, stats);
             if (this.initialTask) {
                 this.initialTask.push(promise);
             }
             break;
         }
         case 'change':
-            this.onChange(path, stats);
+            this.onChange(file, stats);
             break;
         case 'unlink':
-            this.onUnlink(path, stats);
+            this.onUnlink(file);
             break;
         default:
         }
     }
 
     protected onAdd(
-        path: string,
-        stats: fs.Stats,
+        file: string,
+        stats?: fs.Stats,
     ): Promise<void> {
-        return this.onChange(path, stats);
+        return this.onChange(file, stats);
     }
 
     protected async onChange(
-        filePath: string,
-        stats: fs.Stats,
+        file: string,
+        stats?: fs.Stats,
     ): Promise<void> {
-        if (!stats.isFile()) {
-            throw new Error(`${filePath} is not a file.`);
+        if (!stats) {
+            throw new Error(`no stats is given for ${file}.`);
         }
-        await this.processCSS(filePath);
+        if (!stats.isFile()) {
+            throw new Error(`${file} is not a file.`);
+        }
+        await this.processCSS(file);
     }
 
     protected async onUnlink(
-        filePath: string,
-        _stats: fs.Stats,
+        file: string,
     ): Promise<void> {
-        const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
-        this.processedFiles.delete(filePath);
+        const scriptPath = path.join(`${file}${this.configuration.ext}`);
+        this.processedFiles.delete(file);
         await deleteFile(scriptPath, this.configuration.stdout);
     }
 
