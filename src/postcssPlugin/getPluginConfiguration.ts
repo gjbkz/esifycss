@@ -14,8 +14,7 @@ export const getPluginMangler = (
     if (mangle) {
         return (id, type, name) => `_${identifier(`${id}-${type}-${name}`).toString(36)}`;
     } else {
-        return (id, type, name) => `${id}-${type}-${name}`
-        .replace(/[^\w]/g, (c) => `_${c.codePointAt(0)}`);
+        return (id, type, name) => `${name}_${identifier(`${id}-${type}-${name}`).toString(36)}`;
     }
 };
 

@@ -52,7 +52,7 @@ interface ITest {
         const session = t.context.session = new Session({
             ...parameters,
             helper,
-            include: files.map((file) => path.join(t.context.directory, file.path)),
+            include: t.context.directory,
         });
         await session.start();
         await Promise.all(files.map(async (file) => {
@@ -75,7 +75,7 @@ test('#watch', async (t) => {
     const session = new Session({
         helper,
         watch: true,
-        include: [cssPath],
+        include: t.context.directory,
         stdout: new stream.Writable({
             write(chunk, _encoding, callback) {
                 messageListener.emit('message', `${chunk}`);

@@ -1,13 +1,13 @@
 import {addStyle} from './helper.js';
-addStyle(["qBsBKAMCSUCWGYaSceIEuBUCWGYawBceIEE","gBASCOGiBQKAMIE","gBAiBCOGkBQKAMIE","mBAkBCOGoBQKAMIE","mBAoBCOGMQKyBIE"]);
+addStyle(["WYQGaCMSCcAMEeSCcAUEE","WYQGgBCMSCiBAkBmBMoBqBEeSCiBAkBmByBoBqBEE","0BGMC2BA4BIOA6BsBQuBQGaIE","wBGUCOK8BAUsBIOK+BKgCAiCIOKkCKmCAuBIE","wBGoCGqCCOKsCAGgBIE"]);
 export const className = {
-    "baz1": "_2",
-    "baz2": "_3"
+    "icon": "_1",
+    "rotate": "_2"
 };
 export const id = {
-    "bar1": "_0",
-    "bar2": "_1"
+    "container": "_0"
 };
 export const keyframes = {
-    "foo": "_4"
+    "fadeIn": "_3",
+    "rotate": "_4"
 };

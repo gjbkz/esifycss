@@ -8,6 +8,26 @@
 
 Generates modules from CSS.
 
+Assume you have [`style.css`](sample/01-mangle/sample.css) below.
+
+![A screen shot of style.css](images/style.css.png)
+
+Then, run the `esifycss` command.
+
+![A video of the result](images/esifycss.gif)
+
+You'll get [`style.css.js`](sample/01-mangle/sample.css.js) (and [`helper.js`](sample/01-mangle/helper.js)).
+
+![A screen shot of style.css.js](images/style.css.js.png)
+
+You can import the generated script from
+It exports `className`, `id`, and `keyframes` that are shortened uniquely.
+The uniqueness makes styles modular. This means you don't have to concern about
+naming somethings in CSS.
+
+Each string given to `addStyle` represents a CSS string.
+They are inserted to the document's stylesheet by the helper script.
+
 EsifyCSS consists of a **PostCSS plugin** and a **Runner**.
 
 ## PostCSS plugin
@@ -21,69 +41,6 @@ It outputs the result of minifications using [Root.warn()].
 
 A runner process `.css` files in your project with PostCSS and output the
 results to `.css.js` or `.css.ts`.
-
-## Example
-
-Assume you have following [`sample.css`](sample/00-src/sample.css):
-
-```css
-@keyframes foo {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(720deg);
-    }
-}
-#bar1 {
-    animation: 1s foo;
-}
-#bar2 {
-    animation: 2s foo;
-}
-.baz1 {
-    animation: 3s foo;
-}
-.baz2 {
-    animation: 4s bar;
-}
-```
-
-Then, run the command:
-
-```
-$ esifycss sample.css
-```
-
-You'll get the following file:
-
-```javascript
-// sample.css.js
-import {addStyle} from './helper.js';
-addStyle([
-  "qBsBKAMCSUCWGYaSceIEuBUCWGYawBceIEE",
-  "gBASCOGiBQKAMIE",
-  "gBAiBCOGkBQKAMIE",
-  "mBAkBCOGoBQKAMIE",
-  "mBAoBCOGMQKyBIE"
-]);
-export const className = {
-    "baz1": "_2",
-    "baz2": "_3"
-};
-export const id = {
-    "bar1": "_0",
-    "bar2": "_1"
-};
-export const keyframes = {
-    "foo": "_4"
-};
-```
-
-Each string given to `addStyle` represents a CSS string.
-They are inserted to the document's stylesheet by the helper script.
-Classnames, identifiers, and keyframes are shortened uniquely and it makes
-styles modular. This means you don't have to concern about naming somethings.
 
 ## Installation
 

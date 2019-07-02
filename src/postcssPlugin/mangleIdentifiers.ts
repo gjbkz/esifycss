@@ -20,21 +20,19 @@ export const mangleIdentifiers = async (
         selectors.walk((selector) => {
             if (selectorParser.isClassName(selector) || selectorParser.isIdentifier(selector)) {
                 const {value: before} = selector;
-                if (before) {
-                    let after = before;
-                    if (before.startsWith(rawPrefix)) {
-                        after = before.slice(rawPrefix.length);
+                let after = before;
+                if (before.startsWith(rawPrefix)) {
+                    after = before.slice(rawPrefix.length);
+                } else {
+                    const imported = getMatchedImport(before, imports);
+                    if (imported) {
+                        after = mangler(imported.from, selector.type, imported.key);
                     } else {
-                        const imported = getMatchedImport(before, imports);
-                        if (imported) {
-                            after = mangler(imported.from, selector.type, imported.key);
-                        } else {
-                            after = mangler(id, selector.type, before);
-                        }
+                        after = mangler(id, selector.type, before);
                     }
-                    const type = selector.type === 'id' ? 'id' : 'className';
-                    selector.value = result[type][before] = after;
                 }
+                const type = selector.type === 'id' ? 'id' : 'className';
+                selector.value = result[type][before] = after;
             }
         });
     });

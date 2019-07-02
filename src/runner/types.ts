@@ -7,17 +7,23 @@ import {IPluginOptions} from '../postcssPlugin/types';
 export interface ISessionOptions {
     /**
      * Pattern(s) to be included
-     * @default "** / *.css"
+     * @default "*"
      */
     include?: string | Array<string>,
     /**
      * Pattern(s) to be excluded.
-     * @default []
+     * @default ['node_modules']
      */
     exclude?: anymatch.Matcher,
     /**
+     * File extension(s) to be included.
+     * @default ['.css']
+     */
+    extensions?: Array<string>,
+    /**
      * Where this plugin outputs the helper script.
-     * The hash in the default value is calculated from the include.
+     * If you use TypeScript, set it with '.ts'-ended value.
+     * The hash in the default value is calculated from the include option.
      * @default "helper.{hash}.css.js"
      */
     helper?: string,
@@ -65,6 +71,7 @@ export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
 export interface ISessionConfiguration {
     readonly watch: boolean,
     readonly helper: string,
+    readonly extensions: ReadonlySet<string>,
     readonly ext: string,
     readonly path: ReadonlyArray<string>,
     readonly chokidar: IReadonlyWatchOptions,
