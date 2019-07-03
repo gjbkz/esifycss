@@ -23,9 +23,7 @@ script:
   - c8 npm run test
   - c8 report --reporter=text-lcov > coverage.lcov
   - codecov
-  - c8 npm run test-client
-  - c8 report --reporter=text-lcov > coverage.lcov
-  - codecov
+  - npm run test-client
   - nvm install 10
   - npm install -g codecov c8
   - c8 npm run test
