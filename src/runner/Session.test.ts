@@ -1,11 +1,14 @@
 import * as path from 'path';
-import anyTest, {TestInterface} from 'ava';
+import anyTest, {TestInterface, ExecutionContext} from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
+import * as postcss from 'postcss';
 import {ISessionOptions} from './types';
-import {writeFile, readFile, deleteFile, stat} from '../util/fs';
+import {writeFile, deleteFile, stat} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
+import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
+import {runCode, IRunCodeResult} from '../util/runCode.for-test';
 
 const test = anyTest as TestInterface<{
     directory: string,
@@ -27,6 +30,10 @@ interface ITest {
     files: Array<{
         path: string,
         content: Array<string>,
+        test: (
+            t: ExecutionContext,
+            result: IRunCodeResult,
+        ) => void,
     }>,
 }
 
@@ -37,8 +44,34 @@ interface ITest {
             {
                 path: '/components/style.css',
                 content: [
-                    '.foo {color: red}',
+                    '@keyframes foo {0%{color: red}100%{color:green}}',
+                    '.foo#bar {animation: 1s 0.5s linear infinite foo}',
                 ],
+                test: (t, {className, id, keyframes, root}) => {
+                    t.deepEqual(Object.keys(id), ['bar']);
+                    t.deepEqual(Object.keys(className), ['foo']);
+                    t.deepEqual(Object.keys(keyframes), ['foo']);
+                    const nodes = root.nodes || [];
+                    t.is(nodes.length, 2);
+                    {
+                        const node = nodes[0] as postcss.AtRule;
+                        t.is(node.type, 'atrule');
+                        t.is(node.name, 'keyframes');
+                        t.is(node.params, keyframes.foo);
+                    }
+                    {
+                        const node = nodes[1] as postcss.Rule;
+                        t.is(node.type, 'rule');
+                        t.is(node.selector, `.${className.foo}#${id.bar}`);
+                        const declarations = (node.nodes || []) as Array<postcss.Declaration>;
+                        t.is(declarations.length, 1);
+                        t.is(declarations[0].prop, 'animation');
+                        t.deepEqual(
+                            parseAnimationShorthand(declarations[0].value),
+                            parseAnimationShorthand(`1s 0.5s linear infinite ${keyframes.foo}`),
+                        );
+                    }
+                },
             },
         ],
     },
@@ -51,17 +84,24 @@ interface ITest {
         const helper = path.join(t.context.directory, 'helper.js');
         const session = t.context.session = new Session({
             ...parameters,
-            helper,
             include: t.context.directory,
+            helper,
+            watch: false,
         });
         await session.start();
+        const identifiers = new Map<string, string>();
         await Promise.all(files.map(async (file) => {
-            const codePath = path.join(
-                t.context.directory,
-                `${file.path}${path.extname(helper)}`,
-            );
-            const code = await readFile(codePath, 'utf8');
-            t.truthy(code);
+            const name = `${file.path}${path.extname(helper)}`;
+            const result = await runCode(path.join(t.context.directory, name));
+            for (const map of [result.className, result.id, result.keyframes]) {
+                for (const [key, value] of Object.entries(map)) {
+                    if (value) {
+                        t.false(identifiers.has(value), `${key}: ${value} is conflicted`);
+                        identifiers.set(value, key);
+                    }
+                }
+            }
+            file.test(t, result);
         }));
     });
 });
@@ -70,7 +110,10 @@ test('#watch', async (t) => {
     const cssPath = path.join(t.context.directory, '/components/style.css');
     const helper = path.join(t.context.directory, 'helper.js');
     const codePath = `${cssPath}${path.extname(helper)}`;
-    await writeFile(cssPath, '.foo {color: red}');
+    await writeFile(cssPath, [
+        '@keyframes foo {0%{color: red}100%{color:green}}',
+        '.foo#bar {animation: 1s 0.5s linear infinite foo}',
+    ].join(''));
     const messageListener = new events.EventEmitter();
     const session = new Session({
         helper,
@@ -97,13 +140,48 @@ test('#watch', async (t) => {
         messageListener.on('message', onData);
     });
     await session.start();
-    const code1 = await readFile(codePath, 'utf8');
-    await writeFile(cssPath, '.foo {color: green}');
+    const result1 = await runCode(codePath);
+    await writeFile(cssPath, [
+        '@keyframes foo {0%{color: red}100%{color:green}}',
+        '.foo#bar {animation: 2s 1s linear infinite foo}',
+    ].join(''));
     await waitForMessage(`written: ${cssPath}`);
     await new Promise((resolve) => setTimeout(resolve, 200));
-    const code2 = await readFile(codePath, 'utf8');
-    t.true(code1 !== code2);
+    const result2 = await runCode(codePath);
     await deleteFile(cssPath);
     await waitForMessage(`deleted: ${codePath}`);
     await t.throwsAsync(() => stat(codePath), {code: 'ENOENT'});
+    t.deepEqual(result1.className, result2.className);
+    t.deepEqual(result1.id, result2.id);
+    t.deepEqual(result1.keyframes, result2.keyframes);
+    const nodes1 = result1.root.nodes || [];
+    const nodes2 = result2.root.nodes || [];
+    {
+        const atRule1 = nodes1[0] as postcss.AtRule;
+        const atRule2 = nodes2[0] as postcss.AtRule;
+        t.is(atRule1.name, 'keyframes');
+        t.is(atRule2.name, 'keyframes');
+        t.is(atRule1.params, result1.keyframes.foo);
+        t.is(atRule1.params, result1.keyframes.foo);
+    }
+    {
+        const rule1 = nodes1[1] as postcss.Rule;
+        const rule2 = nodes2[1] as postcss.Rule;
+        t.is(rule1.selector, `.${result1.className.foo}#${result1.id.bar}`);
+        t.is(rule2.selector, `.${result1.className.foo}#${result1.id.bar}`);
+        const declarations1 = (rule1.nodes || []) as Array<postcss.Declaration>;
+        const declarations2 = (rule2.nodes || []) as Array<postcss.Declaration>;
+        t.is(declarations1.length, 1);
+        t.is(declarations1[0].prop, 'animation');
+        t.is(declarations2.length, 1);
+        t.is(declarations2[0].prop, 'animation');
+        t.deepEqual(
+            parseAnimationShorthand(declarations1[0].value),
+            parseAnimationShorthand(`1s 0.5s linear infinite ${result1.keyframes.foo}`),
+        );
+        t.deepEqual(
+            parseAnimationShorthand(declarations2[0].value),
+            parseAnimationShorthand(`2s 1s linear infinite ${result1.keyframes.foo}`),
+        );
+    }
 });

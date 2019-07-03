@@ -27,7 +27,8 @@ export const writeFile = (
             if (error) {
                 reject(error);
             } else {
-                write(stdout, [`written: ${dest} (${buffer.length})`]);
+                const isBig = 100000 < buffer.length;
+                write(stdout, [`written: ${dest}${isBig ? ` ${buffer.length}bytes` : ''}`]);
                 resolve();
             }
         },

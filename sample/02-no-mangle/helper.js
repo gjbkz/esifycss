@@ -6,13 +6,13 @@ const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
     map[char] = index;
     return map;
 }, {});
-const decode = (string) => {
+const decode = (encoded) => {
     const result = [];
     let value = 0;
     let shift = 0;
-    const { length } = string;
+    const { length } = encoded;
     for (let index = 0; index < length; index++) {
-        let integer = charToInteger[string[index]];
+        let integer = charToInteger[encoded[index]];
         if (0 <= integer) {
             const hasContinuationBit = integer & 32;
             integer &= 31;
@@ -27,7 +27,7 @@ const decode = (string) => {
             }
         }
         else {
-            throw new Error(`Invalid character (${string[index]})`);
+            return encoded;
         }
     }
     return result.join('');
