@@ -1,3 +1,14 @@
+<a name="1.2.10"></a>
+## [1.2.10](https://github.com/kei-ito/esify/compare/v1.2.9...v1.2.10) (2019-07-03)
+
+
+### Bug Fixes
+
+* allow raw css to work in watch-mode ([c6e9fb3](https://github.com/kei-ito/esify/commit/c6e9fb3))
+* normalize path for Windows ([c5d013f](https://github.com/kei-ito/esify/commit/c5d013f))
+
+
+
 <a name="1.2.9"></a>
 ## [1.2.9](https://github.com/kei-ito/esify/compare/v1.2.8...v1.2.9) (2019-07-02)
 
