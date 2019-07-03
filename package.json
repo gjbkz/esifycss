@@ -21,10 +21,11 @@
     },
     "scripts": {
         "lint": "eslint --ext .ts src",
-        "build:cleanup": "rimraf lib",
+        "build:cleanup": "rimraf lib src/helper/index.js",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
-        "build:helper:cpy": "cpy ./src/helper ./lib/helper",
-        "build:helper": "run-s build:helper:cpy build:helper:tsc",
+        "build:helper:cpy1": "cpy ./src/helper ./lib/helper",
+        "build:helper:cpy2": "cpy ./lib/helper ./src/helper",
+        "build:helper": "run-s build:helper:cpy1 build:helper:tsc build:helper:cpy2",
         "build:tsc": "tsc",
         "build:bin": "ts-node scripts/chmodScripts.ts",
         "build:sample1:cleanup": "rimraf sample/01-mangle",
@@ -40,7 +41,8 @@
         "test-client": "ava -v test/run.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
-        "version": "run-s version:changelog version:add"
+        "version": "run-s version:changelog version:add",
+        "prepack": "rimraf lib/**/*.test.* lib/**/*.for-test.*"
     },
     "dependencies": {
         "@nlib/nbnf": "^3.10.0",
@@ -67,12 +69,11 @@
         "cpy-cli": "^2.0.0",
         "eslint": "^6.0.1",
         "husky": "^3.0.0",
-        "lint-staged": "^9.0.0",
+        "lint-staged": "^9.0.1",
         "npm-run-all": "^4.1.5",
         "postcss-nested": "4.1.2",
         "rimraf": "^2.6.3",
-        "rollup": "^1.16.3",
-        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup": "^1.16.4",
         "selenium-webdriver": "^4.0.0-alpha.4",
         "ts-node": "^8.3.0",
         "typescript": "^3.5.2"
@@ -116,6 +117,17 @@
             },
             {
                 "files": [
+                    "src/helper/**/*.js"
+                ],
+                "rules": {
+                    "brace-style": "off",
+                    "indent": "off",
+                    "object-curly-spacing": "off",
+                    "prefer-destructuring": "off"
+                }
+            },
+            {
+                "files": [
                     "*.test.ts"
                 ],
                 "rules": {
@@ -137,6 +149,14 @@
                 ],
                 "rules": {
                     "no-console": "off"
+                }
+            },
+            {
+                "files": [
+                    "src/util/createSandbox.for-test.ts"
+                ],
+                "rules": {
+                    "class-methods-use-this": "off"
                 }
             }
         ]

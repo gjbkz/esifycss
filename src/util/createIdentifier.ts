@@ -4,27 +4,20 @@ export interface IIdentifier {
 }
 
 export interface IIdListener {
-    (
-        key: string,
-        id: number,
-    ): void,
+    (key: string, id: number): void,
 }
 
 export const createIdentifier = (
-    listener?: IIdListener,
+    listener: IIdListener = () => {},
 ): IIdentifier => {
     const knownIdList = new Map<string, number>();
     let count = 0;
-    const identifier = (
-        key: string,
-    ): number => {
+    const identifier = (key: string): number => {
         let id = knownIdList.get(key);
         if (typeof id === 'undefined') {
             id = count++;
             knownIdList.set(key, id);
-            if (listener) {
-                listener(key, id);
-            }
+            listener(key, id);
         }
         return id;
     };

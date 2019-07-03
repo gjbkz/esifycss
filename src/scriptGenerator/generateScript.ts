@@ -27,7 +27,8 @@ export const generateScript = (
     }
     const helperPath = path.relative(path.dirname(outputFilePath), helperScriptPath)
     .replace(/\.ts$/, '')
-    .replace(/^([^./])/, './$1');
+    .replace(/^([^./])/, './$1')
+    .split(path.sep).join('/');
     return [
         `import {addStyle} from '${helperPath}';`,
         `addStyle([${(postcssRoot.nodes || []).map((node) => `/* begin(css) */${JSON.stringify(node.toString())}/* end(css) */`).join(',')}]);`,
