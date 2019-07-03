@@ -41,7 +41,8 @@
         "test-client": "ava -v test/run.ts",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
-        "version": "run-s version:changelog version:add"
+        "version": "run-s version:changelog version:add",
+        "prepack": "rimraf lib/**/*.test.* lib/**/*.for-test.*"
     },
     "dependencies": {
         "@nlib/nbnf": "^3.10.0",
