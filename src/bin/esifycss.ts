@@ -17,7 +17,7 @@ export const program = new commander.Command()
 .option('--helper <path>', 'A path to the helper script.')
 .option('--config <path>', 'A path to configuration files.')
 .option('--exclude <path ...>', 'Paths or patterns to be excluded.')
-.option('--noMangle', 'Disable minification.')
+.option('--noMangle', 'Keep the original name for debugging.')
 .option('--watch', 'Watch files and update the modules automatically.') as IEsifyCSSCommand;
 
 if (!module.parent) {

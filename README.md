@@ -55,9 +55,10 @@ Usage: esifycss [options] <include ...>
 
 Options:
   -V, --version         output the version number
-  --output <path>       A path to the helper script.
+  --helper <path>       A path to the helper script.
   --config <path>       A path to configuration files.
   --exclude <path ...>  Paths or patterns to be excluded.
+  --noMangle            Keep the original name for debugging.
   --watch               Watch files and update the modules automatically.
   -h, --help            output usage information
 ```
