@@ -1,3 +1,13 @@
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/kei-ito/esify/compare/v1.3.0...v1.3.1) (2019-07-05)
+
+
+### Features
+
+* use acorn to extract CSS in script ([7585e32](https://github.com/kei-ito/esify/commit/7585e32))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/kei-ito/esify/compare/v1.2.11...v1.3.0) (2019-07-05)
 
