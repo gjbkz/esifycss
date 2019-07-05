@@ -20,7 +20,7 @@
         "esifycss": "lib/bin/esifycss.js"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src",
+        "lint": "eslint --ext .ts src scripts",
         "build:cleanup": "rimraf lib src/helper/index.js",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
         "build:helper:cpy1": "cpy ./src/helper ./lib/helper",
@@ -157,6 +157,14 @@
                 ],
                 "rules": {
                     "class-methods-use-this": "off"
+                }
+            },
+            {
+                "files": [
+                    "scripts/*"
+                ],
+                "rules": {
+                    "no-bitwise": "off"
                 }
             }
         ]
