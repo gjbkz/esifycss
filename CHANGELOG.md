@@ -1,3 +1,13 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/kei-ito/esify/compare/v1.2.11...v1.3.0) (2019-07-05)
+
+
+### Features
+
+* add getHelperScript and update processCSS ([696045a](https://github.com/kei-ito/esify/commit/696045a))
+
+
+
 <a name="1.2.11"></a>
 ## [1.2.11](https://github.com/kei-ito/esify/compare/v1.2.10...v1.2.11) (2019-07-05)
 
