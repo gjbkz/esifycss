@@ -145,8 +145,7 @@ test('#watch', async (t) => {
         '@keyframes foo {0%{color: red}100%{color:green}}',
         '.foo#bar {animation: 2s 1s linear infinite foo}',
     ].join(''));
-    await waitForMessage(`written: ${cssPath}`);
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await waitForMessage(`written: ${codePath}`);
     const result2 = await runCode(codePath);
     await deleteFile(cssPath);
     await waitForMessage(`deleted: ${codePath}`);
