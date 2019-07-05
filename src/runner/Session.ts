@@ -6,7 +6,7 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile, deleteFile, copyFile} from '../util/fs';
+import {writeFile, deleteFile, copyFile, readFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
@@ -20,6 +20,11 @@ export class Session {
     protected processedFiles: Set<string>;
 
     protected initialTask: Array<Promise<void>> | null;
+
+    protected get helperScriptPath(): string {
+        const srcDirectory = path.join(__dirname, '..', 'helper');
+        return path.join(srcDirectory, `index${this.configuration.ext}`);
+    }
 
     public constructor(parameters: ISessionOptions = {}) {
         this.configuration = getSessionConfiguration(parameters);
@@ -36,17 +41,17 @@ export class Session {
         await this.stopWatcher();
     }
 
+    public getHelperScript(): Promise<string> {
+        return readFile(this.helperScriptPath, 'utf8');
+    }
+
     public async outputHelperScript() {
-        const srcDirectory = path.join(__dirname, '..', 'helper');
-        await copyFile(
-            path.join(srcDirectory, `index${this.configuration.ext}`),
-            this.configuration.helper,
-        );
+        await copyFile(this.helperScriptPath, this.configuration.helper);
     }
 
     public async processCSS(
         filePath: string,
-    ): Promise<void> {
+    ): Promise<{dest: string, code: string}> {
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
             file: filePath,
@@ -54,16 +59,13 @@ export class Session {
         const pluginResult = extractPluginResult(postcssResult);
         const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
         this.processedFiles.add(filePath);
-        await writeFile(
+        const code = generateScript(
             scriptPath,
-            generateScript(
-                scriptPath,
-                this.configuration.helper,
-                pluginResult,
-                postcssResult.root,
-            ),
-            this.configuration.stdout,
+            this.configuration.helper,
+            pluginResult,
+            postcssResult.root,
         );
+        return {dest: scriptPath, code};
     }
 
     public async minifyScripts() {
@@ -158,7 +160,8 @@ export class Session {
         if (!stats.isFile()) {
             throw new Error(`${file} is not a file.`);
         }
-        await this.processCSS(file);
+        const {dest, code} = await this.processCSS(file);
+        await writeFile(dest, code, this.configuration.stdout);
     }
 
     protected async onUnlink(

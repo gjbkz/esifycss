@@ -9,7 +9,10 @@ const charToInteger = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234
     },
     {},
 );
-const decode = (encoded: string): string => {
+const decode = (encoded: string | {esifycss: string}): string => {
+    if (typeof encoded === 'object') {
+        return encoded.esifycss;
+    }
     const result: Array<string> = [];
     let value = 0;
     let shift = 0;
@@ -29,7 +32,7 @@ const decode = (encoded: string): string => {
                 value = shift = 0;
             }
         } else {
-            return encoded;
+            throw new Error(`Unexpected token: ${encoded[index]} '${encoded}'[${index}]`);
         }
     }
     return result.join('');
