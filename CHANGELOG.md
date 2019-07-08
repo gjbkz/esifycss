@@ -1,3 +1,13 @@
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/kei-ito/esify/compare/v1.3.1...v1.3.2) (2019-07-08)
+
+
+### Features
+
+* add css.d.ts for typeRoots ([81bcdde](https://github.com/kei-ito/esify/commit/81bcdde))
+
+
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/kei-ito/esify/compare/v1.3.0...v1.3.1) (2019-07-05)
 
