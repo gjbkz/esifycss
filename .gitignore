@@ -9,3 +9,4 @@ output
 test/**/*.css.js
 test/**/*.css.ts
 test/**/*.css.d.ts
+test/*/package-lock.json
