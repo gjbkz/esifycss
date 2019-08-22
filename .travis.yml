@@ -14,7 +14,8 @@ install:
     else
       export SUFFIX=linux64
     fi
-  - wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_${SUFFIX}.zip
+  - LATEST_RELEASE=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  - wget https://chromedriver.storage.googleapis.com/${LATEST_RELEASE}/chromedriver_${SUFFIX}.zip
   - unzip chromedriver_${SUFFIX}.zip
 script:
   - npm ci
