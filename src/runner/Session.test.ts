@@ -77,10 +77,12 @@ interface ITest {
     },
 ] as Array<ITest>).forEach(({parameters, files}, index) => {
     test(`#${index}`, async (t) => {
-        await Promise.all(files.map((file) => writeFile(
-            path.join(t.context.directory, file.path),
-            file.content.join('\n'),
-        )));
+        await Promise.all(files.map(async (file) => {
+            await writeFile(
+                path.join(t.context.directory, file.path),
+                file.content.join('\n'),
+            );
+        }));
         const helper = path.join(t.context.directory, 'helper.js');
         const session = t.context.session = new Session({
             ...parameters,
@@ -127,18 +129,20 @@ test('#watch', async (t) => {
         }),
     });
     Object.assign(t.context, {session});
-    const waitForMessage = (
+    const waitForMessage = async (
         expected: string | RegExp,
-    ) => new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => reject(new Error('timeout')), 1000);
-        const onData = (message: string) => {
-            if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
-                clearTimeout(timeoutId);
-                resolve();
-            }
-        };
-        messageListener.on('message', onData);
-    });
+    ) => {
+        await new Promise((resolve, reject) => {
+            const timeoutId = setTimeout(() => reject(new Error('timeout')), 1000);
+            const onData = (message: string) => {
+                if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
+                    clearTimeout(timeoutId);
+                    resolve();
+                }
+            };
+            messageListener.on('message', onData);
+        });
+    };
     await session.start();
     const result1 = await runCode(codePath);
     await writeFile(cssPath, [
@@ -149,7 +153,9 @@ test('#watch', async (t) => {
     const result2 = await runCode(codePath);
     await deleteFile(cssPath);
     await waitForMessage(`deleted: ${codePath}`);
-    await t.throwsAsync(() => stat(codePath), {code: 'ENOENT'});
+    await t.throwsAsync(async () => {
+        await stat(codePath);
+    }, {code: 'ENOENT'});
     t.deepEqual(result1.className, result2.className);
     t.deepEqual(result1.id, result2.id);
     t.deepEqual(result1.keyframes, result2.keyframes);

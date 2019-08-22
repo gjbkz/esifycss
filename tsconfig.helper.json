@@ -1,17 +1,10 @@
 {
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "target": "es2017",
         "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "strict": true,
-        "removeComments": true,
         "declaration": false,
         "sourceMap": false,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
         "outDir": "./lib/helper"
     },
     "include": [

@@ -26,8 +26,12 @@ interface IWriteFileTest {
         const actual = await readFile(absoluteFilePath);
         t.true(actual.equals(content));
         await deleteFile(absoluteFilePath);
-        await t.throwsAsync(() => stat(absoluteFilePath), {code: 'ENOENT'});
+        await t.throwsAsync(async () => {
+            await stat(absoluteFilePath);
+        }, {code: 'ENOENT'});
         await deleteFile(t.context.directory);
-        await t.throwsAsync(() => stat(t.context.directory), {code: 'ENOENT'});
+        await t.throwsAsync(async () => {
+            await stat(t.context.directory);
+        }, {code: 'ENOENT'});
     });
 });

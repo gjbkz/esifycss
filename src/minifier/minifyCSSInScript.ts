@@ -2,11 +2,11 @@ import {IParseResult} from './types';
 import {IIdentifier} from '../util/createIdentifier';
 import {encodeString} from '../util/encodeString';
 
-export const minifyCSSInScript = (
+export const minifyCSSInScript = async (
     script: string,
     cssRanges: Array<IParseResult>,
     identifier: IIdentifier,
-): string => {
+): Promise<string> => {
     let minified = script;
     for (let index = cssRanges.length; index--;) {
         const {css, start, end} = cssRanges[index];
@@ -16,5 +16,6 @@ export const minifyCSSInScript = (
             minified.slice(end),
         ].join('');
     }
+    await Promise.resolve(null);
     return minified;
 };
