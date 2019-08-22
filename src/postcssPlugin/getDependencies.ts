@@ -12,7 +12,7 @@ export const getDependencies = (
     let count = 0;
     root.walkAtRules((node): void => {
         if (node.name === 'import') {
-            const match = node.params.match(REGEX_IMPORT);
+            const match = REGEX_IMPORT.exec(node.params);
             if (match) {
                 count++;
                 const [,, target, name = `$${count}`] = match;
