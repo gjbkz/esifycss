@@ -1,3 +1,13 @@
+<a name="1.3.5"></a>
+## [1.3.5](https://github.com/kei-ito/esify/compare/v1.3.4...v1.3.5) (2019-09-04)
+
+
+### Bug Fixes
+
+* minifyCSSInScript is not asnyc ([240f045](https://github.com/kei-ito/esify/commit/240f045))
+
+
+
 <a name="1.3.4"></a>
 ## [1.3.4](https://github.com/kei-ito/esify/compare/v1.3.3...v1.3.4) (2019-09-04)
 
