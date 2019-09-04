@@ -23,7 +23,9 @@ export const program = new commander.Command()
 if (!module.parent) {
     program.parse(process.argv);
     loadParameters(program)
-    .then((parameters) => new Session(parameters).start())
+    .then(async (parameters) => {
+        await new Session(parameters).start();
+    })
     .catch((error: Error) => {
         write(process.stderr, [error]);
         process.exit(1);

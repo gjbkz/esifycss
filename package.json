@@ -105,6 +105,14 @@
         "overrides": [
             {
                 "files": [
+                    "scripts/*.ts"
+                ],
+                "parserOptions": {
+                    "project": "scripts/tsconfig.json"
+                }
+            },
+            {
+                "files": [
                     "src/helper/**/*",
                     "test/*/src/*"
                 ],
@@ -119,6 +127,9 @@
                 ],
                 "rules": {
                     "no-bitwise": "off"
+                },
+                "parserOptions": {
+                    "project": "./tsconfig.helper.json"
                 }
             },
             {
