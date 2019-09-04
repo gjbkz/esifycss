@@ -82,4 +82,7 @@ declare module 'acorn-walk' {
         ast: acorn.Node,
         visitors: IVisitors,
     ) => void;
+    export const base: {
+        [key: string]: () => void,
+    };
 }

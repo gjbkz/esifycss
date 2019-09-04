@@ -21,6 +21,10 @@ interface ITest {
         input: `({esifycss:${JSON.stringify('aaa')}, a: 0})`,
         expected: [],
     },
+    {
+        input: `({esifycss:${JSON.stringify('aaa')}, a: 0});import('foo')`,
+        expected: [],
+    },
 ] as Array<ITest>).forEach(({input, expected}) => {
     test(JSON.stringify(input), (t) => {
         const actual = extractCSSFromScript(input);
