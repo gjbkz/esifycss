@@ -13,7 +13,7 @@ export const minifyScripts = async (
     await Promise.all(
         [...parseResult.scripts]
         .map(async ([file, {script, cssRanges}]) => {
-            const minified = await minifyCSSInScript(script, cssRanges, identifier);
+            const minified = minifyCSSInScript(script, cssRanges, identifier);
             await writeFile(file, minified);
         }),
     );
