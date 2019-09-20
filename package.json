@@ -157,7 +157,11 @@
                 ],
                 "rules": {
                     "no-process-env": "off",
-                    "@typescript-eslint/no-triple-slash-reference": "off"
+                    "require-atomic-updates": "off",
+                    "@typescript-eslint/triple-slash-reference": "off"
+                },
+                "parserOptions": {
+                    "project": "./tsconfig.base.json"
                 }
             },
             {

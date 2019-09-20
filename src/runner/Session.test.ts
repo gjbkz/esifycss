@@ -10,10 +10,12 @@ import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
 import {runCode, IRunCodeResult} from '../util/runCode.for-test';
 
-const test = anyTest as TestInterface<{
+interface ITestContext {
     directory: string,
     session?: Session,
-}>;
+}
+
+const test = anyTest as TestInterface<ITestContext>;
 
 test.beforeEach(async (t) => {
     t.context.directory = await createTemporaryDirectory();
@@ -31,7 +33,7 @@ interface ITest {
         path: string,
         content: Array<string>,
         test: (
-            t: ExecutionContext,
+            t: ExecutionContext<ITestContext>,
             result: IRunCodeResult,
         ) => void,
     }>,
