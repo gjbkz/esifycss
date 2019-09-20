@@ -98,7 +98,8 @@ const build = async (
     }
 };
 
-getCapabilities(testDirectories).forEach((capability, index) => {
+getCapabilities(testDirectories)
+.forEach((capability, index) => {
     const name = capability['bstack:options'].sessionName;
     const testDirectory = path.join(__dirname, name);
     const outputDirectory = path.join(testDirectory, 'output');

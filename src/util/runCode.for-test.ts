@@ -16,7 +16,11 @@ export const runCode = async (file: string): Promise<IRunCodeResult> => {
     const bundle = await rollup.rollup({input: testCodePath});
     const {output: [output, undef]} = await bundle.generate({format: 'es'});
     if (undef) {
-        throw new Error(`Unexpected multiple outputs: ${undef.code}`);
+        if ('code' in undef) {
+            throw new Error(`Unexpected multiple outputs: ${undef.code}`);
+        } else {
+            throw new Error(`Unexpected multiple outputs: ${JSON.stringify(undef, null, 2)}`);
+        }
     }
     const sandbox = createSandbox<IEsifyCSSResult>();
     vm.runInNewContext(output.code, sandbox);
