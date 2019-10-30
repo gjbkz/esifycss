@@ -1,0 +1,20 @@
+@keyframes FadeIn {
+      0% {opacity: 0}
+    100% {opacity: 1}
+}
+@keyframes Rotate {
+      0% {transform: rotate(  0deg)}
+    100% {transform: rotate(360deg)}
+}
+#container {
+    display: flex;
+    animation: 0.2s linear FadeIn;
+}
+.icon {
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+.icon.rotate {
+    animation-name: Rotate;
+}

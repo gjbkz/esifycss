@@ -6,49 +6,112 @@
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=WDQvOHgwbkRNTUFyUVkrc0RmdGgva0diVk01Tm9LWU95ZFNGVTByeHhpVT0tLUc2RW9lNnNaY2k4QkVCSjMyalRGTVE9PQ==--007efb48774305e72904bb3a15d3b0d048dbfb91)](https://www.browserstack.com/automate/public-build/WDQvOHgwbkRNTUFyUVkrc0RmdGgva0diVk01Tm9LWU95ZFNGVTByeHhpVT0tLUc2RW9lNnNaY2k4QkVCSjMyalRGTVE9PQ==--007efb48774305e72904bb3a15d3b0d048dbfb91)
 [![codecov](https://codecov.io/gh/kei-ito/esifycss/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/esifycss)
 
-Generates modules from CSS.
+## Introduction
 
-Assume you have [`style.css`](sample/01-mangle/sample.css) below.
+EsifyCSS finds CSS files in your project and generates ES modules for each of
+them.
 
-![A screen shot of style.css](images/style.css.png)
+Assume that you have `src/style1.css` and `src/style2.css`. They have the same
+contents:
 
-Then, run the `esifycss` command.
+```css
+/* src/style1.css, src/style2.css */
+@keyframes FadeIn {
+    0%: {opacity: 0}
+  100%: {opacity: 0}
+}
+@keyframes Rotate {
+    0%: {transform: rotate(  0deg)}
+  100%: {transform: rotate(360deg)}
+}
+#container {
+  animation: 0.2s linear FadeIn;
+}
+.icon {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.icon.rotate {
+  animation-name: Rotate;
+}
+```
 
-![A video of the result](images/esifycss.gif)
+Then, run `esifycss --helper src/helper.js src`. `--helper src/helper.js` is
+where the helper script is written. The last `src` specifies the directory that
+contains the file to be processed by EsifyCSS.
 
-You'll get [`style.css.js`](sample/01-mangle/sample.css.js) (and [`helper.js`](sample/01-mangle/helper.js)).
+The process finds CSS files, parses them, extracts identifiers, replaces them with
+ values.
 
-![A screen shot of style.css.js](images/style.css.js.png)
+After the process, you'll get `src/style1.css.js` and `src/style2.css.js`:
 
-You can import the generated script from
-It exports `className`, `id`, and `keyframes` that are shortened uniquely.
-The uniqueness makes styles modular. This means you don't have to concern about
-naming somethings in CSS.
+```javascript
+// src/style1.css.js
+import {addStyle} from './helper.js';
+addStyle(["WYIGqCCQSCaAQEcSCaAUEE","WYIGsCCQSCeAgBiBIIQkBmBEcSCeAgBiByBkBmBEE","0BGQC2BA4BKOA6BoBIqBIGqCKE","sBGUCOM8BAUoBKOM+BMgCAiCKOMkCMmCAqBKE","sBG2CG4CCOMoCAGsCKE"]);
+export const className = {
+    "icon": "_1",
+    "rotate": "_2"
+};
+export const id = {
+    "container": "_0"
+};
+export const keyframes = {
+    "FadeIn": "_3",
+    "Rotate": "_4"
+};
+```
 
-Each string given to `addStyle` represents a CSS string.
-They are inserted to the document's stylesheet by the helper script.
+```javascript
+// src/style2.css.js
+import {addStyle} from './helper.js';
+addStyle(["WYIGuBCQSCaAQEcSCaAUEE","WYIGwBCQSCeAgBiBIIQkBmBEcSCeAgBiByBkBmBEE","0BGuCC2BA4BKOA6BoBIqBIGuBKE","sBGwCCOM8BAUoBKOM+BMgCAiCKOMkCMmCAqBKE","sBGyCG0CCOMoCAGwBKE"]);
+export const className = {
+    "icon": "_6",
+    "rotate": "_7"
+};
+export const id = {
+    "container": "_5"
+};
+export const keyframes = {
+    "FadeIn": "_8",
+    "Rotate": "_9"
+};
+```
 
-EsifyCSS consists of a **PostCSS plugin** and a **Runner**.
+The two modules are almost the same, but the exported objects are different. And
+there will be `src/helper.js` which exports the `addStyle` function which
+applies the style to documents. You can see the code at
+[sample/01-mangle/helper.js](sample/01-mangle/helper.js).
 
-## PostCSS plugin
+The exported objects are mappings of identifiers of `className`, `id`, and
+`keyframes` that were replaced in the process. You should import them and use
+the replaced identifiers instead of original in the code:
 
-The plugin converts the identifiers in CSS and minifies them.
-It outputs the result of minifications using [Root.warn()].
+```javascript
+import style from './style1.css.js';
+const element = document.createElement('div');
+element.classList.add(style.className.icon);
+```
+
+## Tools
+
+EsifyCSS consists of **PostCSS plugin**, **Runner** and **CLI**.
+
+### PostCSS plugin
+
+The plugin converts the identifiers in CSS and minifies them. It outputs the
+result of minifications using [Root.warn()].
 
 [Root.warn()]: http://api.postcss.org/Root.html#warn
 
-## Runner
+### Runner
 
 A runner process `.css` files in your project with PostCSS and output the
 results to `.css.js` or `.css.ts`.
 
-## Installation
-
-```bash
-npm install --save-dev esifycss
-```
-
-## Usage
+### CLI
 
 ```
 Usage: esifycss [options] <include ...>
@@ -63,11 +126,18 @@ Options:
   -h, --help            output usage information
 ```
 
+## Installation
+
+```bash
+npm install --save-dev esifycss
+```
+
 ## `@import` Syntax
 
-You can use `@import` syntax when the style declarations requires names in external files.
+You can use `@import` syntax if the style declarations requires identifiers
+declared in other files.
 
-Example: Assume you have the following `a.css` and `b.css`.
+For example, Assume you have the following `a.css` and `b.css`.
 
 ```css
 /* a.css */
@@ -79,9 +149,8 @@ Example: Assume you have the following `a.css` and `b.css`.
 .container {...} /* → ._1 */
 ```
 
-The `container` class names will be shortened to unique names like
-`_0` and `_1`.
-You can import the shortened names with the `@import` syntax.
+The `container` class names will be shortened to unique names like `_0` and
+`_1`. You can import the shortened names with the `@import` syntax.
 
 ```css
 /* "modA-" is prefix for a.css */
