@@ -1,3 +1,13 @@
+<a name="1.3.7"></a>
+## [1.3.7](https://github.com/kei-ito/esify/compare/v1.3.6...v1.3.7) (2019-10-30)
+
+
+### Bug Fixes
+
+* remove spaces ([dbb3cbb](https://github.com/kei-ito/esify/commit/dbb3cbb))
+
+
+
 <a name="1.3.6"></a>
 ## [1.3.6](https://github.com/kei-ito/esify/compare/v1.3.5...v1.3.6) (2019-09-20)
 
