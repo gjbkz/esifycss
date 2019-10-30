@@ -34,6 +34,6 @@ export const addStyle = (rules) => {
     if (!style.parentNode) {
         document.head.appendChild(style);
     }
-    const sheet = style.sheet;
-    rules.forEach((words) => sheet.insertRule(decode(words), sheet.cssRules.length));
+    const cssStyleSheet = style.sheet;
+    rules.forEach((words) => cssStyleSheet.insertRule(decode(words), cssStyleSheet.cssRules.length));
 };

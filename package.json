@@ -21,7 +21,7 @@
         "esifycss": "lib/bin/esifycss.js"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src scripts",
+        "lint": "eslint --ext .ts src scripts @types",
         "build:cleanup": "rimraf lib src/helper/index.js",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
         "build:helper:cpy1": "cpy ./src/helper ./lib/helper",
@@ -108,17 +108,34 @@
                     "scripts/*.ts"
                 ],
                 "parserOptions": {
-                    "project": "scripts/tsconfig.json"
+                    "project": "./tsconfig.base.json"
+                },
+                "rules": {
+                    "no-bitwise": "off"
                 }
             },
             {
                 "files": [
-                    "src/helper/**/*",
-                    "test/*/src/*"
+                    "@types/**/*.ts"
                 ],
-                "env": {
-                    "node": false,
-                    "browser": true
+                "parserOptions": {
+                    "project": "./tsconfig.base.json"
+                }
+            },
+            {
+                "files": [
+                    "test/**/*.ts",
+                    "*.test.ts",
+                    "*.for-test.ts"
+                ],
+                "rules": {
+                    "no-process-env": "off",
+                    "max-lines-per-function": "off",
+                    "class-methods-use-this": "off",
+                    "@typescript-eslint/no-unnecessary-condition": "off"
+                },
+                "parserOptions": {
+                    "project": "./tsconfig.base.json"
                 }
             },
             {
@@ -134,58 +151,30 @@
             },
             {
                 "files": [
+                    "src/helper/**/*",
+                    "test/*/src/*",
+                    "sample/**/*"
+                ],
+                "env": {
+                    "node": false,
+                    "browser": true
+                }
+            },
+            {
+                "files": [
                     "src/helper/**/*.js"
                 ],
                 "rules": {
-                    "brace-style": "off",
-                    "indent": "off",
-                    "object-curly-spacing": "off",
-                    "prefer-destructuring": "off"
+                    "brace-style": "off"
                 }
             },
             {
                 "files": [
-                    "*.test.ts"
+                    "src/util/tokenizeString.ts",
+                    "src/minifier/extractCSSFromScript.ts"
                 ],
                 "rules": {
-                    "max-lines-per-function": "off"
-                }
-            },
-            {
-                "files": [
-                    "test/**/*.ts"
-                ],
-                "rules": {
-                    "no-process-env": "off",
-                    "require-atomic-updates": "off",
-                    "@typescript-eslint/triple-slash-reference": "off"
-                },
-                "parserOptions": {
-                    "project": "./tsconfig.base.json"
-                }
-            },
-            {
-                "files": [
-                    "sample/*"
-                ],
-                "rules": {
-                    "no-console": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/util/createSandbox.for-test.ts"
-                ],
-                "rules": {
-                    "class-methods-use-this": "off"
-                }
-            },
-            {
-                "files": [
-                    "scripts/*"
-                ],
-                "rules": {
-                    "no-bitwise": "off"
+                    "@typescript-eslint/no-unnecessary-condition": "off"
                 }
             }
         ]

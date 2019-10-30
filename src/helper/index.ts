@@ -40,6 +40,6 @@ export const addStyle = (rules: Array<string>): void => {
     if (!style.parentNode) {
         document.head.appendChild(style);
     }
-    const sheet = style.sheet as CSSStyleSheet;
-    rules.forEach((words) => sheet.insertRule(decode(words), sheet.cssRules.length));
+    const cssStyleSheet = style.sheet as CSSStyleSheet;
+    rules.forEach((words) => cssStyleSheet.insertRule(decode(words), cssStyleSheet.cssRules.length));
 };
