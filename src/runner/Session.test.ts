@@ -114,23 +114,7 @@ test('#watch', async (t) => {
     const cssPath = path.join(t.context.directory, '/components/style.css');
     const helper = path.join(t.context.directory, 'helper.js');
     const codePath = `${cssPath}${path.extname(helper)}`;
-    await writeFile(cssPath, [
-        '@keyframes foo {0%{color: red}100%{color:green}}',
-        '.foo#bar {animation: 1s 0.5s linear infinite foo}',
-    ].join(''));
     const messageListener = new events.EventEmitter();
-    const session = new Session({
-        helper,
-        watch: true,
-        include: t.context.directory,
-        stdout: new stream.Writable({
-            write(chunk, _encoding, callback) {
-                messageListener.emit('message', `${chunk}`);
-                callback();
-            },
-        }),
-    });
-    Object.assign(t.context, {session});
     const waitForMessage = async (
         expected: string | RegExp,
     ) => {
@@ -145,10 +129,26 @@ test('#watch', async (t) => {
             messageListener.on('message', onData);
         });
     };
-    await session.start();
+    t.context.session = new Session({
+        helper,
+        watch: true,
+        include: t.context.directory,
+        stdout: new stream.Writable({
+            write(chunk, _encoding, callback) {
+                messageListener.emit('message', `${chunk}`);
+                callback();
+            },
+        }),
+    });
+    await writeFile(cssPath, [
+        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '.foo#bar {animation: 1s 0.5s linear infinite foo}',
+    ].join(''));
+    t.context.session.start().catch(t.fail);
+    await waitForMessage(`written: ${codePath}`);
     const result1 = await runCode(codePath);
     await writeFile(cssPath, [
-        '@keyframes foo {0%{color: red}100%{color:green}}',
+        '@keyframes foo {0%{color:red}100%{color:green}}',
         '.foo#bar {animation: 2s 1s linear infinite foo}',
     ].join(''));
     await waitForMessage(`written: ${codePath}`);
