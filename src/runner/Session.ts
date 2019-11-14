@@ -114,7 +114,7 @@ export class Session {
 
     protected async stopWatcher(): Promise<void> {
         if (this.watcher) {
-            this.watcher.close();
+            await this.watcher.close();
             delete this.watcher;
         }
         await Promise.resolve(null);
