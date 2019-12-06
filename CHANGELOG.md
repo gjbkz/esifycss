@@ -1,3 +1,13 @@
+<a name="1.3.9"></a>
+## [1.3.9](https://github.com/kei-ito/esify/compare/v1.3.8...v1.3.9) (2019-12-06)
+
+
+### Features
+
+* support postcss.ProcessOptions ([026c237](https://github.com/kei-ito/esify/commit/026c237))
+
+
+
 <a name="1.3.8"></a>
 ## [1.3.8](https://github.com/kei-ito/esify/compare/v1.3.7...v1.3.8) (2019-11-14)
 
