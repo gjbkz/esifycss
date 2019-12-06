@@ -22,4 +22,4 @@ install:
   - c8 npm run test
   - nyc npm run test
   - codecov
-build: 'off'
+build: off

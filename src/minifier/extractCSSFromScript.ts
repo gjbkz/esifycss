@@ -3,7 +3,9 @@ import * as acornWalk from 'acorn-walk';
 import * as dynamicImport from 'acorn-dynamic-import';
 import {IParseResult} from './types';
 const Parser = acorn.Parser.extend(dynamicImport.default || dynamicImport);
-acornWalk.base[dynamicImport.DynamicImportKey] = () => {};
+acornWalk.base[dynamicImport.DynamicImportKey] = () => {
+    // noop
+};
 
 export const extractCSSFromScript = (
     script: string,
