@@ -21,7 +21,7 @@
         "esifycss": "lib/bin/esifycss.js"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src scripts @types",
+        "lint": "eslint --ext .ts src scripts @types test",
         "build:cleanup": "rimraf lib src/helper/index.js",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
         "build:helper:copy1": "ts-node scripts/copy ./src/helper ./lib/helper",
@@ -133,7 +133,10 @@
                     "no-process-env": "off",
                     "max-lines-per-function": "off",
                     "class-methods-use-this": "off",
-                    "@typescript-eslint/no-unnecessary-condition": "off"
+                    "require-atomic-updates": "off",
+                    "@typescript-eslint/no-floating-promises": "off",
+                    "@typescript-eslint/no-unnecessary-condition": "off",
+                    "@typescript-eslint/triple-slash-reference": "off"
                 },
                 "parserOptions": {
                     "project": "./tsconfig.base.json"
