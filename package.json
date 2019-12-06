@@ -24,19 +24,19 @@
         "lint": "eslint --ext .ts src scripts @types",
         "build:cleanup": "rimraf lib src/helper/index.js",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
-        "build:helper:cpy1": "cpy ./src/helper ./lib/helper",
-        "build:helper:cpy2": "cpy ./lib/helper ./src/helper",
-        "build:helper": "run-s build:helper:cpy1 build:helper:tsc build:helper:cpy2",
+        "build:helper:copy1": "ts-node scripts/copy ./src/helper ./lib/helper",
+        "build:helper:copy2": "ts-node scripts/copy ./lib/helper ./src/helper",
+        "build:helper": "run-s build:helper:copy1 build:helper:tsc build:helper:copy2",
         "build:tsc": "tsc",
         "build:bin": "ts-node scripts/chmodScripts.ts",
         "build:sample1:cleanup": "rimraf sample/01-mangle",
-        "build:sample1:cpy": "cpy sample/00-src sample/01-mangle",
+        "build:sample1:copy": "ts-node scripts/copy sample/00-src sample/01-mangle",
         "build:sample1:esifycss": "node ./lib/bin/esifycss.js --helper sample/01-mangle/helper.js 'sample/01-mangle/**/*.css'",
-        "build:sample1": "run-s build:sample1:cleanup build:sample1:cpy build:sample1:esifycss",
+        "build:sample1": "run-s build:sample1:cleanup build:sample1:copy build:sample1:esifycss",
         "build:sample2:cleanup": "rimraf sample/02-no-mangle",
-        "build:sample2:cpy": "cpy sample/00-src sample/02-no-mangle",
+        "build:sample2:copy": "ts-node scripts/copy sample/00-src sample/02-no-mangle",
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
-        "build:sample2": "run-s build:sample2:cleanup build:sample2:cpy build:sample2:esifycss",
+        "build:sample2": "run-s build:sample2:cleanup build:sample2:copy build:sample2:esifycss",
         "build": "run-s build:cleanup build:tsc build:helper build:bin build:sample*",
         "test": "ava -v",
         "test-client": "ava -v test/run.ts",
@@ -72,7 +72,6 @@
         "ava": "^2.4.0",
         "browserstack-local": "^1.4.2",
         "conventional-changelog-cli": "^2.0.28",
-        "cpy-cli": "^3.0.0",
         "eslint": "^6.7.2",
         "husky": "^3.1.0",
         "lint-staged": "^9.5.0",
@@ -110,7 +109,8 @@
                     "project": "./tsconfig.base.json"
                 },
                 "rules": {
-                    "no-bitwise": "off"
+                    "no-bitwise": "off",
+                    "no-console": "off"
                 }
             },
             {
