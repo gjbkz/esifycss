@@ -55,6 +55,7 @@ export class Session {
     ): Promise<{dest: string, code: string}> {
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
+            options: this.configuration.postcssOptions,
             file: filePath,
         });
         const pluginResult = extractPluginResult(postcssResult);

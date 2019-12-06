@@ -49,6 +49,11 @@ export interface ISessionOptions {
      */
     postcssPlugins?: Array<postcss.AcceptedPlugin>,
     /**
+     * https://github.com/postcss/postcss#options
+     * @default undefined
+     */
+    postcssOptions?: postcss.ProcessOptions,
+    /**
      * Parameters for esifycss.plugin.
      */
     esifycssPluginParameter?: IPluginOptions,
@@ -78,11 +83,13 @@ export interface ISessionConfiguration {
     readonly stdout: stream.Writable,
     readonly stderr: stream.Writable,
     readonly postcssPlugins: Array<postcss.AcceptedPlugin>,
+    readonly postcssOptions: postcss.ProcessOptions,
 }
 
 export interface ICSSParserParameters {
     file: string,
     css?: string | Buffer,
+    options?: postcss.ProcessOptions,
     plugins: Array<postcss.AcceptedPlugin>,
     map?: postcss.SourceMapOptions,
 }

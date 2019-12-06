@@ -7,6 +7,7 @@ export const getCSSParserConfiguration = async (
     css: `${parameters.css || await readFile(parameters.file)}`,
     plugins: parameters.plugins,
     options: {
+        ...parameters.options,
         from: parameters.file,
         map: parameters.map || {},
     },
