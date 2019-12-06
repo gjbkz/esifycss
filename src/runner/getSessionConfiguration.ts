@@ -38,5 +38,6 @@ export const getSessionConfiguration = (
             ...ensureArray(parameters.postcssPlugins),
             plugin(parameters.esifycssPluginParameter || {}),
         ],
+        postcssOptions: parameters.postcssOptions || {},
     };
 };

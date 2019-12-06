@@ -3,6 +3,7 @@ import anyTest, {TestInterface, ExecutionContext} from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
 import * as postcss from 'postcss';
+import * as scss from 'postcss-scss';
 import {ISessionOptions} from './types';
 import {writeFile, deleteFile, stat} from '../util/fs';
 import {Session} from './Session';
@@ -73,6 +74,25 @@ interface ITest {
                             parseAnimationShorthand(`1s 0.5s linear infinite ${keyframes.foo}`),
                         );
                     }
+                },
+            },
+        ],
+    },
+    {
+        parameters: {
+            postcssOptions: {parser: scss.parse},
+            extensions: ['.scss', '.css'],
+        },
+        files: [
+            {
+                path: '/components/style.scss',
+                content: [
+                    '.foo#bar {&>.baz {color: red}}',
+                ],
+                test: (t, {className, id, keyframes}) => {
+                    t.deepEqual(Object.keys(id), ['bar']);
+                    t.deepEqual(Object.keys(className), ['foo', 'baz']);
+                    t.deepEqual(Object.keys(keyframes), []);
                 },
             },
         ],

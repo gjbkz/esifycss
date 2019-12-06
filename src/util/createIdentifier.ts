@@ -8,7 +8,9 @@ export interface IIdListener {
 }
 
 export const createIdentifier = (
-    listener: IIdListener = () => {},
+    listener: IIdListener = () => {
+        // noop
+    },
 ): IIdentifier => {
     const knownIdList = new Map<string, number>();
     let count = 0;

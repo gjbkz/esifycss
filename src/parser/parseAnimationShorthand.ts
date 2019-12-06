@@ -11,7 +11,9 @@ const tokenizeAnimation = createTokenizerFromNormalizedRuleList(CSSAnimationRule
 export const parseAnimationShorthand = (
     input: string,
 ): ICSSAnimation => {
-    const result = tokenizeAnimation(input, 'SingleAnimation', 0, () => {});
+    const result = tokenizeAnimation(input, 'SingleAnimation', 0, () => {
+        // noop
+    });
     if (!isASTRuleNode(result)) {
         throw new Error(`Failed to parse the input: ${input}`);
     }
