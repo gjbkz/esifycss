@@ -212,6 +212,11 @@ export interface ISessionOptions {
    */
   postcssPlugins?: Array<postcss.AcceptedPlugin>,
   /**
+   * https://github.com/postcss/postcss#options
+   * @default undefined
+   */
+  postcssOptions?: postcss.ProcessOptions,
+  /**
    * Parameters for esifycss.plugin.
    */
   esifycssPluginParameter?: IPluginOptions,
