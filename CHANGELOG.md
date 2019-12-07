@@ -1,3 +1,13 @@
+<a name="1.3.11"></a>
+## [1.3.11](https://github.com/kei-ito/esify/compare/v1.3.9...v1.3.11) (2019-12-07)
+
+
+### Bug Fixes
+
+* ignore charset rules ([572d552](https://github.com/kei-ito/esify/commit/572d552))
+
+
+
 <a name="1.3.9"></a>
 ## [1.3.9](https://github.com/kei-ito/esify/compare/v1.3.8...v1.3.9) (2019-12-06)
 
