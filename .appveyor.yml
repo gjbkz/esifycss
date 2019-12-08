@@ -1,6 +1,6 @@
 cache:
   - node_modules
-install:
+test_script:
   - ps: Install-Product node 12
   - npm install -g codecov c8 nyc
   - npm ci
