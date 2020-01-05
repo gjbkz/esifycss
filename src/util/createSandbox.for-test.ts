@@ -9,8 +9,9 @@ class Element {
         this.children = [];
     }
 
-    public appendChild(element: Element) {
+    public appendChild(element: Element): Element {
         this.children.push(element);
+        return element;
     }
 
 }
@@ -33,7 +34,7 @@ class StyleSheet {
         this.cssRules = [];
     }
 
-    public insertRule(cssText: string, index = 0) {
+    public insertRule(cssText: string, index = 0): void {
         this.cssRules.splice(index, 0, new CSSRule(cssText));
     }
 
@@ -74,7 +75,7 @@ class Document {
         this.body = new Element('body');
     }
 
-    public createElement(tagName: string) {
+    public createElement(tagName: string): Element {
         switch (tagName) {
         case 'style':
             return new StyleElement();
