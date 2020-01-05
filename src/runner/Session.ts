@@ -46,7 +46,7 @@ export class Session {
         return `${scriptCode}`;
     }
 
-    public async outputHelperScript() {
+    public async outputHelperScript(): Promise<void> {
         await copyFile(this.helperScriptPath, this.configuration.helper);
     }
 
@@ -70,7 +70,7 @@ export class Session {
         return {dest: scriptPath, code};
     }
 
-    public async minifyScripts() {
+    public async minifyScripts(): Promise<void> {
         await minifyScripts(
             this.configuration.helper,
             [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
