@@ -177,6 +177,7 @@
             },
             {
                 "files": [
+                    "src/util/createExposedPromise.ts",
                     "src/util/tokenizeString.ts",
                     "src/minifier/extractCSSFromScript.ts"
                 ],
