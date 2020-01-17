@@ -6,7 +6,7 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile, deleteFile, copyFile, readFile} from '../util/fs';
+import {writeFile, deleteFile, copyFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
