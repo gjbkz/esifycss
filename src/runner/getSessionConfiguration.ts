@@ -1,36 +1,21 @@
-import * as path from 'path';
-import {ISessionConfiguration, ISessionOptions, IReadonlyWatchOptions} from './types';
+import {ISessionConfiguration, ISessionOptions} from './types';
 import {plugin} from '../postcssPlugin/plugin';
 import {ensureArray} from '../util/ensureArray';
-import {getHash} from '../util/getHash';
-
-export const getChokidarOptions = (
-    parameters: ISessionOptions,
-): IReadonlyWatchOptions => ({
-    useFsEvents: false,
-    ...parameters.chokidar,
-    ignored: [
-        ...ensureArray(parameters.chokidar && parameters.chokidar.ignored),
-        ...ensureArray(parameters.exclude),
-    ],
-    ignoreInitial: false,
-});
+import {getChokidarOptions} from './getChokidarOptions';
+import {getOutputOption} from './getOutputOption';
+import {getExtensionOption} from './getExtensionOption';
 
 export const getSessionConfiguration = (
     parameters: ISessionOptions,
 ): ISessionConfiguration => {
     const include = ensureArray(parameters.include || '*');
-    const extensions = new Set(parameters.extensions || ['.css']);
-    const helper = parameters.helper || `helper.${getHash(include.join(','))}.css.js`;
-    if (!path.extname(helper)) {
-        throw new Error(`helper should have an extension (e.g. ".js", ".ts"): ${helper}`);
-    }
+    const output = getOutputOption(parameters, include);
     return {
         watch: Boolean(parameters.watch),
-        helper,
-        extensions,
-        ext: path.extname(helper),
+        output,
         path: include,
+        extensions: new Set(parameters.extensions || ['.css']),
+        ext: getExtensionOption(parameters, output),
         chokidar: getChokidarOptions(parameters),
         stdout: parameters.stdout || process.stdout,
         stderr: parameters.stderr || process.stderr,

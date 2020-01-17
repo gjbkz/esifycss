@@ -30,13 +30,6 @@ jobs:
       - run: c8 npm test
       - run: c8 report --reporter=text-lcov > coverage.lcov
       - run: codecov --disable=gcov
-  test-8:
-    docker: [{image: "circleci/node:8"}]
-    steps:
-      - attach_workspace: {at: .}
-      - run: sudo npm install -g codecov nyc
-      - run: nyc npm test
-      - run: codecov --disable=gcov
   test-client:
     docker: [{image: "circleci/node:lts"}]
     steps:
@@ -72,7 +65,6 @@ workflows:
       - build: {requires: [onBranch]}
       - test-12: {requires: [build]}
       - test-10: {requires: [build]}
-      - test-8: {requires: [build]}
       - test-client: {requires: [build]}
       - lint: {requires: [build]}
   release:
@@ -96,11 +88,6 @@ workflows:
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
-      - test-8:
-          requires: [build]
-          filters:
-            branches: {ignore: /.*/}
-            tags: {only: /^v.*/}
       - test-client:
           requires: [build]
           filters:
@@ -112,7 +99,7 @@ workflows:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}
       - deploy:
-          requires: [test-12, test-10, test-8, test-client, lint]
+          requires: [test-12, test-10, test-client, lint]
           filters:
             branches: {ignore: /.*/}
             tags: {only: /^v.*/}

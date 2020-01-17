@@ -6,10 +6,11 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile, deleteFile, copyFile, readFile} from '../util/fs';
+import {writeFile, deleteFile, copyFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
+import {createExposedPromise} from '../util/createExposedPromise';
 
 export class Session {
 
@@ -21,7 +22,9 @@ export class Session {
 
     protected initialTask: Array<Promise<void>> | null;
 
-    protected get helperScriptPath(): string {
+    protected previousProcess?: Promise<void>;
+
+    protected get helperPath(): string {
         const srcDirectory = path.join(__dirname, '..', 'helper');
         return path.join(srcDirectory, `index${this.configuration.ext}`);
     }
@@ -41,38 +44,43 @@ export class Session {
         await this.stopWatcher();
     }
 
-    public async getHelperScript(): Promise<string> {
-        const scriptCode = await readFile(this.helperScriptPath);
-        return `${scriptCode}`;
-    }
-
     public async outputHelperScript(): Promise<void> {
-        await copyFile(this.helperScriptPath, this.configuration.helper);
+        if (this.configuration.output.type === 'script') {
+            await copyFile(this.helperPath, this.configuration.output.path);
+        }
     }
 
     public async processCSS(
         filePath: string,
     ): Promise<{dest: string, code: string}> {
+        await this.previousProcess;
+        const exposedPromise = createExposedPromise();
+        this.previousProcess = exposedPromise.promise;
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
             options: this.configuration.postcssOptions,
             file: filePath,
+        })
+        .catch((error) => {
+            exposedPromise.resolve();
+            throw error;
         });
         const pluginResult = extractPluginResult(postcssResult);
-        const scriptPath = path.join(`${filePath}${this.configuration.ext}`);
+        const outputPath = path.join(`${filePath}${this.configuration.ext}`);
         this.processedFiles.add(filePath);
         const code = generateScript(
-            scriptPath,
-            this.configuration.helper,
+            outputPath,
+            this.configuration.output.path,
             pluginResult,
             postcssResult.root,
         );
-        return {dest: scriptPath, code};
+        exposedPromise.resolve();
+        return {dest: outputPath, code};
     }
 
     public async minifyScripts(): Promise<void> {
         await minifyScripts(
-            this.configuration.helper,
+            this.configuration.output,
             [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
         );
     }
@@ -174,9 +182,9 @@ export class Session {
     protected async onUnlink(
         file: string,
     ): Promise<void> {
-        const scriptPath = path.join(`${file}${this.configuration.ext}`);
+        const outputPath = path.join(`${file}${this.configuration.ext}`);
         this.processedFiles.delete(file);
-        await deleteFile(scriptPath, this.configuration.stdout);
+        await deleteFile(outputPath, this.configuration.stdout);
     }
 
 }
