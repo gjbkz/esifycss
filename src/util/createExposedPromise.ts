@@ -7,26 +7,31 @@ export interface IExposedPromise {
 export const createExposedPromise = (): IExposedPromise => {
     let resolved = false;
     let rejected: Error | undefined;
-    const resolve = () => {
-        if (!rejected) {
-            resolved = true;
-        }
+    const exposed = {
+        resolve: () => {
+            if (!rejected) {
+                resolved = true;
+            }
+        },
+        reject: (error: Error | void) => {
+            if (!resolved) {
+                rejected = error || new Error('Rejected');
+            }
+        },
     };
-    const reject = (error: Error | void) => {
-        if (!resolved) {
-            rejected = error || new Error('Rejected');
-        }
-    };
-    const promise = new Promise<void>((res, rej) => {
-        if (rejected) {
-            rej(rejected);
-        } else if (resolved) {
-            res();
-        } else {
-            exposed.resolve = res;
-            exposed.reject = rej;
-        }
-    });
-    const exposed = {promise, resolve, reject};
-    return exposed;
+    return Object.assign(
+        exposed,
+        {
+            promise: new Promise<void>((res, rej) => {
+                if (rejected) {
+                    rej(rejected);
+                } else if (resolved) {
+                    res();
+                } else {
+                    exposed.resolve = res;
+                    exposed.reject = rej;
+                }
+            }),
+        },
+    );
 };
