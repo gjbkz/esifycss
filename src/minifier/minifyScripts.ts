@@ -6,29 +6,22 @@ import {setDictionary} from './setDictionary';
 import {removeAddStyle} from './removeAddStyle';
 
 export const minifyScripts = async (
-    output: {
-        type: 'script' | 'css',
-        path: string,
-    },
+    output: {type: 'script' | 'css', path: string},
     files: Array<string>,
 ): Promise<void> => {
     const parseResult = await parseScripts(files);
     const identifier = createOptimizedIdentifier(parseResult.tokens);
     const outputPath = output.path;
     if (output.type === 'script') {
-        await Promise.all(
-            [...parseResult.scripts]
-            .map(async ([file, {script, cssRanges}]) => {
-                const minified = minifyCSSInScript(script, cssRanges, identifier);
-                await writeFile(file, minified);
-            }),
-        );
+        await Promise.all([...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
+            const minified = minifyCSSInScript(script, cssRanges, identifier);
+            await writeFile(file, minified);
+        }));
         const helperCode = setDictionary(await readFile(outputPath, 'utf8'), identifier.idList);
         await writeFile(outputPath, helperCode);
     } else {
         const cssList = await Promise.all(
-            [...parseResult.scripts]
-            .map(async ([file, {script, cssRanges}]) => {
+            [...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
                 const cssList: Array<string> = [];
                 let code = script;
                 for (let index = cssRanges.length; index--;) {

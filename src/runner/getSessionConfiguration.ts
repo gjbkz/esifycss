@@ -16,34 +16,50 @@ export const getChokidarOptions = (
     ignoreInitial: false,
 });
 
+export const getOutputOption = (
+    {helper, css}: ISessionOptions,
+    include: Array<string>,
+): ISessionConfiguration['output'] => {
+    let output: ISessionOutput | undefined;
+    if (css) {
+        if (helper) {
+            throw new Error(`You can't use options.helper (${helper}) with options.css (${css})`);
+        }
+        output = {type: 'css', path: css};
+    } else {
+        const scriptPath = helper || `helper.${getHash(include.join(','))}.css.js`;
+        output = {type: 'script', path: scriptPath};
+    }
+    return output;
+};
+
+export const getExtensionOption = (
+    parameters: ISessionOptions,
+    output: ISessionConfiguration['output'],
+): string => {
+    let {ext} = parameters;
+    if (!ext) {
+        if (output.type === 'script') {
+            ext = path.extname(output.path);
+        }
+        if (!ext) {
+            ext = '.js';
+        }
+    }
+    return ext;
+};
+
 export const getSessionConfiguration = (
     parameters: ISessionOptions,
 ): ISessionConfiguration => {
     const include = ensureArray(parameters.include || '*');
-    const extensions = new Set(parameters.extensions || ['.css']);
-    let {ext} = parameters;
-    let output: ISessionOutput | undefined;
-    if (parameters.css) {
-        if (parameters.helper) {
-            throw new Error(`You can't use options.helper (${parameters.helper}) with options.css (${parameters.css})`);
-        }
-        output = {type: 'css', path: parameters.css};
-    } else {
-        output = {
-            type: 'script',
-            path: parameters.helper || `helper.${getHash(include.join(','))}.css.js`,
-        };
-        if (!path.extname(output.path)) {
-            throw new Error(`options.helper should have an extension (e.g. ".js", ".ts"): ${output.path}`);
-        }
-        ext = path.extname(output.path);
-    }
+    const output = getOutputOption(parameters, include);
     return {
         watch: Boolean(parameters.watch),
         output,
-        extensions,
-        ext: ext || '.js',
         path: include,
+        extensions: new Set(parameters.extensions || ['.css']),
+        ext: getExtensionOption(parameters, output),
         chokidar: getChokidarOptions(parameters),
         stdout: parameters.stdout || process.stdout,
         stderr: parameters.stderr || process.stderr,
