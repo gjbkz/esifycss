@@ -22,11 +22,18 @@ export interface ISessionOptions {
     extensions?: Array<string>,
     /**
      * Where this plugin outputs the helper script.
-     * If you use TypeScript, set it with '.ts'-ended value.
-     * The hash in the default value is calculated from the include option.
+     * If you use TypeScript, set a  value like '*.ts'.
+     * You can't use this option with the css option.
+     * The {hash} in the default value is calculated from the include option.
      * @default "helper.{hash}.css.js"
      */
     helper?: string,
+    /**
+     * Where this plugin outputs the css.
+     * You can't use this option with the helper option.
+     * @default undefined
+     */
+    css?: string,
     /**
      * It it is true, a watcher is enabled.
      * @default false
@@ -73,9 +80,14 @@ export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
     awaitWriteFinish?: Readonly<chokidar.AwaitWriteFinishOptions> | boolean,
 }
 
+export interface ISessionOutput {
+    type: 'script' | 'css',
+    path: string,
+}
+
 export interface ISessionConfiguration {
     readonly watch: boolean,
-    readonly helper: string,
+    readonly output: ISessionOutput,
     readonly extensions: ReadonlySet<string>,
     readonly ext: string,
     readonly path: ReadonlyArray<string>,

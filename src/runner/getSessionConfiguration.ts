@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {ISessionConfiguration, ISessionOptions, IReadonlyWatchOptions} from './types';
+import {ISessionConfiguration, ISessionOptions, IReadonlyWatchOptions, ISessionOutput} from './types';
 import {plugin} from '../postcssPlugin/plugin';
 import {ensureArray} from '../util/ensureArray';
 import {getHash} from '../util/getHash';
@@ -21,15 +21,26 @@ export const getSessionConfiguration = (
 ): ISessionConfiguration => {
     const include = ensureArray(parameters.include || '*');
     const extensions = new Set(parameters.extensions || ['.css']);
-    const helper = parameters.helper || `helper.${getHash(include.join(','))}.css.js`;
-    if (!path.extname(helper)) {
-        throw new Error(`helper should have an extension (e.g. ".js", ".ts"): ${helper}`);
+    let output: ISessionOutput | undefined;
+    if (parameters.css) {
+        if (parameters.helper) {
+            throw new Error(`You can't use options.helper (${parameters.helper}) with options.css (${parameters.css})`);
+        }
+        output = {type: 'css', path: parameters.css};
+    } else {
+        output = {
+            type: 'script',
+            path: parameters.helper || `helper.${getHash(include.join(','))}.css.js`,
+        };
+        if (!path.extname(output.path)) {
+            throw new Error(`options.helper should have an extension (e.g. ".js", ".ts"): ${output.path}`);
+        }
     }
     return {
         watch: Boolean(parameters.watch),
-        helper,
+        output,
         extensions,
-        ext: path.extname(helper),
+        ext: path.extname(output.path),
         path: include,
         chokidar: getChokidarOptions(parameters),
         stdout: parameters.stdout || process.stdout,

@@ -10,6 +10,7 @@ export const loadParameters = async (
     const parameters: Partial<ISessionOptions> = {
         include: program.args,
         helper: program.helper,
+        css: program.css,
         exclude: program.exclude,
         esifycssPluginParameter: {
             mangle: !program.noMangle,
