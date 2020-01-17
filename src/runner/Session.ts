@@ -10,6 +10,7 @@ import {writeFile, deleteFile, copyFile, readFile} from '../util/fs';
 import {generateScript} from '../scriptGenerator/generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
+import {createExposedPromise} from '../util/createExposedPromise';
 
 export class Session {
 
@@ -58,19 +59,15 @@ export class Session {
         filePath: string,
     ): Promise<{dest: string, code: string}> {
         await this.previousProcess;
-        let resolve = () => {
-            // noop
-        };
-        this.previousProcess = new Promise((res) => {
-            resolve = res;
-        });
+        const exposedPromise = createExposedPromise();
+        this.previousProcess = exposedPromise.promise;
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
             options: this.configuration.postcssOptions,
             file: filePath,
         })
         .catch((error) => {
-            resolve();
+            exposedPromise.resolve();
             throw error;
         });
         const pluginResult = extractPluginResult(postcssResult);
@@ -82,7 +79,7 @@ export class Session {
             pluginResult,
             postcssResult.root,
         );
-        resolve();
+        exposedPromise.resolve();
         return {dest: outputPath, code};
     }
 
