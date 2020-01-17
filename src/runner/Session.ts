@@ -44,11 +44,6 @@ export class Session {
         await this.stopWatcher();
     }
 
-    public async getHelperCode(): Promise<string> {
-        const scriptCode = await readFile(this.helperPath);
-        return `${scriptCode}`;
-    }
-
     public async outputHelperScript(): Promise<void> {
         if (this.configuration.output.type === 'script') {
             await copyFile(this.helperPath, this.configuration.output.path);
