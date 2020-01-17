@@ -9,7 +9,7 @@
     },
     "license": "Apache-2.0",
     "engines": {
-        "node": ">=8"
+        "node": ">=10"
     },
     "repository": "kei-ito/esifycss",
     "main": "lib/index.js",
