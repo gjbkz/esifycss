@@ -118,7 +118,9 @@ Usage: esifycss [options] <include ...>
 
 Options:
   -V, --version         output the version number
-  --helper <path>       A path to the helper script.
+  --helper <path>       A path where the helper script will be output. You can't use --helper with --css.
+  --css <path>          A path where the css will be output. You can't use --css with --helper.
+  --ext <ext>           An extension of scripts generated from css.
   --config <path>       A path to configuration files.
   --exclude <path ...>  Paths or patterns to be excluded.
   --noMangle            Keep the original name for debugging.
@@ -176,20 +178,38 @@ new Session(options).start()
 export interface ISessionOptions {
   /**
    * Pattern(s) to be included
-   * @default "** / *.css"
+   * @default "*"
    */
   include?: string | Array<string>,
   /**
    * Pattern(s) to be excluded.
-   * @default []
+   * @default ['node_modules']
    */
   exclude?: anymatch.Matcher,
   /**
+   * File extension(s) to be included.
+   * @default ['.css']
+   */
+  extensions?: Array<string>,
+  /**
    * Where this plugin outputs the helper script.
-   * The hash in the default value is calculated from the include.
+   * If you use TypeScript, set a  value like '*.ts'.
+   * You can't use this option with the css option.
+   * The {hash} in the default value is calculated from the include option.
    * @default "helper.{hash}.css.js"
    */
   helper?: string,
+  /**
+   * File extension of generated script.
+   * @default options.helper ? path.extname(options.helper) : '.js'
+   */
+  ext?: string,
+  /**
+   * Where this plugin outputs the css.
+   * You can't use this option with the helper option.
+   * @default undefined
+   */
+  css?: string,
   /**
    * It it is true, a watcher is enabled.
    * @default false
@@ -263,40 +283,40 @@ running `npm run build`.
 
 ```typescript
 export interface IPluginOptions {
-    /**
-     * When it is true, this plugin minifies classnames.
-     * @default true
-     */
-    mangle?: boolean,
-    /**
-     * A function returns an unique number from a given file id. If you process
-     * CSS files in multiple postcss processes, you should create an identifier
-     * outside the processes and pass it as this value to keep the uniqueness
-     * of mangled outputs.
-     * @default esifycss.createIdentifier()
-     */
-    identifier?: IIdentifier,
-    /**
-     * Names starts with this value are not passed to mangler but replaced with
-     * unprefixed names.
-     * @default "raw-"
-     */
-    rawPrefix?: string,
-    /**
-     * A custom mangler: (*id*, *type*, *name*) => string.
-     * - *id*: string. A filepath to the CSS.
-     * - *type*: 'id' | 'class' | 'keyframes'. The type of *name*
-     * - *name*: string. An identifier in the style.
-     *
-     * If mangler is set, `mangle` and `identifier` options are ignored.
-     *
-     * For example, If the plugin processes `.foo{color:green}` in `/a.css`,
-     * The mangler is called with `("/a.css", "class", "foo")`. A mangler should
-     * return an unique string for each input pattern or the styles will be
-     * overwritten unexpectedly.
-     * @default undefined
-     */
-    mangler?: IPluginMangler,
+  /**
+   * When it is true, this plugin minifies classnames.
+   * @default true
+   */
+  mangle?: boolean,
+  /**
+   * A function returns an unique number from a given file id. If you process
+   * CSS files in multiple postcss processes, you should create an identifier
+   * outside the processes and pass it as this value to keep the uniqueness
+   * of mangled outputs.
+   * @default esifycss.createIdentifier()
+   */
+  identifier?: IIdentifier,
+  /**
+   * Names starts with this value are not passed to mangler but replaced with
+   * unprefixed names.
+   * @default "raw-"
+   */
+  rawPrefix?: string,
+  /**
+   * A custom mangler: (*id*, *type*, *name*) => string.
+   * - *id*: string. A filepath to the CSS.
+   * - *type*: 'id' | 'class' | 'keyframes'. The type of *name*
+   * - *name*: string. An identifier in the style.
+   *
+   * If mangler is set, `mangle` and `identifier` options are ignored.
+   *
+   * For example, If the plugin processes `.foo{color:green}` in `/a.css`,
+   * The mangler is called with `("/a.css", "class", "foo")`. A mangler should
+   * return an unique string for each input pattern or the styles will be
+   * overwritten unexpectedly.
+   * @default undefined
+   */
+  mangler?: IPluginMangler,
 }
 ```
 
