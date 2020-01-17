@@ -21,6 +21,7 @@ export const getSessionConfiguration = (
 ): ISessionConfiguration => {
     const include = ensureArray(parameters.include || '*');
     const extensions = new Set(parameters.extensions || ['.css']);
+    let {ext} = parameters;
     let output: ISessionOutput | undefined;
     if (parameters.css) {
         if (parameters.helper) {
@@ -35,12 +36,13 @@ export const getSessionConfiguration = (
         if (!path.extname(output.path)) {
             throw new Error(`options.helper should have an extension (e.g. ".js", ".ts"): ${output.path}`);
         }
+        ext = path.extname(output.path);
     }
     return {
         watch: Boolean(parameters.watch),
         output,
         extensions,
-        ext: path.extname(output.path),
+        ext: ext || '.js',
         path: include,
         chokidar: getChokidarOptions(parameters),
         stdout: parameters.stdout || process.stdout,

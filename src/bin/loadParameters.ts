@@ -11,6 +11,7 @@ export const loadParameters = async (
         include: program.args,
         helper: program.helper,
         css: program.css,
+        ext: program.ext,
         exclude: program.exclude,
         esifycssPluginParameter: {
             mangle: !program.noMangle,

@@ -29,6 +29,11 @@ export interface ISessionOptions {
      */
     helper?: string,
     /**
+     * File extension of generated script.
+     * @default options.helper ? path.extname(options.helper) : '.js'
+     */
+    ext?: string,
+    /**
      * Where this plugin outputs the css.
      * You can't use this option with the helper option.
      * @default undefined

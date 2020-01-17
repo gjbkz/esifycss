@@ -9,11 +9,11 @@ export const minifyCSSInScript = (
 ): string => {
     let minified = script;
     for (let index = cssRanges.length; index--;) {
-        const {css, start, end} = cssRanges[index];
+        const range = cssRanges[index];
         minified = [
-            minified.slice(0, start),
-            JSON.stringify(encodeString(css, identifier)),
-            minified.slice(end),
+            minified.slice(0, range.start),
+            JSON.stringify(encodeString(range.css, identifier)),
+            minified.slice(range.end),
         ].join('');
     }
     return minified;

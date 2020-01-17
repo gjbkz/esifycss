@@ -21,7 +21,9 @@ export class Session {
 
     protected initialTask: Array<Promise<void>> | null;
 
-    protected get outputPath(): string {
+    protected previousProcess?: Promise<void>;
+
+    protected get helperPath(): string {
         const srcDirectory = path.join(__dirname, '..', 'helper');
         return path.join(srcDirectory, `index${this.configuration.ext}`);
     }
@@ -33,7 +35,7 @@ export class Session {
     }
 
     public async start(): Promise<void> {
-        await this.output();
+        await this.outputHelperScript();
         await this.startWatcher();
     }
 
@@ -41,45 +43,54 @@ export class Session {
         await this.stopWatcher();
     }
 
-    public async getOutputCode(): Promise<string> {
-        const scriptCode = await readFile(this.outputPath);
+    public async getHelperCode(): Promise<string> {
+        const scriptCode = await readFile(this.helperPath);
         return `${scriptCode}`;
     }
 
-    public async output(): Promise<void> {
-        await copyFile(this.outputPath, this.configuration.output.path);
+    public async outputHelperScript(): Promise<void> {
+        if (this.configuration.output.type === 'script') {
+            await copyFile(this.helperPath, this.configuration.output.path);
+        }
     }
 
     public async processCSS(
         filePath: string,
     ): Promise<{dest: string, code: string}> {
+        await this.previousProcess;
+        let resolve = () => {
+            // noop
+        };
+        this.previousProcess = new Promise((res) => {
+            resolve = res;
+        });
         const postcssResult = await parseCSS({
             plugins: this.configuration.postcssPlugins,
             options: this.configuration.postcssOptions,
             file: filePath,
+        })
+        .catch((error) => {
+            resolve();
+            throw error;
         });
         const pluginResult = extractPluginResult(postcssResult);
         const outputPath = path.join(`${filePath}${this.configuration.ext}`);
         this.processedFiles.add(filePath);
-        if (this.configuration.output.type === 'css') {
-            return {dest: outputPath, code: postcssResult.css};
-        }
         const code = generateScript(
             outputPath,
             this.configuration.output.path,
             pluginResult,
             postcssResult.root,
         );
+        resolve();
         return {dest: outputPath, code};
     }
 
     public async minifyScripts(): Promise<void> {
-        if (this.configuration.output.type === 'script') {
-            await minifyScripts(
-                this.configuration.output.path,
-                [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
-            );
-        }
+        await minifyScripts(
+            this.configuration.output,
+            [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
+        );
     }
 
     protected async startWatcher(): Promise<void> {
