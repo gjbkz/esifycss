@@ -7,7 +7,7 @@ import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
 import {writeFile, deleteFile, copyFile} from '../util/fs';
-import {generateScript} from '../scriptGenerator/generateScript';
+import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
 import {createExposedPromise} from '../util/createExposedPromise';
@@ -56,26 +56,27 @@ export class Session {
         await this.previousProcess;
         const exposedPromise = createExposedPromise();
         this.previousProcess = exposedPromise.promise;
+        const {configuration} = this;
         const postcssResult = await parseCSS({
-            plugins: this.configuration.postcssPlugins,
-            options: this.configuration.postcssOptions,
+            plugins: configuration.postcssPlugins,
+            options: configuration.postcssOptions,
             file: filePath,
         })
         .catch((error) => {
             exposedPromise.resolve();
             throw error;
         });
-        const pluginResult = extractPluginResult(postcssResult);
-        const outputPath = path.join(`${filePath}${this.configuration.ext}`);
+        const dest = path.join(`${filePath}${configuration.ext}`);
         this.processedFiles.add(filePath);
-        const code = generateScript(
-            outputPath,
-            this.configuration.output.path,
-            pluginResult,
-            postcssResult.root,
-        );
+        const {output} = configuration;
+        const code = generateScript({
+            output: dest,
+            helper: output.type === 'css' ? null : output.path,
+            result: extractPluginResult(postcssResult),
+            root: postcssResult.root,
+        });
         exposedPromise.resolve();
-        return {dest: outputPath, code};
+        return {dest, code};
     }
 
     public async minifyScripts(): Promise<void> {

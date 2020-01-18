@@ -3,7 +3,6 @@ import {createOptimizedIdentifier} from './createOptimizedIdentifier';
 import {parseScripts} from './parseScripts';
 import {minifyCSSInScript} from './minifyCSSInScript';
 import {setDictionary} from './setDictionary';
-import {removeAddStyle} from './removeAddStyle';
 
 export const minifyScripts = async (
     output: {type: 'script' | 'css', path: string},
@@ -20,19 +19,18 @@ export const minifyScripts = async (
         const helperCode = setDictionary(await readFile(outputPath, 'utf8'), identifier.idList);
         await writeFile(outputPath, helperCode);
     } else {
-        const cssList = await Promise.all(
-            [...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
-                const cssList: Array<string> = [];
-                let code = script;
-                for (let index = cssRanges.length; index--;) {
-                    const range = cssRanges[index];
-                    cssList[index] = range.css;
-                    code = `${code.slice(0, range.start)}${code.slice(range.end).replace(/^\s*,\s*/, '')}`;
-                }
-                await writeFile(file, removeAddStyle(code));
-                return cssList.join('\n');
-            }),
-        );
+        const cssList = await Promise.all([...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
+            const cssList: Array<string> = [];
+            let code = script;
+            for (let index = cssRanges.length; index--;) {
+                const range = cssRanges[index];
+                cssList[index] = range.css;
+                code = `${code.slice(0, range.start)}'CSS${index}'${code.slice(range.end)}`;
+            }
+            code = code.replace(/^\s*\[\s*('CSS\d+',?\s*)*\]\s*;\s*?[\r\n]/g, '');
+            await writeFile(file, code);
+            return cssList.join('\n');
+        }));
         await writeFile(outputPath, cssList.join('\n'));
     }
 };
