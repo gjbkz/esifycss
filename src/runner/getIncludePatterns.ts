@@ -10,7 +10,11 @@ export const getIncludePatterns = (
             if (includePattern.endsWith(ext)) {
                 includePatterns.add(includePattern);
             } else {
-                includePatterns.add(includePattern.replace(/[/*]*$/, `/**/*${ext}`));
+                includePatterns.add(
+                    includePattern
+                    .replace(/[/*]*$/, `/**/*${ext}`)
+                    .replace(/^\/\*/, '*'),
+                );
             }
         }
     }
