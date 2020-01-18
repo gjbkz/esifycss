@@ -1,3 +1,13 @@
+<a name="1.4.1"></a>
+## [1.4.1](https://github.com/kei-ito/esifycss/compare/v1.4.0...v1.4.1) (2020-01-18)
+
+
+### Features
+
+* expose helperPath ([0bc6fca](https://github.com/kei-ito/esifycss/commit/0bc6fca))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/kei-ito/esifycss/compare/v1.3.14...v1.4.0) (2020-01-18)
 
