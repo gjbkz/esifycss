@@ -1,3 +1,13 @@
+<a name="1.4.2"></a>
+## [1.4.2](https://github.com/kei-ito/esifycss/compare/v1.4.1...v1.4.2) (2020-01-18)
+
+
+### Bug Fixes
+
+* generatescript ([#57](https://github.com/kei-ito/esifycss/issues/57)) ([cf1855b](https://github.com/kei-ito/esifycss/commit/cf1855b))
+
+
+
 <a name="1.4.1"></a>
 ## [1.4.1](https://github.com/kei-ito/esifycss/compare/v1.4.0...v1.4.1) (2020-01-18)
 
