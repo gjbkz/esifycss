@@ -24,15 +24,15 @@ export class Session {
 
     protected previousProcess?: Promise<void>;
 
-    protected get helperPath(): string {
-        const srcDirectory = path.join(__dirname, '..', 'helper');
-        return path.join(srcDirectory, `index${this.configuration.ext}`);
-    }
-
     public constructor(parameters: ISessionOptions = {}) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
         this.initialTask = null;
+    }
+
+    public get helperPath(): string {
+        const srcDirectory = path.join(__dirname, '..', 'helper');
+        return path.join(srcDirectory, `index${this.configuration.ext}`);
     }
 
     public async start(): Promise<void> {
