@@ -69,18 +69,18 @@ test('#css', async (t) => {
     t.is(typeof rule5, 'undefined');
     t.is(rule1.type, 'rule');
     if (isRule(rule1)) {
-        t.is(rule1.selector, '._0');
+        t.is(rule1.selector, `.${result1.className.a1}`);
     }
     t.is(rule2.type, 'rule');
     if (isRule(rule2)) {
-        t.is(rule2.selector, '._1');
+        t.is(rule2.selector, `.${result1.className.b1}`);
     }
     t.is(rule3.type, 'rule');
     if (isRule(rule3)) {
-        t.is(rule3.selector, '._2');
+        t.is(rule3.selector, `.${result2.className.a2}`);
     }
     t.is(rule4.type, 'rule');
     if (isRule(rule4)) {
-        t.is(rule4.selector, '._3');
+        t.is(rule4.selector, `.${result2.className.b2}`);
     }
 });
