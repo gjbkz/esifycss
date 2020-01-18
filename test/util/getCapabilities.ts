@@ -28,7 +28,11 @@ export const mergeCapability = (
     capability: ICapability = {browserName: 'chrome'},
 ) => ({
     ...capability,
-    'bstack:options': browserStackOptions,
+    'bstack:options': {
+        ...browserStackOptions,
+        networkLogs: true,
+        console: 'errors',
+    },
 });
 
 export const getBrowserStackCapabilities = (
