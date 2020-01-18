@@ -1,3 +1,13 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/kei-ito/esifycss/compare/v1.3.14...v1.4.0) (2020-01-18)
+
+
+### Features
+
+* output css ([#55](https://github.com/kei-ito/esifycss/issues/55)) ([701b733](https://github.com/kei-ito/esifycss/commit/701b733))
+
+
+
 <a name="1.3.14"></a>
 ## [1.3.14](https://github.com/kei-ito/esifycss/compare/v1.3.13...v1.3.14) (2020-01-06)
 
