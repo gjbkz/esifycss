@@ -4,17 +4,20 @@ import {ensureArray} from '../util/ensureArray';
 import {getChokidarOptions} from './getChokidarOptions';
 import {getOutputOption} from './getOutputOption';
 import {getExtensionOption} from './getExtensionOption';
+import {getIncludePatterns} from './getIncludePatterns';
 
 export const getSessionConfiguration = (
     parameters: ISessionOptions,
 ): ISessionConfiguration => {
-    const include = ensureArray(parameters.include || '*');
+    const include = getIncludePatterns({
+        include: ensureArray(parameters.include || '*'),
+        extensions: parameters.extensions || ['.css'],
+    });
     const output = getOutputOption(parameters, include);
     return {
         watch: Boolean(parameters.watch),
         output,
         path: include,
-        extensions: new Set(parameters.extensions || ['.css']),
         ext: getExtensionOption(parameters, output),
         chokidar: getChokidarOptions(parameters),
         stdout: parameters.stdout || process.stdout,
