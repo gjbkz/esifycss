@@ -56,7 +56,7 @@ export const getBrowserStackCapabilities = (
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Chrome'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Firefox'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Safari'}));
-        capabilities.push(mergeCapability({...commonOptions, osVersion: '12', deviceName: 'iPhone 8', realMobile: 'true'}, {browserName: 'Safari'}));
+        capabilities.push(mergeCapability({...commonOptions, osVersion: '13', deviceName: 'iPhone 11', realMobile: 'true'}, {browserName: 'Safari'}));
         capabilities.push(mergeCapability({...commonOptions, osVersion: '9.0', deviceName: 'Google Pixel 3', realMobile: 'true'}, {browserName: 'Chrome'}));
     }
     return capabilities;
