@@ -10,7 +10,7 @@ import {writeFile, deleteFile, copyFile} from '../util/fs';
 import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
-import {createExposedPromise} from '../util/createExposedPromise';
+import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
 
 export class Session {
 
@@ -22,12 +22,13 @@ export class Session {
 
     protected initialTask: Array<Promise<void>> | null;
 
-    protected previousProcess?: Promise<void>;
+    protected tasks: Set<Promise<void>>;
 
     public constructor(parameters: ISessionOptions = {}) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
         this.initialTask = null;
+        this.tasks = new Set();
     }
 
     public get helperPath(): string {
@@ -53,9 +54,10 @@ export class Session {
     public async processCSS(
         filePath: string,
     ): Promise<{dest: string, code: string}> {
-        await this.previousProcess;
-        const exposedPromise = createExposedPromise();
-        this.previousProcess = exposedPromise.promise;
+        if (0 < this.tasks.size) {
+            await this.waitCurrentTasks();
+        }
+        const exposedPromise = this.createExposedPromise();
         const {configuration} = this;
         const postcssResult = await parseCSS({
             plugins: configuration.postcssPlugins,
@@ -84,6 +86,20 @@ export class Session {
             this.configuration.output,
             [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
         );
+    }
+
+    protected async waitCurrentTasks(): Promise<void> {
+        await Promise.all([...this.tasks]);
+    }
+
+    protected createExposedPromise(): IExposedPromise {
+        const exposedPromise = createExposedPromise();
+        this.tasks.add(exposedPromise.promise);
+        const removeTask = () => this.tasks.delete(exposedPromise.promise);
+        exposedPromise.promise
+        .then(removeTask)
+        .catch(removeTask);
+        return exposedPromise;
     }
 
     protected async startWatcher(): Promise<void> {

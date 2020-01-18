@@ -1,4 +1,4 @@
-import {addStyle} from '../../lib/helper/index.js';
+import {addStyle} from './helper.js';
 addStyle(["WYIGqCCOQCaAOEcQCaAUEE","WYIGsCCOQCeAgBiBIIOkBmBEcQCeAgBiByBkBmBEE","0BGyCC2BA4BSMA6BoBIqBIGqCE","sBG0CCMK8BAUoBSMK+BKgCAiCSMKkCKmCAqBE","sBG2CG4CCMKoCAGsCE"]);
 export const className = {
     "icon": "_6",
