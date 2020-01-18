@@ -133,6 +133,7 @@
                     "*.for-test.ts"
                 ],
                 "rules": {
+                    "no-console": "off",
                     "no-process-env": "off",
                     "max-lines-per-function": "off",
                     "class-methods-use-this": "off",

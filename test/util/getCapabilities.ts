@@ -16,6 +16,8 @@ interface IBrowsetStackOptions {
     seleniumVersion?: string,
     userName?: string,
     accessKey?: string,
+    networkLogs?: 'true',
+    consoleLogs?: 'disable' | 'errors' | 'warnings' | 'info' | 'verbose',
 }
 
 interface ICapability {
@@ -28,11 +30,7 @@ export const mergeCapability = (
     capability: ICapability = {browserName: 'chrome'},
 ) => ({
     ...capability,
-    'bstack:options': {
-        ...browserStackOptions,
-        networkLogs: true,
-        console: 'errors',
-    },
+    'bstack:options': browserStackOptions,
 });
 
 export const getBrowserStackCapabilities = (
@@ -48,6 +46,8 @@ export const getBrowserStackCapabilities = (
             localIdentifier: `${name}-${capabilities.length}-${Date.now()}`,
             userName,
             accessKey,
+            networkLogs: 'true',
+            consoleLogs: 'verbose',
         };
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Chrome'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Firefox'}));
