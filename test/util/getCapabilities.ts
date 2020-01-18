@@ -16,6 +16,8 @@ interface IBrowsetStackOptions {
     seleniumVersion?: string,
     userName?: string,
     accessKey?: string,
+    networkLogs?: 'true',
+    consoleLogs?: 'disable' | 'errors' | 'warnings' | 'info' | 'verbose',
 }
 
 interface ICapability {
@@ -44,6 +46,8 @@ export const getBrowserStackCapabilities = (
             localIdentifier: `${name}-${capabilities.length}-${Date.now()}`,
             userName,
             accessKey,
+            networkLogs: 'true',
+            consoleLogs: 'verbose',
         };
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Chrome'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Firefox'}));
@@ -52,7 +56,7 @@ export const getBrowserStackCapabilities = (
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Chrome'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Firefox'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Safari'}));
-        capabilities.push(mergeCapability({...commonOptions, osVersion: '12', deviceName: 'iPhone 8', realMobile: 'true'}, {browserName: 'Safari'}));
+        capabilities.push(mergeCapability({...commonOptions, osVersion: '13', deviceName: 'iPhone 11', realMobile: 'true'}, {browserName: 'Safari'}));
         capabilities.push(mergeCapability({...commonOptions, osVersion: '9.0', deviceName: 'Google Pixel 3', realMobile: 'true'}, {browserName: 'Chrome'}));
     }
     return capabilities;

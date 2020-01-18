@@ -1,6 +1,6 @@
 {
     "name": "esifycss",
-    "version": "1.4.2",
+    "version": "1.3.14",
     "description": "Generates .js or .ts exports class names and custom properties",
     "author": {
         "name": "Kei Ito",
@@ -133,6 +133,7 @@
                     "*.for-test.ts"
                 ],
                 "rules": {
+                    "no-console": "off",
                     "no-process-env": "off",
                     "max-lines-per-function": "off",
                     "class-methods-use-this": "off",

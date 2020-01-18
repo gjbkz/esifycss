@@ -95,14 +95,10 @@ export class Session {
         )
         .on('error', this.onError.bind(this))
         .on('all', (eventName, file, stats) => {
-            if (this.configuration.extensions.has(path.extname(file))) {
-                this.onFileEvent(eventName, file, stats)
-                .catch((error) => {
-                    watcher.emit('error', error);
-                });
-            } else {
-                watcher.unwatch(file);
-            }
+            this.onFileEvent(eventName, file, stats)
+            .catch((error) => {
+                watcher.emit('error', error);
+            });
         });
         await waitForInitialScanCompletion(this.watcher);
         await Promise.all(this.initialTask);

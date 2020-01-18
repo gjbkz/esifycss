@@ -93,7 +93,6 @@ export interface ISessionOutput {
 export interface ISessionConfiguration {
     readonly watch: boolean,
     readonly output: ISessionOutput,
-    readonly extensions: ReadonlySet<string>,
     readonly ext: string,
     readonly path: ReadonlyArray<string>,
     readonly chokidar: IReadonlyWatchOptions,

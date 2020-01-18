@@ -71,9 +71,7 @@ test('#watch', async (t) => {
     const result2 = await runCode(codePath);
     await deleteFile(cssPath);
     await waitForMessage(`deleted: ${codePath}`);
-    await t.throwsAsync(async () => {
-        await stat(codePath);
-    }, {code: 'ENOENT'});
+    await t.throwsAsync(async () => await stat(codePath), {code: 'ENOENT'});
     t.deepEqual(result1.className, result2.className);
     t.deepEqual(result1.id, result2.id);
     t.deepEqual(result1.keyframes, result2.keyframes);
