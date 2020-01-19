@@ -27,7 +27,9 @@ export const minifyScripts = async (
                 cssList[index] = range.css;
                 code = `${code.slice(0, range.start)}'CSS${index}'${code.slice(range.end)}`;
             }
-            code = code.replace(/^\s*\[\s*('CSS\d+',?\s*)*\]\s*;\s*?[\r\n]/g, '');
+            code = code
+            .replace(/^\s*import\s+\{\s*addStyle\s*\}\s*from\s*'[^']*'\s*;\s*?[\r\n]/, '')
+            .replace(/^\s*addStyle\(\s*\[\s*('CSS\d+',?\s*)*\]\s*\)\s*;\s*?[\r\n]/g, '');
             await writeFile(file, code);
             return cssList.join('\n');
         }));

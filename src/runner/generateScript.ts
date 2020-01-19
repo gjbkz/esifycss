@@ -12,7 +12,7 @@ export const generateScript = (
         /** The destination of the output. The relative path to the helper script is calculated from this value. */
         output: string,
         /** Path to the helperScript which is required to get a relative path to the helper script. */
-        helper: string | null,
+        helper: string,
         /** The main contents of the output script. */
         result: IEsifyCSSResult,
         /** The root node will be splitted into rules that can be passed to insertRule. */
@@ -22,25 +22,16 @@ export const generateScript = (
     if (!props.root) {
         throw new Error(`No root: ${props.root}`);
     }
-    const lines = [
+    const helperPath = path.relative(path.dirname(props.output), props.helper)
+    .replace(/\.ts$/, '')
+    .replace(/^([^./])/, './$1')
+    .split(path.sep).join('/');
+    return [
+        `import {addStyle} from '${helperPath}';`,
+        `addStyle([${(props.root.nodes || []).map((node) => `{esifycss: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
         `export const className = ${JSON.stringify(props.result.className, null, 4)};`,
         `export const id = ${JSON.stringify(props.result.id, null, 4)};`,
         `export const keyframes = ${JSON.stringify(props.result.keyframes, null, 4)};`,
-    ];
-    if (props.helper) {
-        const helperPath = path.relative(path.dirname(props.output), props.helper)
-        .replace(/\.ts$/, '')
-        .replace(/^([^./])/, './$1')
-        .split(path.sep).join('/');
-        lines.unshift(
-            `import {addStyle} from '${helperPath}';`,
-            `addStyle([${(props.root.nodes || []).map((node) => `{esifycss: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
-        );
-    } else {
-        lines.unshift(
-            `[${(props.root.nodes || []).map((node) => `{esifycss: ${JSON.stringify(node.toString())}}`).join(',')}];`,
-        );
-    }
-    lines.push('');
-    return lines.join('\n');
+        '',
+    ].join('\n');
 };
