@@ -1,3 +1,13 @@
+<a name="1.4.3"></a>
+## [1.4.3](https://github.com/kei-ito/esifycss/compare/v1.4.2...v1.4.3) (2020-01-19)
+
+
+### Bug Fixes
+
+* keep addStyle ([#58](https://github.com/kei-ito/esifycss/issues/58)) ([3fb510e](https://github.com/kei-ito/esifycss/commit/3fb510e))
+
+
+
 <a name="1.4.2"></a>
 ## [1.4.2](https://github.com/kei-ito/esifycss/compare/v1.4.1...v1.4.2) (2020-01-18)
 
