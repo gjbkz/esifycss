@@ -33,7 +33,8 @@ export class Session {
 
     public get helperPath(): string {
         const srcDirectory = path.join(__dirname, '..', 'helper');
-        return path.join(srcDirectory, `index${this.configuration.ext}`);
+        const name = this.configuration.output.type === 'script' ? 'default' : 'noop';
+        return path.join(srcDirectory, `${name}${this.configuration.ext}`);
     }
 
     public async start(): Promise<void> {
@@ -73,7 +74,7 @@ export class Session {
         const {output} = configuration;
         const code = generateScript({
             output: dest,
-            helper: output.type === 'css' ? null : output.path,
+            helper: output.type === 'css' ? this.helperPath : output.path,
             result: extractPluginResult(postcssResult),
             root: postcssResult.root,
         });
