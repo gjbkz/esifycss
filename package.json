@@ -68,7 +68,7 @@
         "@types/anymatch": "^1.3.1",
         "@types/jsdom": "^12.2.4",
         "@types/micromatch": "^4.0.0",
-        "@types/node": "^12.12.24",
+        "@types/node": "^13.0.0",
         "@types/postcss-scss": "file:@types/postcss-scss",
         "@types/selenium-webdriver": "^4.0.6",
         "@typescript-eslint/eslint-plugin": "^2.16.0",
