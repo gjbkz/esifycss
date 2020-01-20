@@ -1,3 +1,13 @@
+<a name="1.4.4"></a>
+## [1.4.4](https://github.com/kei-ito/esifycss/compare/v1.4.3...v1.4.4) (2020-01-20)
+
+
+### Bug Fixes
+
+* use acorn to remove import declarations ([#59](https://github.com/kei-ito/esifycss/issues/59)) ([279ccc2](https://github.com/kei-ito/esifycss/commit/279ccc2))
+
+
+
 <a name="1.4.3"></a>
 ## [1.4.3](https://github.com/kei-ito/esifycss/compare/v1.4.2...v1.4.3) (2020-01-19)
 
