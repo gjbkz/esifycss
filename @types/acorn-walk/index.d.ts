@@ -70,14 +70,38 @@ declare module 'acorn-walk' {
     | 'WithStatement';
     interface INode extends acorn.Node {
         type: NodeType,
-        properties?: Array<INode>,
-        key?: INode,
+        key?: IIdentifier,
         value?: INode | string | number,
-        name?: string,
     }
-    export type IVisitors = {
-        [TType in NodeType]?: (node: INode) => void;
-    };
+    interface IIdentifier extends INode {
+        name: string,
+    }
+    interface ICallExpression extends INode {
+        callee: IIdentifier,
+        arguments: Array<INode>,
+    }
+    interface IExpressionStatement extends INode {
+        expression: ICallExpression,
+    }
+    interface IImportSpecifier extends INode {
+        imported: IIdentifier,
+        local: IIdentifier,
+    }
+    interface IImportDeclaration extends INode {
+        specifiers: Array<IImportSpecifier>,
+    }
+    interface IMemberExpression extends INode {
+        key: IIdentifier,
+        value: INode | string | number,
+    }
+    interface IObjectExpression extends INode {
+        properties: Array<IMemberExpression>,
+    }
+    export interface IVisitors {
+        ImportDeclaration?: (node: IImportDeclaration) => void,
+        ExpressionStatement?: (node: IExpressionStatement) => void,
+        ObjectExpression?: (node: IObjectExpression) => void,
+    }
     export const simple: (
         ast: acorn.Node,
         visitors: IVisitors,

@@ -3,6 +3,7 @@ import {createOptimizedIdentifier} from './createOptimizedIdentifier';
 import {parseScripts} from './parseScripts';
 import {minifyCSSInScript} from './minifyCSSInScript';
 import {setDictionary} from './setDictionary';
+import {removeAddStyle} from './removeAddStyle';
 
 export const minifyScripts = async (
     output: {type: 'script' | 'css', path: string},
@@ -27,10 +28,7 @@ export const minifyScripts = async (
                 cssList[index] = range.css;
                 code = `${code.slice(0, range.start)}'CSS${index}'${code.slice(range.end)}`;
             }
-            code = code
-            .replace(/^\s*import\s+\{\s*addStyle\s*\}\s*from\s*'[^']*'\s*;\s*?[\r\n]/, '')
-            .replace(/^\s*addStyle\(\s*\[\s*('CSS\d+',?\s*)*\]\s*\)\s*;\s*?[\r\n]/g, '');
-            await writeFile(file, code);
+            await writeFile(file, removeAddStyle(code));
             return cssList.join('\n');
         }));
         await writeFile(outputPath, cssList.join('\n'));
