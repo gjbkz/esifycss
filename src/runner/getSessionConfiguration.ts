@@ -27,5 +27,6 @@ export const getSessionConfiguration = (
             plugin(parameters.esifycssPluginParameter || {}),
         ],
         postcssOptions: parameters.postcssOptions || {},
+        cssKey: '$$esifycss',
     };
 };

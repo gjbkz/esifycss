@@ -74,28 +74,43 @@ declare module 'acorn-walk' {
         value?: INode | string | number,
     }
     interface IIdentifier extends INode {
+        type: 'Identifier',
         name: string,
     }
     interface ICallExpression extends INode {
+        type: 'CallExpression',
         callee: IIdentifier,
         arguments: Array<INode>,
     }
     interface IExpressionStatement extends INode {
+        type: 'ExpressionStatement',
         expression: ICallExpression,
     }
     interface IImportSpecifier extends INode {
+        type: 'ImportSpecifier',
         imported: IIdentifier,
         local: IIdentifier,
     }
     interface IImportDeclaration extends INode {
+        type: 'ImportDeclaration',
         specifiers: Array<IImportSpecifier>,
     }
     interface IMemberExpression extends INode {
+        type: 'MemberExpression',
         key: IIdentifier,
-        value: INode | string | number,
+        value: INode,
     }
     interface IObjectExpression extends INode {
+        type: 'ObjectExpression',
         properties: Array<IMemberExpression>,
+    }
+    interface IArrayExpression extends INode {
+        type: 'ArrayExpression',
+        elements: Array<INode>,
+    }
+    interface IProgram extends INode {
+        type: 'Program',
+        body: Array<IImportDeclaration | IExpressionStatement>,
     }
     export interface IVisitors {
         ImportDeclaration?: (node: IImportDeclaration) => void,

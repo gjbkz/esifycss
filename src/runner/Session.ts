@@ -11,6 +11,7 @@ import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
 import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
+import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 
 export class Session {
 
@@ -77,16 +78,21 @@ export class Session {
             helper: output.type === 'css' ? this.helperPath : output.path,
             result: extractPluginResult(postcssResult),
             root: postcssResult.root,
+            cssKey: this.configuration.cssKey,
         });
         exposedPromise.resolve();
         return {dest, code};
     }
 
     public async minifyScripts(): Promise<void> {
-        await minifyScripts(
-            this.configuration.output,
-            [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
-        );
+        const files = [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`);
+        const {cssKey} = this.configuration;
+        const dest = this.configuration.output.path;
+        if (this.configuration.output.type === 'css') {
+            await minifyScriptsForCSS({files, cssKey, dest});
+        } else {
+            await minifyScripts({files, cssKey, dest});
+        }
     }
 
     protected async waitCurrentTasks(): Promise<void> {
@@ -97,9 +103,7 @@ export class Session {
         const exposedPromise = createExposedPromise();
         this.tasks.add(exposedPromise.promise);
         const removeTask = () => this.tasks.delete(exposedPromise.promise);
-        exposedPromise.promise
-        .then(removeTask)
-        .catch(removeTask);
+        exposedPromise.promise.then(removeTask).catch(removeTask);
         return exposedPromise;
     }
 
