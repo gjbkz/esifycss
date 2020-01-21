@@ -1,3 +1,8 @@
+<a name="1.4.6"></a>
+## [1.4.6](https://github.com/kei-ito/esifycss/compare/v1.4.5...v1.4.6) (2020-01-21)
+
+
+
 <a name="1.4.5"></a>
 ## [1.4.5](https://github.com/kei-ito/esifycss/compare/v1.4.4...v1.4.5) (2020-01-21)
 
