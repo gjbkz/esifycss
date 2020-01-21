@@ -1,3 +1,14 @@
+<a name="1.4.5"></a>
+## [1.4.5](https://github.com/kei-ito/esifycss/compare/v1.4.4...v1.4.5) (2020-01-21)
+
+
+### Bug Fixes
+
+* addStyle accepts an array of css objects ([38faafc](https://github.com/kei-ito/esifycss/commit/38faafc))
+* update minifier not to use RegExp ([6702084](https://github.com/kei-ito/esifycss/commit/6702084))
+
+
+
 <a name="1.4.4"></a>
 ## [1.4.4](https://github.com/kei-ito/esifycss/compare/v1.4.3...v1.4.4) (2020-01-20)
 
