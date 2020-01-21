@@ -65,22 +65,9 @@ test('#css', async (t) => {
         b2: '_3',
     });
     const resultCSS = await readFile(cssPath, 'utf8');
-    const {nodes: [rule1, rule2, rule3, rule4, rule5] = []} = postcss.parse(resultCSS);
-    t.is(typeof rule5, 'undefined');
-    t.is(rule1.type, 'rule');
-    if (isRule(rule1)) {
-        t.is(rule1.selector, `.${result1.className.a1}`);
-    }
-    t.is(rule2.type, 'rule');
-    if (isRule(rule2)) {
-        t.is(rule2.selector, `.${result1.className.b1}`);
-    }
-    t.is(rule3.type, 'rule');
-    if (isRule(rule3)) {
-        t.is(rule3.selector, `.${result2.className.a2}`);
-    }
-    t.is(rule4.type, 'rule');
-    if (isRule(rule4)) {
-        t.is(rule4.selector, `.${result2.className.b2}`);
-    }
+    const {nodes = []} = postcss.parse(resultCSS);
+    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result1.className.a1}`));
+    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result1.className.b1}`));
+    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result2.className.a2}`));
+    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result2.className.b2}`));
 });
