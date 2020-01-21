@@ -8,6 +8,6 @@
         "outDir": "./lib/helper"
     },
     "include": [
-        "src/helper/*"
+        "src/helper/*.ts"
     ]
 }
