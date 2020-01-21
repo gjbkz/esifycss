@@ -1,3 +1,13 @@
+<a name="1.4.10"></a>
+## [1.4.10](https://github.com/kei-ito/esifycss/compare/v1.4.9...v1.4.10) (2020-01-21)
+
+
+### Bug Fixes
+
+* add some utilities ([62b50a7](https://github.com/kei-ito/esifycss/commit/62b50a7))
+
+
+
 <a name="1.4.9"></a>
 ## [1.4.9](https://github.com/kei-ito/esifycss/compare/v1.4.8...v1.4.9) (2020-01-21)
 
