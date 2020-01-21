@@ -1,5 +1,5 @@
 import {addStyle} from './helper.js';
-addStyle(["YaIcGyCCOQCeAOEgBQCeAWEE","YaIiBG0CCOQCkBASmBIIOoBqBEgBQCkBASmB4BoBqBEE","6B8BG6CC+BAgCUMAiCsBIuBIcGyCE","wByBG8CCMKkCAWsBUMKmCKoCAqCUMKsCKuCAuBE","wByBG+CSGgDCMKwCAiBG0CE"]);
+addStyle(["YaIcG0BCOQCeAOEgBQCeAWEE","YaIiBG2BCOQCkBASmBIIOoBqBEgBQCkBASmB4BoBqBEE","6B8BG2CC+BAgCUMAiCsBIuBIcG0BE","wByBG4CCMKkCAWsBUMKmCKoCAqCUMKsCKuCAuBE","wByBG6CSG8CCMKwCAiBG2BE"]);
 export const className = {
     "icon": "icon_6",
     "rotate": "rotate_7"
