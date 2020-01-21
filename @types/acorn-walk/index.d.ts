@@ -71,7 +71,15 @@ declare module 'acorn-walk' {
     interface INode extends acorn.Node {
         type: NodeType,
         key?: IIdentifier,
-        value?: INode | string | number,
+        value?: INode | string | number | null | boolean,
+    }
+    interface ILiteral extends INode {
+        type: 'Literal',
+        raw: string,
+        value: string | number | null | boolean,
+    }
+    interface IStringLiteral extends ILiteral {
+        value: string,
     }
     interface IIdentifier extends INode {
         type: 'Identifier',
@@ -94,6 +102,7 @@ declare module 'acorn-walk' {
     interface IImportDeclaration extends INode {
         type: 'ImportDeclaration',
         specifiers: Array<IImportSpecifier>,
+        source: IStringLiteral,
     }
     interface IMemberExpression extends INode {
         type: 'MemberExpression',
