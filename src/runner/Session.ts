@@ -11,6 +11,7 @@ import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
 import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
+import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 
 export class Session {
 
@@ -83,10 +84,13 @@ export class Session {
     }
 
     public async minifyScripts(): Promise<void> {
-        await minifyScripts(
-            this.configuration.output,
-            [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`),
-        );
+        const dest = this.configuration.output.path;
+        const files = [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`);
+        if (this.configuration.output.type === 'css') {
+            await minifyScriptsForCSS({files, dest});
+        } else {
+            await minifyScripts({files, dest});
+        }
     }
 
     protected async waitCurrentTasks(): Promise<void> {
