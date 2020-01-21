@@ -1,7 +1,6 @@
 export * from './bin/esifycss';
 export * from './bin/loadParameters';
 export * from './bin/types';
-export * from './helper/default';
 export * from './minifier/ast';
 export * from './minifier/createOptimizedIdentifier';
 export * from './minifier/extractCSSFromArrayExpression';
