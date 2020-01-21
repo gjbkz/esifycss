@@ -7,12 +7,12 @@ export const extractCSSFromArrayExpression = (
     cssKey: string,
 ): Array<ICSSRange> => {
     if (!isArrayExpression(node)) {
-        throw new Error(`NotAnArray: ${node.type}`);
+        throw new Error(`InvalidArrayExpression: ${node.type}`);
     }
     const result: Array<ICSSRange> = [];
     for (const item of node.elements) {
         if (!isObjectExpression(item)) {
-            throw new Error(`InvalidElement: ${item.type}`);
+            throw new Error(`InvalidObjectExpression: ${item.type}`);
         }
         const {properties} = item;
         if (properties.length !== 1) {
@@ -22,7 +22,7 @@ export const extractCSSFromArrayExpression = (
         if (key.name !== cssKey) {
             throw new Error(`InvalidKey: ${JSON.stringify(key)}`);
         }
-        if (typeof value !== 'object' || value.type !== 'Literal') {
+        if (value.type !== 'Literal') {
             throw new Error(`NonLiteral: ${JSON.stringify(value)}`);
         }
         const css = value.value;

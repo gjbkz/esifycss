@@ -98,7 +98,7 @@ declare module 'acorn-walk' {
     interface IMemberExpression extends INode {
         type: 'MemberExpression',
         key: IIdentifier,
-        value: INode | string | number,
+        value: INode,
     }
     interface IObjectExpression extends INode {
         type: 'ObjectExpression',
