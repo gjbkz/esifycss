@@ -1,3 +1,15 @@
+<a name="1.4.7"></a>
+## [1.4.7](https://github.com/kei-ito/esifycss/compare/v1.4.6...v1.4.7) (2020-01-21)
+
+
+### Bug Fixes
+
+* build script ([69cd62c](https://github.com/kei-ito/esifycss/commit/69cd62c))
+* determine helper import from source string ([8ea1e48](https://github.com/kei-ito/esifycss/commit/8ea1e48))
+* remove .ts extension ([9e169f2](https://github.com/kei-ito/esifycss/commit/9e169f2))
+
+
+
 <a name="1.4.6"></a>
 ## [1.4.6](https://github.com/kei-ito/esifycss/compare/v1.4.5...v1.4.6) (2020-01-21)
 
