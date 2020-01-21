@@ -3,6 +3,10 @@ import * as acorn from 'acorn';
 import * as acornWalk from 'acorn-walk';
 import {isProgramNode} from './ast';
 
+export const normalizeHelperId = (
+    id: string,
+) => path.normalize(id).replace(/\.ts$/, '');
+
 export const findAddStyleImport = (
     ast: acorn.Node,
     helperId: string,
@@ -12,7 +16,7 @@ export const findAddStyleImport = (
     }
     for (const node of ast.body) {
         if (node.type === 'ImportDeclaration') {
-            if (path.normalize(node.source.value) === path.normalize(helperId)) {
+            if (normalizeHelperId(node.source.value) === normalizeHelperId(helperId)) {
                 const {specifiers = []} = node;
                 if (specifiers.length === 1) {
                     return {name: specifiers[0].local.name, node};
