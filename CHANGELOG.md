@@ -1,3 +1,13 @@
+<a name="1.4.9"></a>
+## [1.4.9](https://github.com/kei-ito/esifycss/compare/v1.4.8...v1.4.9) (2020-01-21)
+
+
+### Bug Fixes
+
+* index.ts ([449608b](https://github.com/kei-ito/esifycss/commit/449608b))
+
+
+
 <a name="1.4.8"></a>
 ## [1.4.8](https://github.com/kei-ito/esifycss/compare/v1.4.7...v1.4.8) (2020-01-21)
 
