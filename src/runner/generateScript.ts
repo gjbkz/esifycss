@@ -17,6 +17,7 @@ export const generateScript = (
         result: IEsifyCSSResult,
         /** The root node will be splitted into rules that can be passed to insertRule. */
         root?: postcss.Root,
+        cssKey: string,
     },
 ): string => {
     if (!props.root) {
@@ -28,7 +29,7 @@ export const generateScript = (
     .split(path.sep).join('/');
     return [
         `import {addStyle} from '${helperPath}';`,
-        `addStyle([${(props.root.nodes || []).map((node) => `{esifycss: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
+        `addStyle([${(props.root.nodes || []).map((node) => `{${props.cssKey}: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
         `export const className = ${JSON.stringify(props.result.className, null, 4)};`,
         `export const id = ${JSON.stringify(props.result.id, null, 4)};`,
         `export const keyframes = ${JSON.stringify(props.result.keyframes, null, 4)};`,

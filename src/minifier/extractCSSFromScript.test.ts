@@ -2,13 +2,19 @@ import test from 'ava';
 import {extractCSSFromScript} from './extractCSSFromScript';
 
 interface ITest {
-    input: string,
+    input: {
+        code: string,
+        cssKey: string,
+    },
     expected: ReturnType<typeof extractCSSFromScript>,
 }
 
 ([
     {
-        input: `({esifycss:${JSON.stringify('aaa')}})`,
+        input: {
+            code: `({esifycss:${JSON.stringify('aaa')}})`,
+            cssKey: 'esifycss',
+        },
         expected: [
             {
                 css: 'aaa',
@@ -18,11 +24,17 @@ interface ITest {
         ],
     },
     {
-        input: `({esifycss:${JSON.stringify('aaa')}, a: 0})`,
+        input: {
+            code: `({esifycss:${JSON.stringify('aaa')}, a: 0})`,
+            cssKey: 'esifycss',
+        },
         expected: [],
     },
     {
-        input: `({esifycss:${JSON.stringify('aaa')}, a: 0});import('foo')`,
+        input: {
+            code: `({esifycss:${JSON.stringify('aaa')}, a: 0});import('foo')`,
+            cssKey: 'esifycss',
+        },
         expected: [],
     },
 ] as Array<ITest>).forEach(({input, expected}) => {

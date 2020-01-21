@@ -7,30 +7,36 @@ acornWalk.base[dynamicImport.DynamicImportKey] = () => {
     // noop
 };
 
+export const extractCSSFromObjectExpression = (
+    objectExpression: acornWalk.IObjectExpression,
+    cssKey: string,
+): string | null => {
+    const {properties} = objectExpression;
+    if (properties.length === 1) {
+        const [{key, value}] = properties;
+        if (key.type === 'Identifier' && key.name === cssKey && typeof value === 'object' && value.type === 'Literal') {
+            const css = value.value;
+            return typeof css === 'string' ? css : null;
+        }
+    }
+    return null;
+};
+
 export const extractCSSFromScript = (
-    script: string,
+    props: {
+        code: string,
+        cssKey: string,
+    },
 ): Array<IParseResult> => {
-    const results: Array<IParseResult> = [];
-    const ast = Parser.parse(script, {sourceType: 'module'});
+    const ranges: Array<IParseResult> = [];
+    const ast = Parser.parse(props.code, {sourceType: 'module'});
     acornWalk.simple(ast, {
-        ObjectExpression: (node) => {
-            const properties = node.properties || [];
-            if (properties.length === 1) {
-                const property = properties[0];
-                const {key} = property;
-                if (key && key.type === 'Identifier' && key.name === 'esifycss') {
-                    const v = property.value;
-                    const css = typeof v === 'object' && v.type === 'Literal' && v.value;
-                    if (typeof css === 'string') {
-                        results.push({
-                            css,
-                            start: node.start,
-                            end: node.end,
-                        });
-                    }
-                }
+        ObjectExpression: (objectExpression) => {
+            const css = extractCSSFromObjectExpression(objectExpression, props.cssKey);
+            if (css) {
+                ranges.push({css, start: objectExpression.start, end: objectExpression.end});
             }
         },
     });
-    return results;
+    return ranges;
 };

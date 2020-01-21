@@ -100,6 +100,7 @@ export interface ISessionConfiguration {
     readonly stderr: stream.Writable,
     readonly postcssPlugins: Array<postcss.AcceptedPlugin>,
     readonly postcssOptions: postcss.ProcessOptions,
+    readonly cssKey: string,
 }
 
 export interface ICSSParserParameters {

@@ -5,10 +5,11 @@ import {removeAddStyle} from './removeAddStyle';
 export const minifyScriptsForCSS = async (
     props: {
         files: Array<string>,
+        cssKey: string,
         dest: string,
     },
 ): Promise<void> => {
-    const parseResult = await parseScripts(props.files);
+    const parseResult = await parseScripts(props);
     const cssList = await Promise.all([...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
         const cssList: Array<string> = [];
         let code = script;
