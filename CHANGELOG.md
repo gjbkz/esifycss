@@ -1,3 +1,13 @@
+<a name="1.4.8"></a>
+## [1.4.8](https://github.com/kei-ito/esifycss/compare/v1.4.7...v1.4.8) (2020-01-21)
+
+
+### Bug Fixes
+
+* remove helper ([0919f38](https://github.com/kei-ito/esifycss/commit/0919f38))
+
+
+
 <a name="1.4.7"></a>
 ## [1.4.7](https://github.com/kei-ito/esifycss/compare/v1.4.6...v1.4.7) (2020-01-21)
 
