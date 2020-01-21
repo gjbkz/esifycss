@@ -6,6 +6,7 @@ export const minifyScriptsForCSS = async (
         files: Array<string>,
         cssKey: string,
         dest: string,
+        helper: string,
     },
 ): Promise<void> => {
     const parseResult = await parseScripts(props);

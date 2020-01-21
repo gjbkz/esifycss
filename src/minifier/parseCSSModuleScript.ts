@@ -13,12 +13,13 @@ export const parseCSSModuleScript = (
     props: {
         code: string,
         cssKey: string,
+        helper: string,
     },
 ): IParseResult => {
     const ranges: Array<ICSSRange> = [];
     const statements: Array<IRange> = [];
     const ast = Parser.parse(props.code, {sourceType: 'module'});
-    const addStyle = findAddStyleImport(ast, 'addStyle');
+    const addStyle = findAddStyleImport(ast, props.helper);
     acornWalk.simple(ast, {
         ExpressionStatement: (statement) => {
             const {expression} = statement;

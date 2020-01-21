@@ -1,20 +1,22 @@
+import * as path from 'path';
 import * as acorn from 'acorn';
 import * as acornWalk from 'acorn-walk';
 import {isProgramNode} from './ast';
 
 export const findAddStyleImport = (
     ast: acorn.Node,
-    importName: string,
+    helperId: string,
 ): {name: string, node: acornWalk.IImportDeclaration} => {
     if (!isProgramNode(ast)) {
         throw new Error('InvalidNode');
     }
     for (const node of ast.body) {
         if (node.type === 'ImportDeclaration') {
-            const {specifiers = []} = node;
-            const addStyleSpecifier = specifiers.find(({imported}) => imported.name === importName);
-            if (addStyleSpecifier) {
-                return {name: addStyleSpecifier.local.name, node};
+            if (path.normalize(node.source.value) === path.normalize(helperId)) {
+                const {specifiers = []} = node;
+                if (specifiers.length === 1) {
+                    return {name: specifiers[0].local.name, node};
+                }
             }
         }
     }
