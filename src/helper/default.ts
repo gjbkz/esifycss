@@ -36,7 +36,7 @@ const decode = (encoded: string | {$$esifycss: string}): string => {
 
 const style = document.createElement('style');
 
-export const addStyle = (rules: Array<string>): void => {
+export const addStyle = (rules: Array<string | {$$esifycss: string}>): void => {
     if (!style.parentNode) {
         document.head.appendChild(style);
     }
