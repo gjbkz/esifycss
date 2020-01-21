@@ -1,10 +1,10 @@
-import {IParseResult} from './types';
+import {ICSSRange} from './types';
 import {IIdentifier} from '../util/createIdentifier';
 import {encodeString} from '../util/encodeString';
 
 export const minifyCSSInScript = (
     script: string,
-    cssRanges: Array<IParseResult>,
+    cssRanges: Array<ICSSRange>,
     identifier: IIdentifier,
 ): string => {
     let minified = script;

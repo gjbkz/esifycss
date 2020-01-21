@@ -13,8 +13,8 @@ export const minifyScripts = async (
 ): Promise<void> => {
     const parseResult = await parseScripts(props);
     const identifier = createOptimizedIdentifier(parseResult.tokens);
-    await Promise.all([...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
-        const minified = minifyCSSInScript(script, cssRanges, identifier);
+    await Promise.all([...parseResult.scripts].map(async ([file, {script, ranges}]) => {
+        const minified = minifyCSSInScript(script, ranges, identifier);
         await writeFile(file, minified);
     }));
     const helperCode = setDictionary(await readFile(props.dest, 'utf8'), identifier.idList);

@@ -180,7 +180,7 @@
                 "files": [
                     "src/util/createExposedPromise.ts",
                     "src/util/tokenizeString.ts",
-                    "src/minifier/extractCSSFromScript.ts"
+                    "src/minifier/parseCSSModuleScript.ts"
                 ],
                 "rules": {
                     "@typescript-eslint/no-unnecessary-condition": "off"

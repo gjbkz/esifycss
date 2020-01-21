@@ -1,6 +1,6 @@
 import {readFile} from '../util/fs';
 import {IParseScriptsResult, IScriptData} from './types';
-import {extractCSSFromScript} from './extractCSSFromScript';
+import {parseCSSModuleScript} from './parseCSSModuleScript';
 import {tokenizeString} from '../util/tokenizeString';
 
 export const parseScripts = async (
@@ -13,13 +13,13 @@ export const parseScripts = async (
     const tokens = new Map<string, number>();
     await Promise.all(files.map(async (file) => {
         const code = await readFile(file, 'utf8');
-        const cssRanges = extractCSSFromScript({code, cssKey});
-        for (const {css} of cssRanges) {
+        const data = parseCSSModuleScript({code, cssKey});
+        for (const {css} of data.ranges) {
             for (const token of tokenizeString(css)) {
                 tokens.set(token, (tokens.get(token) || 0) + 1);
             }
         }
-        scripts.set(file, {script: code, cssRanges});
+        scripts.set(file, {...data, script: code});
     }));
     return {scripts, tokens};
 };

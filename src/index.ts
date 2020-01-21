@@ -6,7 +6,7 @@ export * from './runner/Session';
 export * from './runner/extractPluginResult';
 export * from './util/createIdentifier';
 export * from './util/tokenizeString';
-export * from './minifier/extractCSSFromScript';
+export * from './minifier/parseCSSModuleScript';
 export * from './minifier/setDictionary';
 export * from './minifier/minifyCSSInScript';
 export * from './minifier/createOptimizedIdentifier';

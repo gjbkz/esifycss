@@ -1,6 +1,5 @@
 import {writeFile} from '../util/fs';
 import {parseScripts} from './parseScripts';
-import {removeAddStyle} from './removeAddStyle';
 
 export const minifyScriptsForCSS = async (
     props: {
@@ -10,15 +9,17 @@ export const minifyScriptsForCSS = async (
     },
 ): Promise<void> => {
     const parseResult = await parseScripts(props);
-    const cssList = await Promise.all([...parseResult.scripts].map(async ([file, {script, cssRanges}]) => {
+    const cssList = await Promise.all([...parseResult.scripts].map(async ([file, data]) => {
         const cssList: Array<string> = [];
-        let code = script;
-        for (let index = cssRanges.length; index--;) {
-            const range = cssRanges[index];
+        let code = data.script;
+        for (let index = data.ranges.length; index--;) {
+            const range = data.ranges[index];
             cssList[index] = range.css;
-            code = `${code.slice(0, range.start)}'CSS${index}'${code.slice(range.end)}`;
         }
-        await writeFile(file, removeAddStyle(code));
+        code = [data.addStyle, ...data.statements]
+        .sort((range1, range2) => range1.start < range2.start ? 1 : -1)
+        .reduce((code, range) => `${code.slice(0, range.start)}${code.slice(range.end)}`, code);
+        await writeFile(file, code);
         return cssList.join('\n');
     }));
     await writeFile(props.dest, cssList.join('\n'));
