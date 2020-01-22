@@ -15,7 +15,7 @@
     "main": "lib/index.js",
     "files": [
         "lib",
-        "@types/css.d.ts"
+        "@types"
     ],
     "bin": {
         "esifycss": "lib/bin/esifycss.js"
