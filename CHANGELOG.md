@@ -1,3 +1,13 @@
+<a name="1.4.11"></a>
+## [1.4.11](https://github.com/kei-ito/esifycss/compare/v1.4.10...v1.4.11) (2020-01-22)
+
+
+### Bug Fixes
+
+* include types ([de03027](https://github.com/kei-ito/esifycss/commit/de03027))
+
+
+
 <a name="1.4.10"></a>
 ## [1.4.10](https://github.com/kei-ito/esifycss/compare/v1.4.9...v1.4.10) (2020-01-21)
 
