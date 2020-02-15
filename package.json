@@ -67,7 +67,7 @@
         "@types/acorn-dynamic-import": "file:@types/acorn-dynamic-import",
         "@types/acorn-walk": "file:@types/acorn-walk",
         "@types/anymatch": "^1.3.1",
-        "@types/jsdom": "^12.2.4",
+        "@types/jsdom": "^16.0.0",
         "@types/micromatch": "^4.0.0",
         "@types/node": "^12.12.24",
         "@types/postcss-scss": "file:@types/postcss-scss",
