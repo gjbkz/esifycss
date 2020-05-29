@@ -182,6 +182,14 @@
                 "rules": {
                     "@typescript-eslint/no-unnecessary-condition": "off"
                 }
+            },
+            {
+                "files": [
+                    "src/runner/getChokidarOptions.ts"
+                ],
+                "rules": {
+                    "@typescript-eslint/no-unsafe-assignment": "off"
+                }
             }
         ]
     },

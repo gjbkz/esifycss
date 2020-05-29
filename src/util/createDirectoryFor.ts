@@ -10,7 +10,7 @@ export const createDirectoryFor = (filePath: string) => {
         try {
             fs.mkdirSync(directory);
         } catch (err2) {
-            if (err2.code !== 'EEXIST') {
+            if ((err2 as {code?: string}).code !== 'EEXIST') {
                 throw err2;
             }
         }
