@@ -46,7 +46,7 @@
         "test:runner": "ava --timeout=1m '{lib,src}/runner/**/*.test.{js,ts}'",
         "test": "run-s test:*",
         "test-ts": "ava 'src/**/*.test.ts'",
-        "test-client": "ava 'test/run.ts'",
+        "test-client": "ava --timeout=2m 'test/run.ts'",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "run-s version:changelog version:add",
