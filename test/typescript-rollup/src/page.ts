@@ -42,5 +42,5 @@ const test = () => {
 try {
     test();
 } catch (error) {
-    log(`${error.stack || error}`);
+    log(error);
 }

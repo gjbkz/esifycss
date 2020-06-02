@@ -66,8 +66,8 @@ interface ITest {
         },
         expected: `steps(2, ${CSSStepPosition.jumpBoth})`,
     },
-] as Array<ITest>).forEach(({input, expected}) => {
-    test(`${JSON.stringify(input)} → ${expected === null ? 'Error' : expected}`, (t) => {
+] as Array<ITest>).forEach(({input, expected}, index) => {
+    test(`#${index} → ${expected === null ? 'Error' : expected}`, (t) => {
         if (expected === null) {
             t.throws(() => serializeTimingFunction(input), {message: /^Invalid timingFunction/});
         } else {

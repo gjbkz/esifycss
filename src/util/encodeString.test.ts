@@ -26,8 +26,8 @@ interface ITest {
         expected: 'ECACACACA',
         expectedWords: ['foo', ' ', 'bar'],
     },
-] as Array<ITest>).forEach(({input, preset, expected, expectedWords}) => {
-    test(`${JSON.stringify(input)} ${JSON.stringify(preset || [])} → ${expected}`, (t) => {
+] as Array<ITest>).forEach(({input, preset, expected, expectedWords}, index) => {
+    test(`#${index} ${JSON.stringify(input)} ${JSON.stringify(preset || [])} → ${expected}`, (t) => {
         const identifier = createIdentifier();
         if (preset) {
             for (const token of preset) {

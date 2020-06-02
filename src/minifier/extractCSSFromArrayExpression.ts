@@ -1,9 +1,9 @@
-import * as acornWalk from 'acorn-walk';
+import {INode} from './walker';
 import {isArrayExpression, isObjectExpression} from './ast';
 import {ICSSRange} from './types';
 
 export const extractCSSFromArrayExpression = (
-    node: acornWalk.INode,
+    node: INode,
     cssKey: string,
 ): Array<ICSSRange> => {
     if (!isArrayExpression(node)) {

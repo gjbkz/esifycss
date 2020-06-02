@@ -30,7 +30,7 @@ export const createRequestHandler = (
             }
         })
         .catch((error) => {
-            if (error.code === 'ENOENT') {
+            if ((error as {code?: string}).code === 'ENOENT') {
                 res.statusCode = 404;
             } else {
                 res.statusCode = 500;

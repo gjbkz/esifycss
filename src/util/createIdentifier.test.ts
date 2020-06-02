@@ -1,7 +1,7 @@
 import test from 'ava';
 import {createIdentifier} from './createIdentifier';
 
-test('without listener', (t) => {
+test('#0 without listener', (t) => {
     const identifier = createIdentifier();
     const id1 = identifier('foo');
     const id2 = identifier('bar');
@@ -10,7 +10,7 @@ test('without listener', (t) => {
     t.is(id3, id1);
 });
 
-test('with listener', (t) => {
+test('#1 with listener', (t) => {
     const log: {[key: string]: number | undefined} = {};
     const identifier = createIdentifier((key, id) => {
         log[key] = id;

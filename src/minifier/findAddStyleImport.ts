@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as acorn from 'acorn';
-import * as acornWalk from 'acorn-walk';
+import {IImportDeclaration} from './walker';
 import {isProgramNode} from './ast';
 
 export const normalizeHelperId = (
@@ -10,7 +10,7 @@ export const normalizeHelperId = (
 export const findAddStyleImport = (
     ast: acorn.Node,
     helperId: string,
-): {name: string, node: acornWalk.IImportDeclaration} => {
+): {name: string, node: IImportDeclaration} => {
     if (!isProgramNode(ast)) {
         throw new Error('InvalidNode');
     }

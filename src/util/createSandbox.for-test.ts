@@ -107,12 +107,12 @@ class Document {
 
 }
 
-export interface ISandbox<TExports extends {}> {
+export interface ISandbox<TExports> {
     document: Document,
     exports: Partial<TExports>,
 }
 
-export const createSandbox = <TExports extends {}>(): ISandbox<TExports> => ({
+export const createSandbox = <TExports>(): ISandbox<TExports> => ({
     document: new Document(),
     exports: {},
 });

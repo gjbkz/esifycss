@@ -9,7 +9,7 @@ interface ITest {
 ([
     {
         input: [{}, {name: 'foo', nodes: []}],
-        expected: {error: /^Invalid <single-animation>/},
+        expected: {error: {message: /^Invalid <single-animation>/}},
     },
 ] as Array<ITest>).forEach(({input, expected}) => {
     test(`${JSON.stringify(input)} → ${'error' in expected ? 'Error' : JSON.stringify(expected)}`, (t) => {

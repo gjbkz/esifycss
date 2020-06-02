@@ -1,5 +1,5 @@
 import * as acorn from 'acorn';
-import * as acornWalk from 'acorn-walk';
+import * as acornWalk from './walker';
 import * as dynamicImport from 'acorn-dynamic-import';
 import {IParseResult, ICSSRange, IRange} from './types';
 import {extractCSSFromArrayExpression} from './extractCSSFromArrayExpression';

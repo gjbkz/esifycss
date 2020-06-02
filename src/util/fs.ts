@@ -45,16 +45,19 @@ export const deleteFile = async (
     try {
         await unlink(filePath);
     } catch (error) {
-        if (error.code === 'ENOENT') {
+        switch ((error as {code?: string}).code) {
+        case 'ENOENT':
             return;
-        }
-        if (error.code === 'EISDIR' || error.code === 'EPERM') {
+        case 'EISDIR':
+        case 'EPERM': {
             const files = (await readdir(filePath)).map((name) => path.join(filePath, name));
             await Promise.all(files.map(async (file) => {
                 await deleteFile(file, stdout);
             }));
             await rmdir(filePath);
-        } else {
+            break;
+        }
+        default:
             throw error;
         }
     }

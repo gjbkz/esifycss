@@ -1,14 +1,14 @@
 import * as acorn from 'acorn';
-import * as acornWalk from 'acorn-walk';
+import {IProgram, IObjectExpression, IArrayExpression} from './walker';
 
 export const isProgramNode = (
     node: acorn.Node,
-): node is acornWalk.IProgram => node.type === 'Program';
+): node is IProgram => node.type === 'Program';
 
 export const isObjectExpression = (
     node: acorn.Node,
-): node is acornWalk.IObjectExpression => node.type === 'ObjectExpression';
+): node is IObjectExpression => node.type === 'ObjectExpression';
 
 export const isArrayExpression = (
     node: acorn.Node,
-): node is acornWalk.IArrayExpression => node.type === 'ArrayExpression';
+): node is IArrayExpression => node.type === 'ArrayExpression';

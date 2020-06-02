@@ -108,6 +108,7 @@ getCapabilities(testDirectories)
         capability.browserName,
     ].join(' ');
     test.serial(`#${index + 1} ${name} ${subTitle}`, async (t) => {
+        t.timeout(120000);
         await build(testDirectory);
         t.context.server.on('request', createRequestHandler(
             outputDirectory,
