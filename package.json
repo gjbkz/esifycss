@@ -43,7 +43,7 @@
         "test:parser": "ava '{lib,src}/parser/**/*.test.{js,ts}'",
         "test:postcssPlugin": "ava '{lib,src}/postcssPlugin/**/*.test.{js,ts}'",
         "test:util": "ava '{lib,src}/util/**/*.test.{js,ts}'",
-        "test:runner": "ava '{lib,src}/runner/**/*.test.{js,ts}'",
+        "test:runner": "ava --timeout=1m '{lib,src}/runner/**/*.test.{js,ts}'",
         "test": "run-s test:*",
         "test-ts": "ava 'src/**/*.test.ts'",
         "test-client": "ava 'test/run.ts'",
