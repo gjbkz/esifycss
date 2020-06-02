@@ -1,3 +1,13 @@
+<a name="1.4.13"></a>
+## [1.4.13](https://github.com/kei-ito/esifycss/compare/v1.4.12...v1.4.13) (2020-06-02)
+
+
+### Bug Fixes
+
+* remove the uninstalled package ([99548ce](https://github.com/kei-ito/esifycss/commit/99548ce))
+
+
+
 <a name="1.4.12"></a>
 ## [1.4.12](https://github.com/kei-ito/esifycss/compare/v1.4.11...v1.4.12) (2020-01-23)
 
