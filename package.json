@@ -39,7 +39,13 @@
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
         "build:sample2": "run-s build:sample2:cleanup build:sample2:copy build:sample2:esifycss",
         "build": "run-s build:cleanup build:tsc build:helper build:bin build:sample*",
-        "test": "ava 'lib/**/*.test.js'",
+        "test:minifier": "ava '{lib,src}/minifier/**/*.test.{js,ts}'",
+        "test:parser": "ava '{lib,src}/parser/**/*.test.{js,ts}'",
+        "test:postcssPlugin": "ava '{lib,src}/postcssPlugin/**/*.test.{js,ts}'",
+        "test:util": "ava '{lib,src}/util/**/*.test.{js,ts}'",
+        "test:runner": "ava '{lib,src}/runner/**/*.test.{js,ts}'",
+        "test": "run-s test:*",
+        "test-ts": "ava 'src/**/*.test.ts'",
         "test-client": "ava 'test/run.ts'",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
@@ -94,7 +100,8 @@
         ],
         "require": [
             "ts-node/register"
-        ]
+        ],
+        "verbose": true
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
