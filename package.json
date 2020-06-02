@@ -41,7 +41,7 @@
         "build": "run-s build:cleanup build:tsc build:helper build:bin build:sample*",
         "test:minifier": "ava '{lib,src}/minifier/**/*.test.{js,ts}'",
         "test:parser": "ava '{lib,src}/parser/**/*.test.{js,ts}'",
-        "test:postcssPlugin": "ava '{lib,src}/postcssPlugin/**/*.test.{js,ts}'",
+        "test:postcssPlugin": "ava --timeout=1m '{lib,src}/postcssPlugin/**/*.test.{js,ts}'",
         "test:util": "ava '{lib,src}/util/**/*.test.{js,ts}'",
         "test:runner": "ava --timeout=1m '{lib,src}/runner/**/*.test.{js,ts}'",
         "test": "run-s test:*",
