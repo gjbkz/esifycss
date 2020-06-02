@@ -105,8 +105,8 @@ interface ITest {
         },
         expected: '1s infinite reverse both paused aaa',
     },
-] as Array<ITest>).forEach(({input, expected}) => {
-    test(JSON.stringify(input), (t) => {
+] as Array<ITest>).forEach(({input, expected}, index) => {
+    test(`#${index}`, (t) => {
         const actual = serializeCSSAnimationShorthand(input);
         t.is(actual, expected);
     });

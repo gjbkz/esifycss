@@ -10,8 +10,8 @@ interface ITest {
     {input: 0, expected: [0]},
     {input: [0], expected: [0]},
     {input: [0, 1], expected: [0, 1]},
-] as Array<ITest>).forEach(({input, expected}) => {
-    test(`ensureArray(${JSON.stringify(input)}) → ${JSON.stringify(expected)}`, (t) => {
+] as Array<ITest>).forEach(({input, expected}, index) => {
+    test(`#${index} ensureArray(${JSON.stringify(input)}) → ${JSON.stringify(expected)}`, (t) => {
         t.deepEqual(
             ensureArray(input),
             expected,

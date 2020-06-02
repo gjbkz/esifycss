@@ -9,8 +9,8 @@ interface ITest {
 ([
     {input: 'foo', expected: ['foo']},
     {input: 'width:100px', expected: ['width', ':', '100', 'px']},
-] as Array<ITest>).forEach(({input, expected}) => {
-    test(`${JSON.stringify(input)} → ${expected.join('|')}`, (t) => {
+] as Array<ITest>).forEach(({input, expected}, index) => {
+    test(`#${index} ${JSON.stringify(input)} → ${expected.join('|')}`, (t) => {
         t.deepEqual(
             [...tokenizeString(input)],
             expected,

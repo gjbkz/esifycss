@@ -19,8 +19,8 @@ interface ITest {
 ([
     {input: '/foo'},
     {input: '/foo/bar/baz'},
-] as Array<ITest>).forEach(({input}) => {
-    test(`createDirectoryFor(${JSON.stringify(input)})`, async (t) => {
+] as Array<ITest>).forEach(({input}, index) => {
+    test(`#${index} createDirectoryFor(${JSON.stringify(input)})`, async (t) => {
         const absoluteInput = path.join(t.context.directory, input);
         const actual = createDirectoryFor(absoluteInput);
         t.true(absoluteInput.startsWith(actual));

@@ -1,14 +1,14 @@
 import test from 'ava';
 import {getHash} from './getHash';
 
-test('get a hash string', (t) => {
+test('#0 get a hash string', (t) => {
     const data = 'foo';
     const hash = getHash(data);
     t.true(0 < hash.length);
     t.is(typeof hash, 'string');
 });
 
-test('get a different hash', (t) => {
+test('#1 get a different hash', (t) => {
     const data1 = 'foo';
     const hash1 = getHash(data1);
     const data2 = 'bar';
@@ -18,7 +18,7 @@ test('get a different hash', (t) => {
     t.true(hash1 !== hash2);
 });
 
-test('get a hash string using sha512', (t) => {
+test('#2 get a hash string using sha512', (t) => {
     const data = 'foo';
     const hash1 = getHash(data);
     const hash2 = getHash(data, {algorithm: 'sha512', encoding: 'base64'});
@@ -27,7 +27,7 @@ test('get a hash string using sha512', (t) => {
     t.true(hash1 !== hash2);
 });
 
-test('get a hash as a buffer', (t) => {
+test('#3 get a hash as a buffer', (t) => {
     const data = 'foo';
     const hash = getHash(data, {algorithm: 'sha256', encoding: Buffer});
     t.true(Buffer.isBuffer(hash));

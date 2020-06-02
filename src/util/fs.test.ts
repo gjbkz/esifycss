@@ -19,8 +19,8 @@ interface IWriteFileTest {
 ([
     {filePath: '/foo/bar', content: Buffer.from('hello')},
     {filePath: '/foo/bar/baz', content: Buffer.from('foo/bar/baz')},
-] as Array<IWriteFileTest>).forEach(({filePath, content}) => {
-    test(`writeFile('${filePath}', Buffer.from('${content}'))`, async (t) => {
+] as Array<IWriteFileTest>).forEach(({filePath, content}, index) => {
+    test(`#${index} writeFile('${filePath}', Buffer.from('${content}'))`, async (t) => {
         const absoluteFilePath = path.join(t.context.directory, filePath);
         await writeFile(absoluteFilePath, content);
         const actual = await readFile(absoluteFilePath);

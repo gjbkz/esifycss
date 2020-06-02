@@ -47,7 +47,6 @@ test('plugin', async (t): Promise<void> => {
         t.true(identifiers.every((identifier) => Boolean(identifier)));
         t.is(identifiers.length, new Set(identifiers).size);
     }
-    t.log({mapA, mapB});
     const rootA = postcss.parse(resultA.css);
     const rootB = postcss.parse(resultB.css);
     const nodes = [...(rootA.nodes || []), ...(rootB.nodes || [])];
