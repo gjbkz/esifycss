@@ -1,6 +1,10 @@
 import {writeFile} from '../util/fs';
 import {parseScripts} from './parseScripts';
 
+/**
+ * Removes statements for importing and executing addStyle().
+ * @param props
+ */
 export const minifyScriptsForCSS = async (
     props: {
         files: Array<string>,

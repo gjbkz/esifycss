@@ -7,6 +7,7 @@ interface ITest {
         code: string,
         cssKey: string,
         helper: string,
+        localName?: string,
     },
     expected: ReturnType<typeof parseCSSModuleScript> | null,
 }
@@ -14,7 +15,7 @@ interface ITest {
 ([
     {
         input: {
-            title: 'basic',
+            title: 'simple',
             code: [
                 ' import {addStyle} from \'esifycss\';',
                 'addStyle([{esifycss:\'aaa\'}]);',
@@ -134,6 +135,52 @@ interface ITest {
             helper: 'esifycss',
         },
         expected: null,
+    },
+    {
+        input: {
+            title: 'Locally declared const addFoooo',
+            code: [
+                ' const addFoooo = () => null;',
+                'addFoooo([{esifycss:\'aaa\'}]);',
+            ].join('\n'),
+            cssKey: 'esifycss',
+            helper: 'esifycss',
+            localName: 'addFoooo',
+        },
+        expected: {
+            ranges: [
+                {
+                    css: 'aaa',
+                    start: 40,
+                    end: 56,
+                },
+            ],
+            addStyle: {start: 1, end: 29},
+            statements: [{start: 30, end: 59}],
+        },
+    },
+    {
+        input: {
+            title: 'Locally declared function addFoooo',
+            code: [
+                ' function addFoooo() {return null}',
+                'addFoooo([{esifycss:\'aaa\'}]);',
+            ].join('\n'),
+            cssKey: 'esifycss',
+            helper: 'esifycss',
+            localName: 'addFoooo',
+        },
+        expected: {
+            ranges: [
+                {
+                    css: 'aaa',
+                    start: 45,
+                    end: 61,
+                },
+            ],
+            addStyle: {start: 1, end: 34},
+            statements: [{start: 35, end: 64}],
+        },
     },
 ] as Array<ITest>).forEach(({input, expected}, index) => {
     test(`#${index} ${input.title}${expected ? '' : ' → Error'}`, (t) => {
