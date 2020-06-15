@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as acorn from 'acorn';
-import {IImportDeclaration} from './walker';
+import {IImportDeclaration, IVariableDeclaration, IFunctionDeclaration} from './walker';
 import {isProgramNode} from './ast';
 
 export const normalizeHelperId = (
@@ -10,7 +10,8 @@ export const normalizeHelperId = (
 export const findAddStyleImport = (
     ast: acorn.Node,
     helperId: string,
-): {name: string, node: IImportDeclaration} => {
+    localName?: string,
+): {name: string, node: IImportDeclaration | IVariableDeclaration | IFunctionDeclaration} => {
     if (!isProgramNode(ast)) {
         throw new Error('InvalidNode');
     }
@@ -21,6 +22,25 @@ export const findAddStyleImport = (
                 if (specifiers.length === 1) {
                     return {name: specifiers[0].local.name, node};
                 }
+            }
+        }
+    }
+    if (localName) {
+        for (const node of ast.body) {
+            switch (node.type) {
+            case 'VariableDeclaration': {
+                const {declarations} = node;
+                if (declarations.length === 1 && declarations[0].id.name === localName) {
+                    return {name: localName, node};
+                }
+                break;
+            }
+            case 'FunctionDeclaration':
+                if (node.id.name === localName) {
+                    return {name: localName, node};
+                }
+                break;
+            default:
             }
         }
     }

@@ -113,6 +113,21 @@ interface IImportDeclaration extends INode {
     source: IStringLiteral,
 }
 
+interface IVariableDeclarator extends INode {
+    type: 'VariableDeclaration',
+    id: IIdentifier,
+}
+
+interface IVariableDeclaration extends INode {
+    type: 'VariableDeclaration',
+    declarations: Array<IVariableDeclarator>,
+}
+
+interface IFunctionDeclaration extends INode {
+    type: 'FunctionDeclaration',
+    id: IIdentifier,
+}
+
 interface IMemberExpression extends INode {
     type: 'MemberExpression',
     key: IIdentifier,
@@ -131,7 +146,7 @@ interface IArrayExpression extends INode {
 
 interface IProgram extends INode {
     type: 'Program',
-    body: Array<IImportDeclaration | IExpressionStatement>,
+    body: Array<IImportDeclaration | IExpressionStatement | IVariableDeclaration | IFunctionDeclaration>,
 }
 
 export interface IVisitors {
