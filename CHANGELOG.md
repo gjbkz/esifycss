@@ -1,3 +1,13 @@
+<a name="1.4.14"></a>
+## [1.4.14](https://github.com/kei-ito/esifycss/compare/v1.4.13...v1.4.14) (2020-06-15)
+
+
+### Bug Fixes
+
+* support locally declared addStyle functions ([d59b3a9](https://github.com/kei-ito/esifycss/commit/d59b3a9))
+
+
+
 <a name="1.4.13"></a>
 ## [1.4.13](https://github.com/kei-ito/esifycss/compare/v1.4.12...v1.4.13) (2020-06-02)
 
