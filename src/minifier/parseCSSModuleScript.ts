@@ -24,7 +24,7 @@ export const parseCSSModuleScript = (
     acornWalk.simple(ast, {
         ExpressionStatement: (statement) => {
             const {expression} = statement;
-            if (expression.callee.name === addStyle.name) {
+            if (expression.callee && expression.callee.name === addStyle.name) {
                 for (const argument of expression.arguments) {
                     ranges.push(...extractCSSFromArrayExpression(argument, props.cssKey));
                 }

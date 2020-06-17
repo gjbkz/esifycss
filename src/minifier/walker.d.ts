@@ -92,7 +92,7 @@ interface IIdentifier extends INode {
 
 interface ICallExpression extends INode {
     type: 'CallExpression',
-    callee: IIdentifier,
+    callee?: IIdentifier,
     arguments: Array<INode>,
 }
 
