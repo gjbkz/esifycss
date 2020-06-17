@@ -1,3 +1,13 @@
+<a name="1.4.16"></a>
+## [1.4.16](https://github.com/kei-ito/esifycss/compare/v1.4.15...v1.4.16) (2020-06-17)
+
+
+### Bug Fixes
+
+* leave import statements ([c1b6610](https://github.com/kei-ito/esifycss/commit/c1b6610))
+
+
+
 <a name="1.4.15"></a>
 ## [1.4.15](https://github.com/kei-ito/esifycss/compare/v1.4.14...v1.4.15) (2020-06-17)
 
