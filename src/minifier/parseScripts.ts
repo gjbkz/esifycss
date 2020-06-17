@@ -1,14 +1,12 @@
-import * as path from 'path';
 import {readFile} from '../util/fs';
 import {IParseScriptsResult, IScriptData} from './types';
 import {parseCSSModuleScript} from './parseCSSModuleScript';
 import {tokenizeString} from '../util/tokenizeString';
 
 export const parseScripts = async (
-    {files, cssKey, helper}: {
+    {files, cssKey}: {
         files: Array<string>,
         cssKey: string,
-        helper: string,
     },
 ): Promise<IParseScriptsResult> => {
     const scripts = new Map<string, IScriptData>();
@@ -18,7 +16,6 @@ export const parseScripts = async (
         const data = parseCSSModuleScript({
             code,
             cssKey,
-            helper: path.relative(path.dirname(file), helper),
         });
         for (const {css} of data.ranges) {
             for (const token of tokenizeString(css)) {

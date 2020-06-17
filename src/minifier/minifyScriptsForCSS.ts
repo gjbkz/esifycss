@@ -10,7 +10,6 @@ export const minifyScriptsForCSS = async (
         files: Array<string>,
         cssKey: string,
         dest: string,
-        helper: string,
     },
 ): Promise<void> => {
     const parseResult = await parseScripts(props);
@@ -21,7 +20,7 @@ export const minifyScriptsForCSS = async (
             const range = data.ranges[index];
             cssList[index] = range.css;
         }
-        code = [data.addStyle, ...data.statements]
+        code = data.statements
         .sort((range1, range2) => range1.start < range2.start ? 1 : -1)
         .reduce((code, range) => `${code.slice(0, range.start)}${code.slice(range.end)}`, code);
         await writeFile(file, code);
