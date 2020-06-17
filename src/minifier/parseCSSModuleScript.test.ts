@@ -6,8 +6,6 @@ interface ITest {
         title: string,
         code: string,
         cssKey: string,
-        helper: string,
-        localName?: string,
     },
     expected: ReturnType<typeof parseCSSModuleScript> | null,
 }
@@ -21,7 +19,6 @@ interface ITest {
                 'addStyle([{esifycss:\'aaa\'}]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: {
             ranges: [
@@ -31,7 +28,6 @@ interface ITest {
                     end: 62,
                 },
             ],
-            addStyle: {start: 1, end: 35},
             statements: [{start: 36, end: 65}],
         },
     },
@@ -43,7 +39,6 @@ interface ITest {
                 'addStyle({esifycss:\'aaa\'});',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: null,
     },
@@ -52,9 +47,17 @@ interface ITest {
             title: 'NoAddStyle',
             code: 'addStyle([{esifycss:\'aaa\'}]);',
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
-        expected: null,
+        expected: {
+            ranges: [
+                {
+                    css: 'aaa',
+                    start: 10,
+                    end: 26,
+                },
+            ],
+            statements: [{start: 0, end: 29}],
+        },
     },
     {
         input: {
@@ -64,7 +67,6 @@ interface ITest {
                 'addStyle([0]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: null,
     },
@@ -76,11 +78,9 @@ interface ITest {
                 'addStyle([]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: {
             ranges: [],
-            addStyle: {start: 0, end: 34},
             statements: [{start: 35, end: 48}],
         },
     },
@@ -92,11 +92,9 @@ interface ITest {
                 'addStyle();',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: {
             ranges: [],
-            addStyle: {start: 0, end: 34},
             statements: [{start: 35, end: 46}],
         },
     },
@@ -108,7 +106,6 @@ interface ITest {
                 'addStyle([{foo:\'aaa\'}]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: null,
     },
@@ -120,7 +117,6 @@ interface ITest {
                 'addStyle([{esifycss:[]}]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: null,
     },
@@ -132,7 +128,6 @@ interface ITest {
                 'addStyle([{esifycss:1}]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
         },
         expected: null,
     },
@@ -144,8 +139,6 @@ interface ITest {
                 'addFoooo([{esifycss:\'aaa\'}]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
-            localName: 'addFoooo',
         },
         expected: {
             ranges: [
@@ -155,7 +148,6 @@ interface ITest {
                     end: 56,
                 },
             ],
-            addStyle: {start: 1, end: 29},
             statements: [{start: 30, end: 59}],
         },
     },
@@ -167,8 +159,6 @@ interface ITest {
                 'addFoooo([{esifycss:\'aaa\'}]);',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
-            localName: 'addFoooo',
         },
         expected: {
             ranges: [
@@ -178,7 +168,6 @@ interface ITest {
                     end: 61,
                 },
             ],
-            addStyle: {start: 1, end: 34},
             statements: [{start: 35, end: 64}],
         },
     },
@@ -191,7 +180,6 @@ interface ITest {
                 'a += 1',
             ].join('\n'),
             cssKey: 'esifycss',
-            helper: 'esifycss',
             localName: 'addFoooo',
         },
         expected: {
@@ -202,7 +190,6 @@ interface ITest {
                     end: 61,
                 },
             ],
-            addStyle: {start: 1, end: 34},
             statements: [{start: 35, end: 64}],
         },
     },

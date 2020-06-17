@@ -87,11 +87,10 @@ export class Session {
     public async minifyScripts(): Promise<void> {
         const files = [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`);
         const {cssKey, output} = this.configuration;
-        const dest = this.configuration.output.path;
-        if (this.configuration.output.type === 'css') {
-            await minifyScriptsForCSS({files, cssKey, dest, helper: this.helperPath});
+        if (output.type === 'css') {
+            await minifyScriptsForCSS({files, cssKey, dest: output.path});
         } else {
-            await minifyScripts({files, cssKey, dest, helper: output.path});
+            await minifyScripts({files, cssKey, dest: output.path});
         }
     }
 

@@ -9,7 +9,6 @@ export interface ICSSRange extends IRange {
 
 export interface IParseResult {
     ranges: Array<ICSSRange>,
-    addStyle: IRange,
     statements: Array<IRange>,
 }
 

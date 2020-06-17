@@ -110,6 +110,10 @@
             "es6": true,
             "node": true
         },
+        "ignorePatterns": [
+            "**/temp/*",
+            "*.css.ts"
+        ],
         "overrides": [
             {
                 "files": [
