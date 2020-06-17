@@ -182,6 +182,30 @@ interface ITest {
             statements: [{start: 35, end: 64}],
         },
     },
+    {
+        input: {
+            title: 'Ignore AssignmentExpression',
+            code: [
+                ' function addFoooo() {return null}',
+                'addFoooo([{esifycss:\'aaa\'}]);',
+                'a += 1',
+            ].join('\n'),
+            cssKey: 'esifycss',
+            helper: 'esifycss',
+            localName: 'addFoooo',
+        },
+        expected: {
+            ranges: [
+                {
+                    css: 'aaa',
+                    start: 45,
+                    end: 61,
+                },
+            ],
+            addStyle: {start: 1, end: 34},
+            statements: [{start: 35, end: 64}],
+        },
+    },
 ] as Array<ITest>).forEach(({input, expected}, index) => {
     test(`#${index} ${input.title}${expected ? '' : ' → Error'}`, (t) => {
         if (expected) {
