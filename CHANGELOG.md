@@ -1,3 +1,13 @@
+<a name="1.4.15"></a>
+## [1.4.15](https://github.com/kei-ito/esifycss/compare/v1.4.14...v1.4.15) (2020-06-17)
+
+
+### Bug Fixes
+
+* ignore AssignmentExpression ([b991b2c](https://github.com/kei-ito/esifycss/commit/b991b2c))
+
+
+
 <a name="1.4.14"></a>
 ## [1.4.14](https://github.com/kei-ito/esifycss/compare/v1.4.13...v1.4.14) (2020-06-15)
 
