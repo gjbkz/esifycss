@@ -1,3 +1,13 @@
+<a name="1.4.17"></a>
+## [1.4.17](https://github.com/kei-ito/esifycss/compare/v1.4.16...v1.4.17) (2020-06-19)
+
+
+### Bug Fixes
+
+* ignore invalid arguments ([495f034](https://github.com/kei-ito/esifycss/commit/495f034))
+
+
+
 <a name="1.4.16"></a>
 ## [1.4.16](https://github.com/kei-ito/esifycss/compare/v1.4.15...v1.4.16) (2020-06-17)
 
