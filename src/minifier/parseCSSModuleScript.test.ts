@@ -40,7 +40,10 @@ interface ITest {
             ].join('\n'),
             cssKey: 'esifycss',
         },
-        expected: null,
+        expected: {
+            ranges: [],
+            statements: [{start: 36, end: 63}],
+        },
     },
     {
         input: {
@@ -68,7 +71,10 @@ interface ITest {
             ].join('\n'),
             cssKey: 'esifycss',
         },
-        expected: null,
+        expected: {
+            ranges: [],
+            statements: [{start: 35, end: 49}],
+        },
     },
     {
         input: {
@@ -107,7 +113,10 @@ interface ITest {
             ].join('\n'),
             cssKey: 'esifycss',
         },
-        expected: null,
+        expected: {
+            ranges: [],
+            statements: [{start: 35, end: 59}],
+        },
     },
     {
         input: {
