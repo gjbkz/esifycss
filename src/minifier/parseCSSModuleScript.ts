@@ -1,12 +1,7 @@
 import * as acorn from 'acorn';
 import * as acornWalk from './walker';
-import * as dynamicImport from 'acorn-dynamic-import';
 import {IParseResult, ICSSRange, IRange} from './types';
 import {extractCSSFromArrayExpression} from './extractCSSFromArrayExpression';
-const Parser = acorn.Parser.extend(dynamicImport.default || dynamicImport);
-acornWalk.base[dynamicImport.DynamicImportKey] = () => {
-    // noop
-};
 
 export const parseCSSModuleScript = (
     props: {
@@ -16,7 +11,7 @@ export const parseCSSModuleScript = (
 ): IParseResult => {
     const ranges: Array<ICSSRange> = [];
     const statements: Array<IRange> = [];
-    const ast = Parser.parse(props.code, {sourceType: 'module'});
+    const ast = acorn.parse(props.code, {sourceType: 'module'});
     acornWalk.simple(ast, {
         ExpressionStatement: (statement) => {
             const {expression} = statement;
