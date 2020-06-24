@@ -1,3 +1,12 @@
+## [1.4.19](https://github.com/kei-ito/esifycss/compare/v1.4.18...v1.4.19) (2020-06-24)
+
+
+### Bug Fixes
+
+* set ecmaVersion ([#79](https://github.com/kei-ito/esifycss/issues/79)) ([37cfcb7](https://github.com/kei-ito/esifycss/commit/37cfcb787b0db2e8d4a3d3fbf91d1e73581f93d2))
+
+
+
 ## [1.4.18](https://github.com/kei-ito/esifycss/compare/v1.4.17...v1.4.18) (2020-06-24)
 
 
