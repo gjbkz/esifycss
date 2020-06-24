@@ -42,7 +42,7 @@ interface ITest {
         },
         expected: {
             ranges: [],
-            statements: [{start: 36, end: 63}],
+            statements: [],
         },
     },
     {
@@ -73,7 +73,7 @@ interface ITest {
         },
         expected: {
             ranges: [],
-            statements: [{start: 35, end: 49}],
+            statements: [],
         },
     },
     {
@@ -87,7 +87,7 @@ interface ITest {
         },
         expected: {
             ranges: [],
-            statements: [{start: 35, end: 48}],
+            statements: [],
         },
     },
     {
@@ -101,7 +101,7 @@ interface ITest {
         },
         expected: {
             ranges: [],
-            statements: [{start: 35, end: 46}],
+            statements: [],
         },
     },
     {
@@ -115,7 +115,7 @@ interface ITest {
         },
         expected: {
             ranges: [],
-            statements: [{start: 35, end: 59}],
+            statements: [],
         },
     },
     {
@@ -200,6 +200,28 @@ interface ITest {
                 },
             ],
             statements: [{start: 35, end: 64}],
+        },
+    },
+    {
+        input: {
+            title: 'dynamic import',
+            code: [
+                'import(\'./foo\').catch((err) => console.error(err));',
+                'addStyle([{esifycss:\'aaa\'}]);',
+            ].join('\n'),
+            cssKey: 'esifycss',
+        },
+        expected: {
+            ranges: [
+                {
+                    css: 'aaa',
+                    start: 62,
+                    end: 78,
+                },
+            ],
+            statements: [
+                {start: 52, end: 81},
+            ],
         },
     },
 ] as Array<ITest>).forEach(({input, expected}, index) => {
