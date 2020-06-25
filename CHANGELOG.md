@@ -1,3 +1,12 @@
+## [1.4.20](https://github.com/kei-ito/esifycss/compare/v1.4.19...v1.4.20) (2020-06-25)
+
+
+### Bug Fixes
+
+* copy .d.ts ([4142305](https://github.com/kei-ito/esifycss/commit/41423054add33dbb46d7c09c3630212148d5d68c))
+
+
+
 ## [1.4.19](https://github.com/kei-ito/esifycss/compare/v1.4.18...v1.4.19) (2020-06-24)
 
 
