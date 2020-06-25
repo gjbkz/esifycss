@@ -1,26 +1,35 @@
-import * as path from 'path';
 import {promises as afs} from 'fs';
+import * as path from 'path';
 
-const copy = async (source: string, dest: string) => {
-    for await (const dirent of await afs.opendir(source)) {
-        const {name} = dirent;
-        if (dirent.isDirectory()) {
-            await afs.mkdir(path.join(dest, name), {recursive: true});
-            await copy(path.join(source, name), path.join(dest, name));
-        } else if (dirent.isFile()) {
-            await afs.copyFile(path.join(source, name), path.join(dest, name));
-        }
+/**
+ * @param {string} src
+ * @param {string} dest
+ */
+export const copy = async (
+    src: string,
+    dest: string,
+): Promise<void> => {
+    src = path.normalize(src);
+    dest = path.normalize(dest);
+    if ((await afs.stat(src)).isDirectory()) {
+        await afs.mkdir(dest, {recursive: true});
+        await Promise.all((await afs.readdir(src)).map(async (name) => {
+            const srcFile = path.join(src, name);
+            const destFile = path.join(dest, name);
+            await afs.copyFile(srcFile, destFile);
+            console.log(`Copied: ${srcFile} → ${destFile}`);
+        }));
+    } else {
+        await afs.copyFile(src, dest);
+        console.log(`Copied: ${src} → ${dest}`);
     }
 };
 
-const cwd = process.cwd();
-const [source, dest] = process.argv.slice(2).slice(-2).map((value) => path.join(cwd, value));
-
-afs.mkdir(dest, {recursive: true})
-.then(async () => {
-    await copy(source, dest);
-})
-.catch((error) => {
-    console.error(error);
-    process.exit(1);
-});
+if (!module.parent) {
+    const [src, dest] = process.argv.slice(-2);
+    copy(src, dest)
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });
+}
