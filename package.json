@@ -40,14 +40,8 @@
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
         "build:sample2": "run-s build:sample2:cleanup build:sample2:copy build:sample2:esifycss",
         "build": "run-s build:cleanup build:tsc build:dts build:helper build:bin build:sample*",
-        "test:minifier": "ava 'lib/minifier/**/*.test.js'",
-        "test:parser": "ava 'lib/parser/**/*.test.js'",
-        "test:postcssPlugin": "ava 'lib/postcssPlugin/**/*.test.js'",
-        "test:util": "ava 'lib/util/**/*.test.js'",
-        "test:runner": "ava 'lib/runner/**/*.test.js'",
-        "test": "run-s test:*",
-        "test-ts": "ava 'src/**/*.test.ts'",
-        "test-client": "ava 'test/run.ts'",
+        "test": "ava --config ava.config.all.cjs",
+        "test-client": "ava --config ava.config.client.cjs",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "run-s version:changelog version:add",
@@ -91,17 +85,6 @@
         "selenium-webdriver": "^4.0.0-alpha.7",
         "ts-node": "^8.10.2",
         "typescript": "^3.9.5"
-    },
-    "ava": {
-        "extensions": [
-            "js",
-            "ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "verbose": true,
-        "timeout": "2m"
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
