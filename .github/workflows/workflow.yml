@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm build
+      - run: npm run build
       - run: npm pack
       - uses: actions/upload-artifact@v2
         with:
