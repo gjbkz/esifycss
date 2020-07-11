@@ -23,6 +23,12 @@ export const generateScript = (
     if (!props.root) {
         throw new Error(`No root: ${props.root}`);
     }
+    process.stdout.write([
+        `Output: ${path.dirname(props.output)}`,
+        `Helper: ${props.helper}`,
+        `Relative: ${path.relative(path.dirname(props.output), props.helper)}`,
+        '',
+    ].join('\n'));
     const helperPath = path.relative(path.dirname(props.output), props.helper)
     .replace(/\.ts$/, '')
     .replace(/^([^./])/, './$1')
