@@ -27,25 +27,18 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: lib
-          key: lib-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            lib-${{ hashFiles('**/package-lock.json') }}
-            lib-
+          key: lib-${{ github.sha }}
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm run build
-      # - run: npm pack
-      # - uses: actions/upload-artifact@v2
-      #   with:
-      #     name: package-${{ matrix.os }}
-      #     path: esifycss-*.tgz
-      # - run: npm run build
+      - run: npm pack
       - uses: actions/upload-artifact@v2
         with:
-          name: package-setup-${{ matrix.os }}
-          path: lib
+          name: package-${{ github.sha }}-${{ matrix.os }}
+          path: esifycss-*.tgz
+      - run: npm run build
   Test:
     runs-on: ${{ matrix.os }}
     needs:
@@ -69,11 +62,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: lib
-          key: lib-${{ hashFiles('**/package-lock.json') }}
-      - uses: actions/upload-artifact@v2
-        with:
-          name: package-test-${{ matrix.os }}
-          path: lib
+          key: lib-${{ github.sha }}
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
