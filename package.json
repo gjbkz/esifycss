@@ -21,7 +21,7 @@
         "esifycss": "lib/bin/esifycss.js"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src scripts @types test",
+        "lint": "eslint --ext .ts src scripts @types test-client",
         "build:cleanup": "rimraf lib src/helper/*.js",
         "build:helper:cleanup": "rimraf lib/helper",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
@@ -119,7 +119,7 @@
             },
             {
                 "files": [
-                    "test/**/*.ts",
+                    "test-client/**/*.ts",
                     "*.test.ts",
                     "*.for-test.ts"
                 ],
@@ -151,7 +151,7 @@
             {
                 "files": [
                     "src/helper/**/*",
-                    "test/*/src/*",
+                    "test-client/*/src/*",
                     "sample/**/*"
                 ],
                 "env": {
