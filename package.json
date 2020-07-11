@@ -21,7 +21,7 @@
         "esifycss": "lib/bin/esifycss.js"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src scripts @types test",
+        "lint": "eslint --ext .ts src scripts @types test-client",
         "build:cleanup": "rimraf lib src/helper/*.js",
         "build:helper:cleanup": "rimraf lib/helper",
         "build:helper:tsc": "tsc --project tsconfig.helper.json",
@@ -40,14 +40,8 @@
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
         "build:sample2": "run-s build:sample2:cleanup build:sample2:copy build:sample2:esifycss",
         "build": "run-s build:cleanup build:tsc build:dts build:helper build:bin build:sample*",
-        "test:minifier": "ava '{lib,src}/minifier/**/*.test.js'",
-        "test:parser": "ava '{lib,src}/parser/**/*.test.js'",
-        "test:postcssPlugin": "ava '{lib,src}/postcssPlugin/**/*.test.js'",
-        "test:util": "ava '{lib,src}/util/**/*.test.js'",
-        "test:runner": "ava '{lib,src}/runner/**/*.test.js'",
-        "test": "run-s test:*",
-        "test-ts": "ava 'src/**/*.test.ts'",
-        "test-client": "ava 'test/run.ts'",
+        "test": "ava --config ava.config.lib.cjs",
+        "test-client": "ava --config ava.config.client.cjs",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
         "version": "run-s version:changelog version:add",
@@ -74,7 +68,6 @@
         "@types/jsdom": "^16.2.3",
         "@types/micromatch": "^4.0.1",
         "@types/node": "^14.0.13",
-        "@types/postcss-scss": "file:@types/postcss-scss",
         "@types/selenium-webdriver": "^4.0.9",
         "@typescript-eslint/eslint-plugin": "^3.3.0",
         "@typescript-eslint/parser": "^3.3.0",
@@ -91,17 +84,6 @@
         "selenium-webdriver": "^4.0.0-alpha.7",
         "ts-node": "^8.10.2",
         "typescript": "^3.9.5"
-    },
-    "ava": {
-        "extensions": [
-            "js",
-            "ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "verbose": true,
-        "timeout": "2m"
     },
     "eslintConfig": {
         "extends": "./node_modules/@nlib/lint/.eslintrc.json",
@@ -136,7 +118,7 @@
             },
             {
                 "files": [
-                    "test/**/*.ts",
+                    "test-client/**/*.ts",
                     "*.test.ts",
                     "*.for-test.ts"
                 ],
@@ -168,7 +150,7 @@
             {
                 "files": [
                     "src/helper/**/*",
-                    "test/*/src/*",
+                    "test-client/*/src/*",
                     "sample/**/*"
                 ],
                 "env": {

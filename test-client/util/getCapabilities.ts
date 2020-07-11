@@ -53,11 +53,11 @@ export const getBrowserStackCapabilities = (
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Firefox'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'Edge'}));
         capabilities.push(mergeCapability({...commonOptions, os: 'Windows', osVersion: '10'}, {browserName: 'IE'}));
-        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Chrome'}));
-        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Firefox'}));
-        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Mojave'}, {browserName: 'Safari'}));
+        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Catalina'}, {browserName: 'Chrome'}));
+        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Catalina'}, {browserName: 'Firefox'}));
+        capabilities.push(mergeCapability({...commonOptions, os: 'OS X', osVersion: 'Catalina'}, {browserName: 'Safari'}));
         capabilities.push(mergeCapability({...commonOptions, osVersion: '13', deviceName: 'iPhone 11', realMobile: 'true'}, {browserName: 'Safari'}));
-        capabilities.push(mergeCapability({...commonOptions, osVersion: '9.0', deviceName: 'Google Pixel 3', realMobile: 'true'}, {browserName: 'Chrome'}));
+        capabilities.push(mergeCapability({...commonOptions, osVersion: '10.0', deviceName: 'Google Pixel 4', realMobile: 'true'}, {browserName: 'Chrome'}));
     }
     return capabilities;
 };
