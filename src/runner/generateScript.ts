@@ -23,16 +23,11 @@ export const generateScript = (
     if (!props.root) {
         throw new Error(`No root: ${props.root}`);
     }
-    process.stdout.write([
-        `Output: ${path.dirname(props.output)}`,
-        `Helper: ${props.helper}`,
-        `Relative: ${path.relative(path.dirname(props.output), props.helper)}`,
-        '',
-    ].join('\n'));
-    const helperPath = path.relative(path.dirname(props.output), props.helper)
-    .replace(/\.ts$/, '')
-    .replace(/^([^./])/, './$1')
-    .split(path.sep).join('/');
+    let helperPath = path.relative(path.dirname(props.output), props.helper);
+    helperPath = helperPath.replace(/\.ts$/, '');
+    if (!path.isAbsolute(helperPath)) {
+        helperPath = `./${path.normalize(helperPath).split(path.sep).join('/')}`;
+    }
     return [
         `import {addStyle} from '${helperPath}';`,
         `addStyle([${(props.root.nodes || []).map((node) => `{${props.cssKey}: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
