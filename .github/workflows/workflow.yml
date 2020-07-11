@@ -41,6 +41,7 @@ jobs:
         with:
           name: package
           path: esifycss-*.tgz
+      - run: npm run build
   Test:
     runs-on: ${{ matrix.os }}
     needs:
