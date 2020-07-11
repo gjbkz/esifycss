@@ -2,11 +2,11 @@ import * as path from 'path';
 import anyTest, {TestInterface, ExecutionContext} from 'ava';
 import * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
+import * as parser from '@hookun/parse-animation-shorthand';
 import {ISessionOptions} from './types';
 import {writeFile} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
-import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
 import {runCode, IRunCodeResult} from '../util/runCode.for-test';
 
 interface ITestContext {
@@ -68,8 +68,8 @@ interface ITest {
                         t.is(declarations.length, 1);
                         t.is(declarations[0].prop, 'animation');
                         t.deepEqual(
-                            parseAnimationShorthand(declarations[0].value),
-                            parseAnimationShorthand(`1s 0.5s linear infinite ${keyframes.foo}`),
+                            parser.parse(declarations[0].value),
+                            parser.parse(`1s 0.5s linear infinite ${keyframes.foo}`),
                         );
                     }
                 },
