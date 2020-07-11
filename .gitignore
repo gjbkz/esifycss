@@ -6,7 +6,7 @@ output
 .cache
 .nyc_output
 !sample
-test/**/*.css.js
-test/**/*.css.ts
-test/**/*.css.d.ts
-test/*/package-lock.json
+test-client/**/*.css.js
+test-client/**/*.css.ts
+test-client/**/*.css.d.ts
+test-client/**/package-lock.json
