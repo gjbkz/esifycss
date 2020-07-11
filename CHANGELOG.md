@@ -1,3 +1,12 @@
+## [1.4.21](https://github.com/kei-ito/esifycss/compare/v1.4.20...v1.4.21) (2020-07-11)
+
+
+### Reverts
+
+* Revert "1.4.21" ([57f2923](https://github.com/kei-ito/esifycss/commit/57f2923a67ed50ba777d67b4c782d8b6b34fb379))
+
+
+
 ## [1.4.20](https://github.com/kei-ito/esifycss/compare/v1.4.19...v1.4.20) (2020-06-25)
 
 
