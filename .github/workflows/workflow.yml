@@ -36,12 +36,12 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm run build
-      - run: npm pack
-      - uses: actions/upload-artifact@v2
-        with:
-          name: package
-          path: esifycss-*.tgz
-      - run: npm run build
+      # - run: npm pack
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: package-${{ matrix.os }}
+      #     path: esifycss-*.tgz
+      # - run: npm run build
   Test:
     runs-on: ${{ matrix.os }}
     needs:
