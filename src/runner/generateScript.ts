@@ -26,7 +26,7 @@ export const generateScript = (
     let helperPath = path.relative(path.dirname(props.output), props.helper);
     helperPath = helperPath.replace(/\.ts$/, '');
     if (!path.isAbsolute(helperPath)) {
-        helperPath = `./${path.normalize(helperPath)}`;
+        helperPath = `./${path.normalize(helperPath)}`.replace(/^\.\/\.\./, '..');
     }
     return [
         `import {addStyle} from '${helperPath.split(path.sep).join('/')}';`,
