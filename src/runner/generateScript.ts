@@ -26,10 +26,10 @@ export const generateScript = (
     let helperPath = path.relative(path.dirname(props.output), props.helper);
     helperPath = helperPath.replace(/\.ts$/, '');
     if (!path.isAbsolute(helperPath)) {
-        helperPath = `./${path.normalize(helperPath).split(path.sep).join('/')}`;
+        helperPath = `./${path.normalize(helperPath)}`;
     }
     return [
-        `import {addStyle} from '${helperPath}';`,
+        `import {addStyle} from '${helperPath.split(path.sep).join('/')}';`,
         `addStyle([${(props.root.nodes || []).map((node) => `{${props.cssKey}: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
         `export const className = ${JSON.stringify(props.result.className, null, 4)};`,
         `export const id = ${JSON.stringify(props.result.id, null, 4)};`,
