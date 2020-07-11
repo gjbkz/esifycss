@@ -3,10 +3,10 @@ import anyTest, {TestInterface} from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
 import * as postcss from 'postcss';
+import * as parser from '@hookun/parse-animation-shorthand';
 import {writeFile, deleteFile, stat} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
-import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
 import {runCode} from '../util/runCode.for-test';
 
 interface ITestContext {
@@ -97,12 +97,12 @@ test('#watch', async (t) => {
         t.is(declarations2.length, 1);
         t.is(declarations2[0].prop, 'animation');
         t.deepEqual(
-            parseAnimationShorthand(declarations1[0].value),
-            parseAnimationShorthand(`1s 0.5s linear infinite ${result1.keyframes.foo}`),
+            parser.parse(declarations1[0].value),
+            parser.parse(`1s 0.5s linear infinite ${result1.keyframes.foo}`),
         );
         t.deepEqual(
-            parseAnimationShorthand(declarations2[0].value),
-            parseAnimationShorthand(`2s 1s linear infinite ${result1.keyframes.foo}`),
+            parser.parse(declarations2[0].value),
+            parser.parse(`2s 1s linear infinite ${result1.keyframes.foo}`),
         );
     }
 });

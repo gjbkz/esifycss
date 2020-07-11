@@ -1,8 +1,8 @@
 import test from 'ava';
-import {plugin} from './plugin';
 import * as postcss from 'postcss';
+import * as parser from '@hookun/parse-animation-shorthand';
+import {plugin} from './plugin';
 import {extractPluginResult} from '../runner/extractPluginResult';
-import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
 
 const getFirstDeclaration = (
     rule: postcss.Rule,
@@ -75,8 +75,8 @@ test('plugin', async (t): Promise<void> => {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation');
             t.deepEqual(
-                parseAnimationShorthand(declaration.value),
-                parseAnimationShorthand(`linear ${mapA.keyframes.aaa} 1s 123ms`),
+                parser.parse(declaration.value),
+                parser.parse(`linear ${mapA.keyframes.aaa} 1s 123ms`),
             );
         }
     }

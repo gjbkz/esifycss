@@ -1,7 +1,6 @@
 import * as postcss from 'postcss';
+import * as parser from '@hookun/parse-animation-shorthand';
 import {IEsifyCSSResult, IImports, IPluginMangler} from './types';
-import {parseAnimationShorthand} from '../parser/parseAnimationShorthand';
-import {serializeCSSAnimationShorthand} from '../parser/serializeAnimationShorthand';
 import {getMatchedImport} from './getMatchedImport';
 
 export const transformDeclarations = (
@@ -31,12 +30,15 @@ export const transformDeclarations = (
                 declaration.value = renamed;
             }
         } else if (prop === 'animation') {
-            const animation = parseAnimationShorthand(declaration.value);
-            const renamed = getRenamed(animation.name);
-            if (renamed) {
-                animation.name = renamed;
-                declaration.value = serializeCSSAnimationShorthand(animation);
+            const animations: Array<string> = [];
+            for (const animation of parser.parse(declaration.value)) {
+                const renamed = getRenamed(animation.name);
+                if (renamed) {
+                    animation.name = renamed;
+                }
+                animations.push(parser.serialize(animation));
             }
+            declaration.value = animations.join(',');
         }
     });
 };

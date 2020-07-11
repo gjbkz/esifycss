@@ -1,7 +1,7 @@
 const dictionary = [
         ":",         "{",         "}",         "_",         " ",         "-", "animation",         "0",         "%",         ";",
         "1",         "@", "keyframes",   "opacity",       "100", "transform",    "rotate",         "(",       "deg",         ")",
-        "s",    "linear",         ".",         "3",         "4",       "360",         "#",   "display",      "flex",       "0.2",
+        "s",    "linear",         ".",         "3",         "4",       "360",         "#",   "display",      "flex",        ".2",
  "duration", "iteration",     "count",  "infinite",    "timing",  "function",      "name",         "8",         "9",        "1.",
         "2",         "5",         "6",        "6.",         "7",
 ];
