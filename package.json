@@ -40,7 +40,7 @@
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
         "build:sample2": "run-s build:sample2:cleanup build:sample2:copy build:sample2:esifycss",
         "build": "run-s build:cleanup build:tsc build:dts build:helper build:bin build:sample*",
-        "test": "ava --config ava.config.all.cjs",
+        "test": "ava --config ava.config.lib.cjs",
         "test-client": "ava --config ava.config.client.cjs",
         "version:changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file --release-count 0",
         "version:add": "git add .",
