@@ -46,14 +46,15 @@ interface ITest {
                 path: '/components/style.css',
                 content: [
                     '@keyframes foo {0%{color: red}100%{color:green}}',
-                    '.foo#bar {animation: 1s 0.5s linear infinite foo}',
+                    '@keyframes bar {0%{color: red}100%{color:green}}',
+                    '.foo#bar {animation: 1s 0.5s linear infinite foo, 1s 0.5s ease 5 bar}',
                 ],
                 test: (t, {className, id, keyframes, root}) => {
                     t.deepEqual(Object.keys(id), ['bar']);
                     t.deepEqual(Object.keys(className), ['foo']);
-                    t.deepEqual(Object.keys(keyframes), ['foo']);
+                    t.deepEqual(Object.keys(keyframes), ['foo', 'bar']);
                     const nodes = root.nodes || [];
-                    t.is(nodes.length, 2);
+                    t.is(nodes.length, 3);
                     {
                         const node = nodes[0] as postcss.AtRule;
                         t.is(node.type, 'atrule');
@@ -61,7 +62,13 @@ interface ITest {
                         t.is(node.params, keyframes.foo);
                     }
                     {
-                        const node = nodes[1] as postcss.Rule;
+                        const node = nodes[1] as postcss.AtRule;
+                        t.is(node.type, 'atrule');
+                        t.is(node.name, 'keyframes');
+                        t.is(node.params, keyframes.bar);
+                    }
+                    {
+                        const node = nodes[2] as postcss.Rule;
                         t.is(node.type, 'rule');
                         t.is(node.selector, `.${className.foo}#${id.bar}`);
                         const declarations = (node.nodes || []) as Array<postcss.Declaration>;
@@ -69,7 +76,10 @@ interface ITest {
                         t.is(declarations[0].prop, 'animation');
                         t.deepEqual(
                             parser.parse(declarations[0].value),
-                            parser.parse(`1s 0.5s linear infinite ${keyframes.foo}`),
+                            parser.parse([
+                                `1s 0.5s linear infinite ${keyframes.foo}`,
+                                `1s 0.5s ease 5 ${keyframes.bar}`,
+                            ].join(',')),
                         );
                     }
                 },
