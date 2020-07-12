@@ -1,3 +1,12 @@
+## [1.4.22](https://github.com/kei-ito/esifycss/compare/v1.4.21...v1.4.22) (2020-07-12)
+
+
+### Bug Fixes
+
+* support <url> ([af229eb](https://github.com/kei-ito/esifycss/commit/af229ebe5d2772ee9f733d0b1f18163f12e10331))
+
+
+
 ## [1.4.21](https://github.com/kei-ito/esifycss/compare/v1.4.20...v1.4.21) (2020-07-11)
 
 
