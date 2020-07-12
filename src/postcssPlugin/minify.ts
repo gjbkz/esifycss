@@ -11,10 +11,12 @@ interface INodeRaws extends postcss.NodeRaws {
 export const minify = (
     root: postcss.Root,
 ): postcss.Root => {
-    root.walkComments((comment) => comment.remove());
     Object.assign(root.raws, {semicolon: false, after: ''});
     root.walk((node) => {
         switch (node.type) {
+        case 'comment':
+            node.remove();
+            break;
         case 'atrule':
             Object.assign(node.raws, {before: '', between: '', afterName: ' '});
             break;

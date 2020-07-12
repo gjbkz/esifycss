@@ -14,8 +14,11 @@ interface ITest {
     },
     {
         css: [
+            '  /* comment */',
             ' @import url("foo.css") print  ; ;',
+            '  /* comment */',
             '\n.foo  #bar >  div { ; ; foo : bar ; ; bar : "foo" ; ;; } ;\n\n',
+            '  /* comment */',
         ].join('\n;;\n'),
         expected: [
             '@import url("foo.css") print;',
@@ -23,7 +26,7 @@ interface ITest {
         ].join(''),
     },
 ] as Array<ITest>).forEach(({css, expected}, index) => {
-    test(`#${index + 1}`, (t) => {
+    test(`#${index + 1} ${expected}`, (t) => {
         const root = minify(postcss.parse(css));
         t.is(root.toString(), expected);
     });
