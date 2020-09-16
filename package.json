@@ -204,14 +204,7 @@
     },
     "renovate": {
         "extends": [
-            ":ignoreModulesAndTests",
-            ":unpublishSafe",
-            ":semanticPrefixChore",
-            ":prNotPending",
-            ":prConcurrentLimit10",
-            ":prHourlyLimitNone",
-            ":label(dependencies)",
-            ":automergeMinor"
+            "github>nlibjs/renovate-config"
         ]
     }
 }
