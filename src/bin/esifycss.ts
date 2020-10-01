@@ -22,7 +22,7 @@ export const program = new commander.Command()
 .option('--noMangle', 'Keep the original name for debugging.')
 .option('--watch', 'Watch files and update the modules automatically.') as IEsifyCSSCommand;
 
-if (!module.parent) {
+if (require.main === module) {
     program.parse(process.argv);
     loadParameters(program)
     .then(async (parameters) => {
