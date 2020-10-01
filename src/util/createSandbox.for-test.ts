@@ -84,7 +84,7 @@ class Document {
         }
     }
 
-    public* walkElements(): IterableIterator<Element> {
+    public *walkElements(): IterableIterator<Element> {
         yield* walkElements(this.head);
         yield* walkElements(this.body);
     }

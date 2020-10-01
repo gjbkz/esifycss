@@ -5,11 +5,11 @@ export const createDirectoryFor = (filePath: string) => {
     const directory = path.dirname(filePath);
     try {
         fs.readdirSync(directory);
-    } catch (err) {
+    } catch {
         createDirectoryFor(directory);
         try {
             fs.mkdirSync(directory);
-        } catch (err2) {
+        } catch (err2: unknown) {
             if ((err2 as {code?: string}).code !== 'EEXIST') {
                 throw err2;
             }

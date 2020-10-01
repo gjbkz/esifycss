@@ -14,7 +14,7 @@ export const createTransformer = (
     root: postcss.Root,
     result: postcss.Result,
 ): Promise<IEsifyCSSResult> => {
-    const id = normalizePath((result.opts && result.opts.from) || Date.now().toString(36));
+    const id = normalizePath(result.opts.from || Date.now().toString(36));
     const imports = getImports(root, id);
     const transformResult: IEsifyCSSResult = {
         ...(await mangleIdentifiers({id, root, mangler, imports, rawPrefix})),
