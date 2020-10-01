@@ -1,3 +1,7 @@
+## [1.4.23](https://github.com/kei-ito/esifycss/compare/v1.4.22...v1.4.23) (2020-10-01)
+
+
+
 ## [1.4.22](https://github.com/kei-ito/esifycss/compare/v1.4.21...v1.4.22) (2020-07-12)
 
 
