@@ -1,16 +1,8 @@
-import * as postcss from 'postcss';
-
-interface INodeRaws extends postcss.NodeRaws {
-    value?: {
-        value: string,
-        raw: string,
-    },
-    ownSemicolon?: string,
-}
+import {Root} from 'postcss';
 
 export const minify = (
-    root: postcss.Root,
-): postcss.Root => {
+    root: Root,
+): Root => {
     Object.assign(root.raws, {semicolon: false, after: ''});
     root.walk((node) => {
         switch (node.type) {
@@ -29,7 +21,7 @@ export const minify = (
             break;
         case 'decl': {
             Object.assign(node.raws, {before: '', between: ':', semicolon: true, after: '', ownSemicolon: ''});
-            const {value} = node.raws as INodeRaws;
+            const value = node.raws.value as {raw: string, value: string} | undefined;
             if (value) {
                 value.raw = value.value;
             }

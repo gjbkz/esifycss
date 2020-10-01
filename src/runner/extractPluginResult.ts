@@ -1,6 +1,6 @@
 import * as postcss from 'postcss';
 import {IEsifyCSSResult} from '../postcssPlugin/types';
-import {pluginName} from '../postcssPlugin/plugin';
+import {PluginName} from '../postcssPlugin/plugin';
 
 export const extractPluginResult = (
     postcssResult: postcss.Result,
@@ -11,7 +11,7 @@ export const extractPluginResult = (
         keyframes: {},
     };
     for (const warning of postcssResult.warnings()) {
-        if (warning.plugin === pluginName) {
+        if (warning.plugin === PluginName) {
             const result = JSON.parse(warning.text) as IEsifyCSSResult;
             Object.assign(pluginResult.className, result.className);
             Object.assign(pluginResult.id, result.id);
