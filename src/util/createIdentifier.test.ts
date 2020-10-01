@@ -21,7 +21,7 @@ test('#1 with listener', (t) => {
     const id3 = identifier('foo');
     t.is(id3, id1);
     t.deepEqual(log, {
-        'foo': id1,
-        'bar': id2,
+        foo: id1,
+        bar: id2,
     });
 });

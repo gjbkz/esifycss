@@ -70,7 +70,9 @@ test.afterEach(async (t) => {
         });
     });
     if (t.context.bsLocal) {
-        await new Promise((resolve) => t.context.bsLocal.stop(resolve));
+        await new Promise((resolve) => {
+            t.context.bsLocal.stop(resolve);
+        });
     }
 });
 
@@ -78,7 +80,7 @@ const testDirectories = fs.readdirSync(__dirname)
 .filter((name) => {
     try {
         return fs.statSync(path.join(__dirname, name, 'package.json')).isFile();
-    } catch (error) {
+    } catch {
         return false;
     }
 });

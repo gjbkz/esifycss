@@ -22,25 +22,24 @@ const test = () => {
     fooElement.textContent = 'FOO';
 
     const computedStyle = getComputedStyle(fooElement);
-    const result = [
+    const status = [
         {name: 'text-align', expected: 'center'},
         {name: 'animation-duration', expected: '2s'},
         {name: 'animation-iteration-count', expected: 'infinite'},
         {name: 'animation-name', expected: css.keyframes.foo},
         {name: 'font-size', expected: '30px'},
-    ]
-    .reduce((result, {name, expected}) => {
+    ].reduce((result, {name, expected}) => {
         const actual = (computedStyle.getPropertyValue(name) || '').trim();
         log(JSON.stringify({name, actual, expected}));
         return result && actual === expected;
     }, true);
-    const summary = result ? 'passed' : 'failed';
+    const summary = status ? 'passed' : 'failed';
     document.title += ` → ${summary}`;
     log(summary);
 };
 
 try {
     test();
-} catch (error) {
-    log(error);
+} catch (error: unknown) {
+    log(`${error}`);
 }

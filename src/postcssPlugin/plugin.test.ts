@@ -1,17 +1,18 @@
 import test from 'ava';
-import * as postcss from 'postcss';
+import {Rule, Declaration, AtRule} from 'postcss';
+import {postcss} from '../util/postcss';
 import * as parser from '@hookun/parse-animation-shorthand';
 import {plugin} from './plugin';
 import {extractPluginResult} from '../runner/extractPluginResult';
 
 const getFirstDeclaration = (
-    rule: postcss.Rule,
-): postcss.Declaration => {
+    rule: Rule,
+): Declaration => {
     if (rule.nodes) {
         if (rule.nodes[1]) {
             throw new Error(`The given rule has multiple declarations: ${rule}`);
         }
-        return rule.nodes[0] as postcss.Declaration;
+        return rule.nodes[0] as Declaration;
     }
     throw new Error(`The given rule has no nodes: ${rule}`);
 };
@@ -52,13 +53,13 @@ test('plugin', async (t): Promise<void> => {
     const nodes = [...(rootA.nodes || []), ...(rootB.nodes || [])];
     let index = 0;
     {
-        const node = nodes[index++] as postcss.AtRule;
+        const node = nodes[index++] as AtRule;
         t.is(node.type, 'atrule');
         t.is(node.name, 'keyframes');
         t.is(node.params, mapA.keyframes.aaa);
     }
     {
-        const node = nodes[index++] as postcss.Rule;
+        const node = nodes[index++] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `.${mapA.className.foo}:first-child[data-hello=abc]`);
         {
@@ -68,7 +69,7 @@ test('plugin', async (t): Promise<void> => {
         }
     }
     {
-        const node = nodes[index++] as postcss.Rule;
+        const node = nodes[index++] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `#${mapA.id.bar1},#${mapA.id.bar2}:nth-of-type(2):not([data-hello=abc])`);
         {
@@ -81,7 +82,7 @@ test('plugin', async (t): Promise<void> => {
         }
     }
     {
-        const node = nodes[index++] as postcss.Rule;
+        const node = nodes[index++] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `.${mapB.className.foo}>.foo`);
         {
@@ -91,7 +92,7 @@ test('plugin', async (t): Promise<void> => {
         }
     }
     {
-        const node = nodes[index++] as postcss.Rule;
+        const node = nodes[index++] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `#${mapB.id.bar}>#bar`);
         {
@@ -101,13 +102,13 @@ test('plugin', async (t): Promise<void> => {
         }
     }
     {
-        const node = nodes[index++] as postcss.AtRule;
+        const node = nodes[index++] as AtRule;
         t.is(node.type, 'atrule');
         t.is(node.name, 'keyframes');
         t.is(node.params, mapB.keyframes.aaa);
     }
     {
-        const node = nodes[index++] as postcss.Rule;
+        const node = nodes[index++] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `.${mapB.className.foo}`);
         {
@@ -117,7 +118,7 @@ test('plugin', async (t): Promise<void> => {
         }
     }
     {
-        const node = nodes[index++] as postcss.Rule;
+        const node = nodes[index++] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `#${mapB.id.bar}`);
         {

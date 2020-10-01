@@ -44,7 +44,7 @@ export const deleteFile = async (
 ): Promise<void> => {
     try {
         await unlink(filePath);
-    } catch (error) {
+    } catch (error: unknown) {
         switch ((error as {code?: string}).code) {
         case 'ENOENT':
             return;
