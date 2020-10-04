@@ -15,7 +15,9 @@
     "main": "lib/index.js",
     "files": [
         "lib",
-        "@types"
+        "@types",
+        "!*.test.*",
+        "!*.map"
     ],
     "bin": {
         "esifycss": "lib/bin/esifycss.js"
@@ -44,10 +46,7 @@
         "test-client": "ava --config ava.config.client.cjs",
         "version": "run-s version:changelog version:add",
         "version:changelog": "nlib-changelog --output CHANGELOG.md",
-        "version:add": "git add .",
-        "prepack:test": "rimraf lib/**/*.test.* lib/**/*.for-test.*",
-        "prepack:sourcemap": "remove-sourcemap lib",
-        "prepack": "run-s prepack:test prepack:sourcemap"
+        "version:add": "git add ."
     },
     "dependencies": {
         "@hookun/parse-animation-shorthand": "^0.1.2",
@@ -63,7 +62,7 @@
         "@nlib/changelog": "^0.1.8",
         "@nlib/eslint-config": "^3.17.12",
         "@nlib/lint-commit": "^0.1.3",
-        "@nlib/remove-sourcemap": "^3.17.4",
+        "@nlib/nodetool": "^0.1.11",
         "@types/anymatch": "^1.3.1",
         "@types/jsdom": "^16.2.4",
         "@types/micromatch": "^4.0.1",
