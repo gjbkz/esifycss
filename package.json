@@ -59,7 +59,7 @@
         "vlq": "^1.0.1"
     },
     "devDependencies": {
-        "@nlib/changelog": "^0.1.8",
+        "@nlib/changelog": "^0.1.9",
         "@nlib/eslint-config": "^3.17.12",
         "@nlib/lint-commit": "^0.1.3",
         "@nlib/nodetool": "^0.1.11",
