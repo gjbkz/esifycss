@@ -74,6 +74,36 @@ interface ITest {
             {
                 path: '/components/style.css',
                 content: [
+                    '@charset "UTF-8";',
+                    '.foo {color: blue}',
+                ],
+                test: (t, {className, id, keyframes, root}) => {
+                    t.deepEqual(Object.keys(id), []);
+                    t.deepEqual(Object.keys(className), ['foo']);
+                    t.deepEqual(Object.keys(keyframes), []);
+                    const [ruleNode, anotherNode] = root.nodes as Array<postcss.Rule>;
+                    t.is(anotherNode, undefined);
+                    t.like(ruleNode, {
+                        type: 'rule',
+                        selector: `.${className.foo}`,
+                    });
+                    const [declaration, anotherDeclaration] = ruleNode.nodes;
+                    t.is(anotherDeclaration, undefined);
+                    t.like(declaration, {
+                        type: 'decl',
+                        prop: 'color',
+                        value: 'blue',
+                    });
+                },
+            },
+        ],
+    },
+    {
+        parameters: {},
+        files: [
+            {
+                path: '/components/style.css',
+                content: [
                     '@keyframes foo {0%{color: red}100%{color:green}}',
                     '@keyframes bar {0%{color: red}100%{color:green}}',
                     '.foo#bar {animation: 1s 0.5s linear infinite foo, 1s 0.5s ease 5 bar}',
