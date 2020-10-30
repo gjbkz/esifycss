@@ -55,22 +55,22 @@ interface ITest {
                     t.deepEqual(Object.keys(keyframes), ['foo', 'bar']);
                     const nodes = root.nodes || [];
                     t.is(nodes.length, 3);
-                    {
-                        const node = nodes[0] as postcss.AtRule;
-                        t.is(node.type, 'atrule');
-                        t.is(node.name, 'keyframes');
-                        t.is(node.params, keyframes.foo);
-                    }
-                    {
-                        const node = nodes[1] as postcss.AtRule;
-                        t.is(node.type, 'atrule');
-                        t.is(node.name, 'keyframes');
-                        t.is(node.params, keyframes.bar);
-                    }
+                    t.like(nodes[0], {
+                        type: 'atrule',
+                        name: 'keyframes',
+                        params: keyframes.foo,
+                    });
+                    t.like(nodes[1], {
+                        type: 'atrule',
+                        name: 'keyframes',
+                        params: keyframes.bar,
+                    });
                     {
                         const node = nodes[2] as postcss.Rule;
-                        t.is(node.type, 'rule');
-                        t.is(node.selector, `.${className.foo}#${id.bar}`);
+                        t.like(node, {
+                            type: 'rule',
+                            selector: `.${className.foo}#${id.bar}`,
+                        });
                         const declarations = (node.nodes || []) as Array<postcss.Declaration>;
                         t.is(declarations.length, 1);
                         t.is(declarations[0].prop, 'animation');
