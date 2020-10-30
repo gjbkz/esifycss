@@ -6,7 +6,7 @@ const getCSS = (
     node: postcss.ChildNode,
 ): string => {
     const css = node.toString();
-    return css;
+    return css.endsWith('}') ? css : `${css};`;
 };
 
 export const generateScript = (
