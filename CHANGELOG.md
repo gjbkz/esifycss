@@ -1,9 +1,17 @@
 # Changelog
 
+## v1.4.25 (2020-10-30)
+
+### Dependency Upgrades
+
+- upgrade dependencies (#107) (d5bc422)
+
+
 ## v1.4.24 (2020-10-04)
 
 ### Continuous Integration
 
+- fix scripts before publish (bbadd29)
 - remove the prepack scripts (c1ad02c)
 
 ### Dependency Upgrades
