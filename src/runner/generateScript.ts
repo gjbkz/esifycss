@@ -2,6 +2,13 @@ import * as path from 'path';
 import * as postcss from 'postcss';
 import {IEsifyCSSResult} from '../postcssPlugin/types';
 
+const getCSS = (
+    node: postcss.ChildNode,
+): string => {
+    const css = node.toString();
+    return css;
+};
+
 export const generateScript = (
     /**
      * Returns a (TypeScript-compatible) JavaScript code that exports className,
@@ -27,7 +34,7 @@ export const generateScript = (
     }
     return [
         `import {addStyle} from '${helperPath.split(path.sep).join('/')}';`,
-        `addStyle([${props.root.nodes.map((node) => `{${props.cssKey}: ${JSON.stringify(node.toString())}}`).join(',')}]);`,
+        `addStyle([${props.root.nodes.map((node) => `{${props.cssKey}: ${JSON.stringify(getCSS(node))}}`).join(',')}]);`,
         `export const className = ${JSON.stringify(props.result.className, null, 4)};`,
         `export const id = ${JSON.stringify(props.result.id, null, 4)};`,
         `export const keyframes = ${JSON.stringify(props.result.keyframes, null, 4)};`,
