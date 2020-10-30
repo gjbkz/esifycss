@@ -3,6 +3,22 @@ on:
   - push
   - pull_request
 jobs:
+  CheckRenovate:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+        node:
+          - 14.x
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install -g renovate
+      - run: renovate-config-validator
   Setup:
     runs-on: ${{ matrix.os }}
     strategy:
