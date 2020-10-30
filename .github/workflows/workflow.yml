@@ -84,7 +84,7 @@ jobs:
       - run: npx c8 report --reporter=text-lcov > coverage.lcov
       - uses: codecov/codecov-action@v1
   TestClient:
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ contains(github.ref, "master") || github.event_name == 'pull_request' }}
     runs-on: ${{ matrix.os }}
     needs:
       - Setup
