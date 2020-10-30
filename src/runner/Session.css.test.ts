@@ -29,16 +29,16 @@ test('#css', async (t) => {
         {
             path: 'input1.css',
             content: [
-                '.a1 {color: a1}',
-                '.b1 {color: b1}',
+                '.a1 {color: a1; width: 10%}',
+                '.b1 {color: b1; width: 20%}',
             ],
         },
         {
             path: 'input2.css',
             content: [
                 '@charset "utf-8";',
-                '.a2 {color: a2}',
-                '.b2 {color: b2}',
+                '.a2 {color: a2; width: 30%}',
+                '.b2 {color: b2; width: 40%}',
             ],
         },
     ];
