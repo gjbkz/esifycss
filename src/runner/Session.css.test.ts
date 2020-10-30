@@ -29,15 +29,16 @@ test('#css', async (t) => {
         {
             path: 'input1.css',
             content: [
-                '.a1 {color: a1}',
-                '.b1 {color: b1}',
+                '.a1 {color: a1; width: 10%}',
+                '.b1 {color: b1; width: 20%}',
             ],
         },
         {
             path: 'input2.css',
             content: [
-                '.a2 {color: a2}',
-                '.b2 {color: b2}',
+                '@charset "utf-8";',
+                '.a2 {color: a2; width: 30%}',
+                '.b2 {color: b2; width: 40%}',
             ],
         },
     ];
@@ -65,9 +66,11 @@ test('#css', async (t) => {
         b2: '_3',
     });
     const resultCSS = await readFile(cssPath, 'utf8');
-    const {nodes = []} = postcss.parse(resultCSS);
-    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result1.className.a1}`));
-    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result1.className.b1}`));
-    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result2.className.a2}`));
-    t.truthy(nodes.find((node) => isRule(node) && node.selector === `.${result2.className.b2}`));
+    t.log(`==== resultCSS ====\n${resultCSS}\n===================`);
+    const root = postcss.parse(resultCSS);
+    t.log(root.toJSON());
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result1.className.a1}`));
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result1.className.b1}`));
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result2.className.a2}`));
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result2.className.b2}`));
 });

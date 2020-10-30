@@ -8,8 +8,7 @@ export const minifyScriptForCSS = async (
     const cssList: Array<string> = [];
     let code = data.script;
     for (let index = data.ranges.length; index--;) {
-        const range = data.ranges[index];
-        cssList[index] = range.css;
+        cssList[index] = data.ranges[index].css;
     }
     code = data.statements
     .sort((range1, range2) => range1.start < range2.start ? 1 : -1)

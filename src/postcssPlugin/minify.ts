@@ -10,7 +10,17 @@ export const minify = (
             node.remove();
             break;
         case 'atrule':
-            Object.assign(node.raws, {before: '', between: '', afterName: ' '});
+            if (node.name === 'charset') {
+                /**
+                 * https://www.w3.org/TR/CSS2/syndata.html#x57
+                 * > User agents must ignore any @charset rule not at the beginning of the style sheet.
+                 * https://www.w3.org/TR/css-syntax-3/#charset-rule
+                 * > However, there is no actual at-rule named @charset.
+                 */
+                node.remove();
+            } else {
+                Object.assign(node.raws, {before: '', between: '', afterName: ' '});
+            }
             break;
         case 'rule':
             node.selector = node.selector

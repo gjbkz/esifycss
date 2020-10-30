@@ -42,9 +42,6 @@ export const addStyle = (rules: Array<string | {$$esifycss: string}>): void => {
     }
     const cssStyleSheet = style.sheet as CSSStyleSheet;
     rules.forEach((words) => {
-        const rule = decode(words);
-        if (!(/^\s*@charset/i).test(rule)) {
-            cssStyleSheet.insertRule(rule, cssStyleSheet.cssRules.length);
-        }
+        cssStyleSheet.insertRule(decode(words), cssStyleSheet.cssRules.length);
     });
 };
