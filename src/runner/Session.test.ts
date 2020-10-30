@@ -45,6 +45,35 @@ interface ITest {
             {
                 path: '/components/style.css',
                 content: [
+                    '.foo {color: red}',
+                ],
+                test: (t, {className, id, keyframes, root}) => {
+                    t.deepEqual(Object.keys(id), []);
+                    t.deepEqual(Object.keys(className), ['foo']);
+                    t.deepEqual(Object.keys(keyframes), []);
+                    const [ruleNode, anotherNode] = root.nodes as Array<postcss.Rule>;
+                    t.is(anotherNode, undefined);
+                    t.like(ruleNode, {
+                        type: 'rule',
+                        selector: `.${className.foo}`,
+                    });
+                    const [declaration, anotherDeclaration] = ruleNode.nodes;
+                    t.is(anotherDeclaration, undefined);
+                    t.like(declaration, {
+                        type: 'decl',
+                        prop: 'color',
+                        value: 'red',
+                    });
+                },
+            },
+        ],
+    },
+    {
+        parameters: {},
+        files: [
+            {
+                path: '/components/style.css',
+                content: [
                     '@keyframes foo {0%{color: red}100%{color:green}}',
                     '@keyframes bar {0%{color: red}100%{color:green}}',
                     '.foo#bar {animation: 1s 0.5s linear infinite foo, 1s 0.5s ease 5 bar}',
@@ -53,25 +82,24 @@ interface ITest {
                     t.deepEqual(Object.keys(id), ['bar']);
                     t.deepEqual(Object.keys(className), ['foo']);
                     t.deepEqual(Object.keys(keyframes), ['foo', 'bar']);
-                    const nodes = root.nodes || [];
-                    t.is(nodes.length, 3);
-                    t.like(nodes[0], {
+                    t.is(root.nodes.length, 3);
+                    t.like(root.nodes[0], {
                         type: 'atrule',
                         name: 'keyframes',
                         params: keyframes.foo,
                     });
-                    t.like(nodes[1], {
+                    t.like(root.nodes[1], {
                         type: 'atrule',
                         name: 'keyframes',
                         params: keyframes.bar,
                     });
                     {
-                        const node = nodes[2] as postcss.Rule;
+                        const node = root.nodes[2] as postcss.Rule;
                         t.like(node, {
                             type: 'rule',
                             selector: `.${className.foo}#${id.bar}`,
                         });
-                        const declarations = (node.nodes || []) as Array<postcss.Declaration>;
+                        const declarations = node.nodes as Array<postcss.Declaration>;
                         t.is(declarations.length, 1);
                         t.is(declarations[0].prop, 'animation');
                         t.deepEqual(
