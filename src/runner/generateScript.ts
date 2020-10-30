@@ -16,13 +16,10 @@ export const generateScript = (
         /** The main contents of the output script. */
         result: IEsifyCSSResult,
         /** The root node will be splitted into rules that can be passed to insertRule. */
-        root?: postcss.Root,
+        root: postcss.Root,
         cssKey: string,
     },
 ): string => {
-    if (!props.root) {
-        throw new Error(`No root: ${props.root}`);
-    }
     let helperPath = path.relative(path.dirname(props.output), props.helper);
     helperPath = helperPath.replace(/\.ts$/, '');
     if (!path.isAbsolute(helperPath)) {
