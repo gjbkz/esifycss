@@ -70,7 +70,7 @@
         "@types/selenium-webdriver": "4.0.10",
         "@typescript-eslint/eslint-plugin": "4.9.0",
         "@typescript-eslint/parser": "4.9.0",
-        "ava": "3.13.0",
+        "ava": "3.14.0",
         "browserstack-local": "1.4.8",
         "eslint": "7.15.0",
         "husky": "4.3.4",
