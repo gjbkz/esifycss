@@ -1,4 +1,3 @@
-import './fetch';
 import fetch from 'node-fetch';
 import * as selenium from 'selenium-webdriver';
 import {browserStack} from './constants';
