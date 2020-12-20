@@ -1,6 +1,19 @@
 # Changelog
 
+## v1.4.26 (2020-12-20)
+
+### Dependency Upgrades
+
+- upgrade dependencies (#165) (2c1b842)
+
+
 ## v1.4.25 (2020-10-30)
+
+### Continuous Integration
+
+- update TestClient condition (78feb22)
+- update TestClient condition (af18829)
+- update TestClient condition (25cabb6)
 
 ### Dependency Upgrades
 
