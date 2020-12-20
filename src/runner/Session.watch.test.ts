@@ -29,35 +29,38 @@ test.afterEach(async (t) => {
     }
 });
 
-test('#watch', async (t) => {
+test('watch', async (t) => {
     const cssPath = path.join(t.context.directory, '/components/style.css');
     const helper = path.join(t.context.directory, 'helper.js');
     const codePath = `${cssPath}${path.extname(helper)}`;
     const messageListener = new events.EventEmitter();
     const waitForMessage = async (
         expected: string | RegExp,
-    ) => {
-        await new Promise<void>((resolve, reject) => {
-            const timeoutId = setTimeout(() => reject(new Error('timeout')), 1000);
-            const onData = (message: string) => {
-                if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
-                    clearTimeout(timeoutId);
-                    resolve();
-                }
-            };
-            messageListener.on('message', onData);
-        });
-    };
+    ) => await new Promise<void>((resolve, reject) => {
+        const timeoutId = setTimeout(() => reject(new Error(`Timeout: waiting ${expected}`)), 1000);
+        const onData = (message: string) => {
+            if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
+                clearTimeout(timeoutId);
+                messageListener.removeListener('message', onData);
+                resolve();
+            }
+        };
+        messageListener.on('message', onData);
+    });
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            const message = `${chunk}`.trim();
+            messageListener.emit('message', message);
+            t.log(message);
+            callback();
+        },
+    });
     t.context.session = new Session({
         helper,
         watch: true,
         include: t.context.directory,
-        stdout: new stream.Writable({
-            write(chunk, _encoding, callback) {
-                messageListener.emit('message', `${chunk}`);
-                callback();
-            },
-        }),
+        stdout: writable,
+        stderr: writable,
     });
     await writeFilep(cssPath, [
         '@keyframes foo {0%{color:red}100%{color:green}}',

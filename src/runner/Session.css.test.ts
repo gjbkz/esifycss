@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import * as stream from 'stream';
 import * as postcss from 'postcss';
 import anyTest, {TestInterface} from 'ava';
 import {Session} from './Session';
@@ -51,10 +52,18 @@ test('#css', async (t) => {
         );
     }));
     const cssPath = path.join(t.context.directory, 'output.css');
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            t.log(`${chunk}`.trim());
+            callback();
+        },
+    });
     const session = t.context.session = new Session({
         css: cssPath,
         include: t.context.directory,
         watch: false,
+        stdout: writable,
+        stderr: writable,
     });
     await session.start();
     const result1 = await runCode(path.join(t.context.directory, 'input1.css.js'));

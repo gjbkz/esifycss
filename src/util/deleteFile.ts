@@ -1,12 +1,9 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as stream from 'stream';
-import {write} from './write';
 const {unlink, readdir, rmdir} = fs.promises;
 
 export const deleteFile = async (
     filePath: string,
-    stdout: stream.Writable = process.stdout,
 ): Promise<void> => {
     try {
         await unlink(filePath);
@@ -18,7 +15,7 @@ export const deleteFile = async (
         case 'EPERM': {
             const files = (await readdir(filePath)).map((name) => path.join(filePath, name));
             await Promise.all(files.map(async (file) => {
-                await deleteFile(file, stdout);
+                await deleteFile(file);
             }));
             await rmdir(filePath);
             break;
@@ -27,5 +24,4 @@ export const deleteFile = async (
             throw error;
         }
     }
-    write(stdout, [`deleted: ${filePath}`]);
 };

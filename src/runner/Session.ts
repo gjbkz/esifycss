@@ -196,6 +196,7 @@ export class Session {
         }
         const {dest, code} = await this.processCSS(file);
         await writeFilep(dest, code);
+        this.log(`written: ${dest}`);
     }
 
     protected async onUnlink(
@@ -203,7 +204,8 @@ export class Session {
     ): Promise<void> {
         const outputPath = path.join(`${file}${this.configuration.ext}`);
         this.processedFiles.delete(file);
-        await deleteFile(outputPath, this.configuration.stdout);
+        await deleteFile(outputPath);
+        this.log(`deleted: ${outputPath}`);
     }
 
 }
