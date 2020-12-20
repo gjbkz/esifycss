@@ -5,7 +5,8 @@ import anyTest, {TestInterface} from 'ava';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
-const {readFile, writeFile} = fs.promises;
+import {writeFilep} from '../util/writeFilep';
+const {readFile} = fs.promises;
 
 interface ITestContext {
     directory: string,
@@ -44,7 +45,7 @@ test('#css', async (t) => {
         },
     ];
     await Promise.all(files.map(async (file) => {
-        await writeFile(
+        await writeFilep(
             path.join(t.context.directory, file.path),
             file.content.join('\n'),
         );

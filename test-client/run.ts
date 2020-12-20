@@ -13,7 +13,7 @@ import {spawn} from './util/spawn';
 import {createBrowserStackLocal} from './util/createBrowserStackLocal';
 import {markResult} from './util/markResult';
 import {getCapabilities} from './util/getCapabilities';
-const afs = fs.promises;
+const {writeFile} = fs.promises;
 
 const test = anyTest as TestInterface<{
     session?: selenium.Session,
@@ -60,7 +60,7 @@ test.afterEach(async (t) => {
     if (t.context.driver) {
         await t.context.driver.quit();
     }
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
         t.context.server.close((error) => {
             if (error) {
                 reject(error);
@@ -70,7 +70,7 @@ test.afterEach(async (t) => {
         });
     });
     if (t.context.bsLocal) {
-        await new Promise((resolve) => {
+        await new Promise<void>((resolve) => {
             t.context.bsLocal.stop(resolve);
         });
     }
@@ -133,7 +133,7 @@ getCapabilities(testDirectories)
         await driver.wait(selenium.until.titleMatches(/(?:passed|failed)$/), 10000);
         const base64 = await driver.takeScreenshot();
         const screenShot = Buffer.from(base64, 'base64');
-        await afs.writeFile(path.join(outputDirectory, `${Date.now()}.png`), screenShot);
+        await writeFile(path.join(outputDirectory, `${Date.now()}.png`), screenShot);
         const title = await driver.getTitle();
         const passed = title === `${path.basename(testDirectory)} → passed`;
         t.true(passed);

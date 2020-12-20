@@ -12,7 +12,8 @@ import {minifyScripts} from '../minifier/minifyScripts';
 import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 import {deleteFile} from '../util/deleteFile';
-const {writeFile, copyFile} = fs.promises;
+import {writeFilep} from '../util/writeFilep';
+const {copyFile} = fs.promises;
 
 export class Session {
 
@@ -194,7 +195,7 @@ export class Session {
             throw new Error(`${file} is not a file.`);
         }
         const {dest, code} = await this.processCSS(file);
-        await writeFile(dest, code);
+        await writeFilep(dest, code);
     }
 
     protected async onUnlink(

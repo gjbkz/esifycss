@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import * as stream from 'stream';
 import anyTest, {TestInterface, ExecutionContext} from 'ava';
 import * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
@@ -8,7 +8,7 @@ import {ISessionOptions} from './types';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode, IRunCodeResult} from '../util/runCode.for-test';
-const {writeFile} = fs.promises;
+import {writeFilep} from '../util/writeFilep';
 
 interface ITestContext {
     directory: string,
@@ -165,19 +165,25 @@ interface ITest {
         ],
     },
 ] as Array<ITest>).forEach(({parameters, files}, index) => {
-    test(`#${index}`, async (t) => {
+    test.serial(`#${index}`, async (t) => {
         await Promise.all(files.map(async (file) => {
-            await writeFile(
-                path.join(t.context.directory, file.path),
-                file.content.join('\n'),
-            );
+            const filePath = path.join(t.context.directory, file.path);
+            await writeFilep(filePath, file.content.join('\n'));
         }));
         const helper = path.join(t.context.directory, 'helper.js');
+        const writable = new stream.Writable({
+            write(chunk, _encoding, callback) {
+                t.log(`${chunk}`.trim());
+                callback();
+            },
+        });
         const session = t.context.session = new Session({
             ...parameters,
             include: t.context.directory,
             helper,
             watch: false,
+            stdout: writable,
+            stderr: writable,
         });
         await session.start();
         const identifiers = new Map<string, string>();

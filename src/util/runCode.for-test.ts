@@ -1,11 +1,10 @@
 import * as path from 'path';
-import * as fs from 'fs';
 import * as vm from 'vm';
 import * as rollup from 'rollup';
 import * as postcss from 'postcss';
 import {createSandbox} from '../util/createSandbox.for-test';
 import {IEsifyCSSResult} from '../postcssPlugin/types';
-const {writeFile} = fs.promises;
+import {writeFilep} from './writeFilep';
 
 export interface IRunCodeResult extends IEsifyCSSResult {
     root: postcss.Root,
@@ -13,7 +12,7 @@ export interface IRunCodeResult extends IEsifyCSSResult {
 
 export const runCode = async (file: string): Promise<IRunCodeResult> => {
     const testCodePath = `${file}-import.js`;
-    await writeFile(testCodePath, `import * as imported from './${path.basename(file)}';exports = imported;`);
+    await writeFilep(testCodePath, `import * as imported from './${path.basename(file)}';exports = imported;`);
     const bundle = await rollup.rollup({input: testCodePath});
     const {output: [output, undef]} = await bundle.generate({format: 'es'});
     if (undef) {
