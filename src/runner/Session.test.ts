@@ -1,13 +1,14 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import anyTest, {TestInterface, ExecutionContext} from 'ava';
 import * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
 import * as parser from '@hookun/parse-animation-shorthand';
 import {ISessionOptions} from './types';
-import {writeFile} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode, IRunCodeResult} from '../util/runCode.for-test';
+const {writeFile} = fs.promises;
 
 interface ITestContext {
     directory: string,

@@ -1,13 +1,15 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import anyTest, {TestInterface} from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
 import * as postcss from 'postcss';
 import * as parser from '@hookun/parse-animation-shorthand';
-import {writeFile, deleteFile, stat} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
+import {deleteFile} from '../util/deleteFile';
+const {writeFile, stat} = fs.promises;
 
 interface ITestContext {
     directory: string,
@@ -34,7 +36,7 @@ test('#watch', async (t) => {
     const waitForMessage = async (
         expected: string | RegExp,
     ) => {
-        await new Promise((resolve, reject) => {
+        await new Promise<void>((resolve, reject) => {
             const timeoutId = setTimeout(() => reject(new Error('timeout')), 1000);
             const onData = (message: string) => {
                 if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {

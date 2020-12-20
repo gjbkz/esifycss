@@ -6,12 +6,13 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile, deleteFile, copyFile} from '../util/fs';
 import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
 import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
+import {deleteFile} from '../util/deleteFile';
+const {writeFile, copyFile} = fs.promises;
 
 export class Session {
 
@@ -193,7 +194,7 @@ export class Session {
             throw new Error(`${file} is not a file.`);
         }
         const {dest, code} = await this.processCSS(file);
-        await writeFile(dest, code, this.configuration.stdout);
+        await writeFile(dest, code);
     }
 
     protected async onUnlink(

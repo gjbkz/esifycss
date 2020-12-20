@@ -1,10 +1,11 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import * as postcss from 'postcss';
 import anyTest, {TestInterface} from 'ava';
-import {writeFile, readFile} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
+const {readFile, writeFile} = fs.promises;
 
 interface ITestContext {
     directory: string,

@@ -29,6 +29,6 @@ test('#2 get a hash string using sha512', (t) => {
 
 test('#3 get a hash as a buffer', (t) => {
     const data = 'foo';
-    const hash = getHash(data, {algorithm: 'sha256', encoding: Buffer});
+    const hash = getHash(data, {algorithm: 'sha256', encoding: 'buffer'});
     t.true(Buffer.isBuffer(hash));
 });

@@ -1,8 +1,9 @@
-import {readFile, writeFile} from '../util/fs';
+import * as fs from 'fs';
 import {createOptimizedIdentifier} from './createOptimizedIdentifier';
 import {parseScripts} from './parseScripts';
 import {minifyCSSInScript} from './minifyCSSInScript';
 import {setDictionary} from './setDictionary';
+const {writeFile, readFile} = fs.promises;
 
 export const minifyScripts = async (
     props: {

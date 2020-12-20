@@ -1,6 +1,7 @@
-import {writeFile} from '../util/fs';
+import * as fs from 'fs';
 import {parseScripts} from './parseScripts';
 import {IScriptData} from './types';
+const {writeFile} = fs.promises;
 
 export const minifyScriptForCSS = async (
     [file, data]: [string, IScriptData],

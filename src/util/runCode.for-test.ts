@@ -1,10 +1,11 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import * as vm from 'vm';
 import * as rollup from 'rollup';
 import * as postcss from 'postcss';
 import {createSandbox} from '../util/createSandbox.for-test';
 import {IEsifyCSSResult} from '../postcssPlugin/types';
-import {writeFile} from './fs';
+const {writeFile} = fs.promises;
 
 export interface IRunCodeResult extends IEsifyCSSResult {
     root: postcss.Root,

@@ -1,7 +1,8 @@
-import {readFile} from '../util/fs';
+import * as fs from 'fs';
 import {IParseScriptsResult, IScriptData} from './types';
 import {parseCSSModuleScript} from './parseCSSModuleScript';
 import {tokenizeString} from '../util/tokenizeString';
+const {readFile} = fs.promises;
 
 export const parseScripts = async (
     {files, cssKey}: {
