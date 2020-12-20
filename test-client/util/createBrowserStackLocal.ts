@@ -26,7 +26,7 @@ export const createBrowserStackLocal = async (
             }
         });
     });
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
         let count = 0;
         const check = function () {
             if (bsLocal.isRunning()) {

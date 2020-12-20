@@ -4,7 +4,7 @@ import {ISpawnParameters} from './types';
 export const spawn = async (
     parameters: ISpawnParameters,
 ): Promise<void> => {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
         const subProcess = childProcess.spawn(
             parameters.command,
             parameters.args || [],

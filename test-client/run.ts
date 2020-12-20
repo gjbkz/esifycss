@@ -12,7 +12,7 @@ import {browserStack} from './util/constants';
 import {spawn} from './util/spawn';
 import {createBrowserStackLocal} from './util/createBrowserStackLocal';
 import {markResult} from './util/markResult';
-import {getCapabilities} from './util/getCapabilities';
+import {capabilities} from './util/capabilities';
 const {writeFile} = fs.promises;
 
 const test = anyTest as TestInterface<{
@@ -100,8 +100,7 @@ const build = async (
     }
 };
 
-getCapabilities(testDirectories)
-.forEach((capability, index) => {
+for (const capability of capabilities) {
     const name = capability['bstack:options'].sessionName;
     const testDirectory = path.join(__dirname, name);
     const outputDirectory = path.join(testDirectory, 'output');
@@ -109,7 +108,7 @@ getCapabilities(testDirectories)
         capability['bstack:options'].os || capability['bstack:options'].deviceName || '-',
         capability.browserName,
     ].join(' ');
-    test.serial(`#${index + 1} ${name} ${subTitle}`, async (t) => {
+    test.serial(`${subTitle}`, async (t) => {
         t.timeout(120000);
         await build(testDirectory);
         t.context.server.on('request', createRequestHandler(
@@ -121,7 +120,7 @@ getCapabilities(testDirectories)
         if (browserStack) {
             builder.usingServer(browserStack.server);
             t.context.bsLocal = await createBrowserStackLocal({
-                accessKey: browserStack.key,
+                accessKey: browserStack.accessKey,
                 port: t.context.port,
                 localIdentifier: capability['bstack:options'].localIdentifier,
             });
@@ -139,4 +138,4 @@ getCapabilities(testDirectories)
         t.true(passed);
         t.context.passed = passed;
     });
-});
+}
