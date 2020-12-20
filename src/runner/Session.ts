@@ -6,12 +6,14 @@ import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
-import {writeFile, deleteFile, copyFile} from '../util/fs';
 import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
 import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
+import {deleteFile} from '../util/deleteFile';
+import {writeFilep} from '../util/writeFilep';
+const {copyFile} = fs.promises;
 
 export class Session {
 
@@ -193,7 +195,8 @@ export class Session {
             throw new Error(`${file} is not a file.`);
         }
         const {dest, code} = await this.processCSS(file);
-        await writeFile(dest, code, this.configuration.stdout);
+        await writeFilep(dest, code);
+        this.log(`written: ${dest}`);
     }
 
     protected async onUnlink(
@@ -201,7 +204,8 @@ export class Session {
     ): Promise<void> {
         const outputPath = path.join(`${file}${this.configuration.ext}`);
         this.processedFiles.delete(file);
-        await deleteFile(outputPath, this.configuration.stdout);
+        await deleteFile(outputPath);
+        this.log(`deleted: ${outputPath}`);
     }
 
 }

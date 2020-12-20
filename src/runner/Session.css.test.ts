@@ -1,10 +1,13 @@
 import * as path from 'path';
+import * as fs from 'fs';
+import * as stream from 'stream';
 import * as postcss from 'postcss';
 import anyTest, {TestInterface} from 'ava';
-import {writeFile, readFile} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
+import {writeFilep} from '../util/writeFilep';
+const {readFile} = fs.promises;
 
 interface ITestContext {
     directory: string,
@@ -43,16 +46,24 @@ test('#css', async (t) => {
         },
     ];
     await Promise.all(files.map(async (file) => {
-        await writeFile(
+        await writeFilep(
             path.join(t.context.directory, file.path),
             file.content.join('\n'),
         );
     }));
     const cssPath = path.join(t.context.directory, 'output.css');
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            t.log(`${chunk}`.trim());
+            callback();
+        },
+    });
     const session = t.context.session = new Session({
         css: cssPath,
         include: t.context.directory,
         watch: false,
+        stdout: writable,
+        stderr: writable,
     });
     await session.start();
     const result1 = await runCode(path.join(t.context.directory, 'input1.css.js'));

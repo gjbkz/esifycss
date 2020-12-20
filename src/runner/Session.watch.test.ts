@@ -1,13 +1,16 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import anyTest, {TestInterface} from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
 import * as postcss from 'postcss';
 import * as parser from '@hookun/parse-animation-shorthand';
-import {writeFile, deleteFile, stat} from '../util/fs';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
+import {deleteFile} from '../util/deleteFile';
+import {writeFilep} from '../util/writeFilep';
+const {stat} = fs.promises;
 
 interface ITestContext {
     directory: string,
@@ -26,44 +29,47 @@ test.afterEach(async (t) => {
     }
 });
 
-test('#watch', async (t) => {
+test('watch', async (t) => {
     const cssPath = path.join(t.context.directory, '/components/style.css');
     const helper = path.join(t.context.directory, 'helper.js');
     const codePath = `${cssPath}${path.extname(helper)}`;
     const messageListener = new events.EventEmitter();
     const waitForMessage = async (
         expected: string | RegExp,
-    ) => {
-        await new Promise((resolve, reject) => {
-            const timeoutId = setTimeout(() => reject(new Error('timeout')), 1000);
-            const onData = (message: string) => {
-                if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
-                    clearTimeout(timeoutId);
-                    resolve();
-                }
-            };
-            messageListener.on('message', onData);
-        });
-    };
+    ) => await new Promise<void>((resolve, reject) => {
+        const timeoutId = setTimeout(() => reject(new Error(`Timeout: waiting ${expected}`)), 1000);
+        const onData = (message: string) => {
+            if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
+                clearTimeout(timeoutId);
+                messageListener.removeListener('message', onData);
+                resolve();
+            }
+        };
+        messageListener.on('message', onData);
+    });
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            const message = `${chunk}`.trim();
+            messageListener.emit('message', message);
+            t.log(message);
+            callback();
+        },
+    });
     t.context.session = new Session({
         helper,
         watch: true,
         include: t.context.directory,
-        stdout: new stream.Writable({
-            write(chunk, _encoding, callback) {
-                messageListener.emit('message', `${chunk}`);
-                callback();
-            },
-        }),
+        stdout: writable,
+        stderr: writable,
     });
-    await writeFile(cssPath, [
+    await writeFilep(cssPath, [
         '@keyframes foo {0%{color:red}100%{color:green}}',
         '.foo#bar {animation: 1s 0.5s linear infinite foo}',
     ].join(''));
     t.context.session.start().catch(t.fail);
     await waitForMessage(`written: ${codePath}`);
     const result1 = await runCode(codePath);
-    await writeFile(cssPath, [
+    await writeFilep(cssPath, [
         '@keyframes foo {0%{color:red}100%{color:green}}',
         '.foo#bar {animation: 2s 1s linear infinite foo}',
     ].join(''));

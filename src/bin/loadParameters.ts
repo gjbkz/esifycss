@@ -1,7 +1,8 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import {ISessionOptions} from '../runner/types.js';
-import {readFile} from '../util/fs';
 import {IEsifyCSSCommand} from './types';
+const {readFile} = fs.promises;
 
 export const loadParameters = async (
     program: IEsifyCSSCommand,

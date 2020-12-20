@@ -1,10 +1,11 @@
-export const projectName = 'esifycss';
-export const buildId = `${projectName}#${process.env.CIRCLE_BUILD_NUM}`;
+import {name as projectName} from '../../package.json';
+export {projectName};
+export const buildName = `${projectName}#${process.env.GITHUB_RUN_ID || new Date().toISOString()}`;
 
-const user = process.env.BROWSERSTACK_USERNAME;
-const key = process.env.BROWSERSTACK_ACCESS_KEY;
-export const browserStack = user && key ? {
-    user,
-    key,
+const userName = process.env.BROWSERSTACK_USERNAME;
+const accessKey = process.env.BROWSERSTACK_ACCESS_KEY;
+export const browserStack = userName && accessKey ? {
+    userName,
+    accessKey,
     server: 'http://hub-cloud.browserstack.com/wd/hub',
 } : null;
