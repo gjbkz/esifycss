@@ -76,15 +76,6 @@ test.afterEach(async (t) => {
     }
 });
 
-const testDirectories = fs.readdirSync(__dirname)
-.filter((name) => {
-    try {
-        return fs.statSync(path.join(__dirname, name, 'package.json')).isFile();
-    } catch {
-        return false;
-    }
-});
-
 const builtProjects = new Set<string>();
 const build = async (
     testDirectory: string,
@@ -100,42 +91,49 @@ const build = async (
     }
 };
 
-for (const capability of capabilities) {
-    const name = capability['bstack:options'].sessionName;
-    const testDirectory = path.join(__dirname, name);
-    const outputDirectory = path.join(testDirectory, 'output');
-    const subTitle = [
-        capability['bstack:options'].os || capability['bstack:options'].deviceName || '-',
-        capability.browserName,
-    ].join(' ');
-    test.serial(`${subTitle}`, async (t) => {
-        t.timeout(120000);
-        await build(testDirectory);
-        t.context.server.on('request', createRequestHandler(
-            outputDirectory,
-            (message) => t.log(message),
-        ));
-        const builder = new selenium.Builder().withCapabilities(capability);
-        t.context.builder = builder;
-        if (browserStack) {
-            builder.usingServer(browserStack.server);
-            t.context.bsLocal = await createBrowserStackLocal({
-                accessKey: browserStack.accessKey,
-                port: t.context.port,
-                localIdentifier: capability['bstack:options'].localIdentifier,
-            });
-        }
-        const driver = t.context.driver = builder.build();
-        const baseURL = (/safari/i).test(capability.browserName) ? new URL(`http://bs-local.com:${t.context.port}`) : t.context.baseURL;
-        t.context.session = await driver.getSession();
-        await driver.get(`${new URL('/index.html', baseURL)}`);
-        await driver.wait(selenium.until.titleMatches(/(?:passed|failed)$/), 10000);
-        const base64 = await driver.takeScreenshot();
-        const screenShot = Buffer.from(base64, 'base64');
-        await writeFile(path.join(outputDirectory, `${Date.now()}.png`), screenShot);
-        const title = await driver.getTitle();
-        const passed = title === `${path.basename(testDirectory)} → passed`;
-        t.true(passed);
-        t.context.passed = passed;
-    });
+const testNameList = fs.readdirSync(__dirname).filter((name) => {
+    try {
+        return fs.statSync(path.join(__dirname, name, 'package.json')).isFile();
+    } catch {
+        return false;
+    }
+});
+
+for (const testName of testNameList) {
+    for (const $capability of capabilities) {
+        const sessionName = `${testName}-${$capability['bstack:options'].sessionName}`;
+        const capability = {...$capability, sessionName};
+        const testDirectory = path.join(__dirname, testName);
+        const outputDirectory = path.join(testDirectory, 'output');
+        test.serial(`${sessionName}`, async (t) => {
+            t.timeout(120000);
+            await build(testDirectory);
+            t.context.server.on('request', createRequestHandler(
+                outputDirectory,
+                (message) => t.log(message),
+            ));
+            const builder = new selenium.Builder().withCapabilities(capability);
+            t.context.builder = builder;
+            if (browserStack) {
+                builder.usingServer(browserStack.server);
+                t.context.bsLocal = await createBrowserStackLocal({
+                    accessKey: browserStack.accessKey,
+                    port: t.context.port,
+                    localIdentifier: capability['bstack:options'].localIdentifier,
+                });
+            }
+            const driver = t.context.driver = builder.build();
+            const baseURL = (/safari/i).test(capability.browserName) ? new URL(`http://bs-local.com:${t.context.port}`) : t.context.baseURL;
+            t.context.session = await driver.getSession();
+            await driver.get(`${new URL('/index.html', baseURL)}`);
+            await driver.wait(selenium.until.titleMatches(/(?:passed|failed)$/), 10000);
+            const base64 = await driver.takeScreenshot();
+            const screenShot = Buffer.from(base64, 'base64');
+            await writeFile(path.join(outputDirectory, `${Date.now()}.png`), screenShot);
+            const title = await driver.getTitle();
+            const passed = title === `${path.basename(testDirectory)} → passed`;
+            t.true(passed);
+            t.context.passed = passed;
+        });
+    }
 }
