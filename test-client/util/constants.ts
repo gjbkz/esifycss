@@ -1,5 +1,6 @@
-export const projectName = 'middleware-static-livereload';
-export const buildName = `${projectName}#${process.env.CIRCLE_BUILD_NUM || new Date().toISOString()}`;
+import {name as projectName} from '../../package.json';
+export {projectName};
+export const buildName = `${projectName}#${process.env.GITHUB_RUN_ID || new Date().toISOString()}`;
 
 const userName = process.env.BROWSERSTACK_USERNAME;
 const accessKey = process.env.BROWSERSTACK_ACCESS_KEY;
