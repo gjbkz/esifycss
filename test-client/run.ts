@@ -101,11 +101,12 @@ const testNameList = fs.readdirSync(__dirname).filter((name) => {
 
 for (const testName of testNameList) {
     for (const $capability of capabilities) {
-        const sessionName = `${testName}-${$capability['bstack:options'].sessionName}`;
+        const {'bstack:options': options} = $capability;
+        const sessionName = `${testName}-${options.sessionName}`;
         const capability = {...$capability, sessionName};
         const testDirectory = path.join(__dirname, testName);
         const outputDirectory = path.join(testDirectory, 'output');
-        test.serial(`${sessionName}`, async (t) => {
+        test.serial(`${testName} ${options.os || options.deviceName || '-'} ${capability.browserName}`, async (t) => {
             t.timeout(120000);
             await build(testDirectory);
             t.context.server.on('request', createRequestHandler(
