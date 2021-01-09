@@ -52,7 +52,7 @@
         "@hookun/parse-animation-shorthand": "0.1.2",
         "acorn": "8.0.4",
         "acorn-walk": "8.0.0",
-        "chokidar": "3.4.3",
+        "chokidar": "3.5.0",
         "commander": "6.2.1",
         "postcss": "8.2.2",
         "postcss-selector-parser": "6.0.4",
