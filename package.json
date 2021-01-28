@@ -51,7 +51,7 @@
     "dependencies": {
         "@hookun/parse-animation-shorthand": "0.1.2",
         "acorn": "8.0.5",
-        "acorn-walk": "8.0.1",
+        "acorn-walk": "8.0.2",
         "chokidar": "3.5.1",
         "commander": "6.2.1",
         "postcss": "8.2.4",
