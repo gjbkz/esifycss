@@ -5,7 +5,6 @@ import * as commander from 'commander';
 import {write} from '../util/write';
 import {Session} from '../runner/Session.js';
 import {loadParameters} from './loadParameters';
-import type {IEsifyCSSCommand} from './types';
 
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8')) as {
     version: string,
@@ -13,21 +12,20 @@ const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../packa
 
 export const program = new commander.Command()
 .version(packageData.version)
-.usage('[options] <include ...>')
+.arguments('<include...>')
 .option('--helper <path>', 'A path where the helper script will be output. You can\'t use --helper with --css.')
 .option('--css <path>', 'A path where the css will be output. You can\'t use --css with --helper.')
 .option('--ext <ext>', 'An extension of scripts generated from css.')
 .option('--config <path>', 'A path to configuration files.')
-.option('--exclude <path ...>', 'Paths or patterns to be excluded.')
+.option('--exclude <path...>', 'Paths or patterns to be excluded.')
 .option('--noMangle', 'Keep the original name for debugging.')
-.option('--watch', 'Watch files and update the modules automatically.') as IEsifyCSSCommand;
+.option('--watch', 'Watch files and update the modules automatically.')
+.action(async (include: Array<string>, options) => {
+    await new Session(await loadParameters(include, options)).start();
+});
 
 if (require.main === module) {
-    program.parse(process.argv);
-    loadParameters(program)
-    .then(async (parameters) => {
-        await new Session(parameters).start();
-    })
+    program.parseAsync()
     .catch((error: Error) => {
         write(process.stderr, [error]);
         process.exit(1);

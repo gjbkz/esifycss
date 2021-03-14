@@ -113,16 +113,24 @@ export class Session {
         await this.stopWatcher();
         this.initialTask = [];
         this.log(`watching: ${this.configuration.path.join(', ')}`);
-        const watcher = this.watcher = chokidar.watch(
-            this.configuration.path.slice(),
-            this.configuration.chokidar,
-        )
-        .on('error', this.onError.bind(this))
-        .on('all', (eventName, file, stats) => {
-            this.onFileEvent(eventName, file, stats)
-            .catch((error) => {
-                watcher.emit('error', error);
-            });
+        const onError = this.onError.bind(this);
+        this.watcher = chokidar.watch(this.configuration.path, this.configuration.chokidar)
+        .on('error', onError)
+        .on('add', (file, stats) => {
+            this.log(`[add] ${file}`);
+            const promise = this.onAdd(file, stats);
+            if (this.initialTask) {
+                this.initialTask.push(promise);
+            }
+            promise.catch(onError);
+        })
+        .on('change', (file, stats) => {
+            this.log(`[change] ${file}`);
+            this.onChange(file, stats).catch(onError);
+        })
+        .on('unlink', (file) => {
+            this.log(`[unlink] ${file}`);
+            this.onUnlink(file).catch(onError);
         });
         await waitForInitialScanCompletion(this.watcher);
         await Promise.all(this.initialTask);
@@ -151,31 +159,6 @@ export class Session {
 
     protected onError(error: Error): void {
         this.logError(error);
-    }
-
-    protected async onFileEvent(
-        eventName: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir',
-        file: string,
-        stats?: fs.Stats,
-    ): Promise<void> {
-        this.log(`[${eventName}] ${file}`);
-        switch (eventName) {
-        case 'add': {
-            const promise = this.onAdd(file, stats);
-            if (this.initialTask) {
-                this.initialTask.push(promise);
-            }
-            await promise;
-            break;
-        }
-        case 'change':
-            await this.onChange(file, stats);
-            break;
-        case 'unlink':
-            await this.onUnlink(file);
-            break;
-        default:
-        }
     }
 
     protected async onAdd(
