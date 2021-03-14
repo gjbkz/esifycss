@@ -5,14 +5,14 @@ import {
 } from './constants';
 
 interface BrowsetStackOptions {
-    os?: 'Windows' | 'OS X',
+    os?: 'OS X' | 'Windows',
     osVersion?: string,
     deviceName?: string,
-    realMobile?: 'true' | 'false',
+    realMobile?: 'false' | 'true',
     projectName?: string,
     buildName?: string,
     sessionName: string,
-    local?: 'true' | 'false',
+    local?: 'false' | 'true',
     localIdentifier: string,
     seleniumVersion?: string,
     userName?: string,

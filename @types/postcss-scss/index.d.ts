@@ -1,5 +1,5 @@
 declare module 'postcss-scss' {
-    import * as postcss from 'postcss';
-    export const parse: postcss.Parser;
-    export const stringify: postcss.Stringifier;
+    import type {Parser, Stringifier} from 'postcss';
+    export const parse: Parser;
+    export const stringify: Stringifier;
 }

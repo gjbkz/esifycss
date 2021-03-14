@@ -1,7 +1,7 @@
 import {URL} from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as http from 'http';
+import type * as http from 'http';
 const afs = fs.promises;
 
 export const createRequestHandler = (

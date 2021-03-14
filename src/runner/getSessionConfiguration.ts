@@ -1,4 +1,4 @@
-import {ISessionConfiguration, ISessionOptions} from './types';
+import type {ISessionConfiguration, ISessionOptions} from './types';
 import {plugin} from '../postcssPlugin/plugin';
 import {ensureArray} from '../util/ensureArray';
 import {getChokidarOptions} from './getChokidarOptions';

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import * as selenium from 'selenium-webdriver';
+import type * as selenium from 'selenium-webdriver';
 import {browserStack} from './constants';
 
 export const markResult = async (

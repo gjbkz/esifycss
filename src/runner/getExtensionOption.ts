@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {ISessionConfiguration} from './types';
+import type {ISessionConfiguration} from './types';
 
 export const getExtensionOption = (
     parameters: {ext?: string},

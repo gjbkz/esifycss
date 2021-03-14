@@ -1,84 +1,18 @@
-import * as acorn from 'acorn';
+import type * as acorn from 'acorn';
 
 export type NodeType =
-| 'ArrayExpression'
-| 'ArrayPattern'
-| 'ArrowFunctionExpression'
-| 'FunctionDeclaration'
-| 'FunctionExpression'
-| 'AssignmentExpression'
-| 'AssignmentPattern'
-| 'BinaryExpression'
-| 'LogicalExpression'
-| 'AwaitExpression'
-| 'RestElement'
-| 'ReturnStatement'
-| 'SpreadElement'
-| 'ThrowStatement'
-| 'UnaryExpression'
-| 'UpdateExpression'
-| 'YieldExpression'
-| 'BlockStatement'
-| 'ClassBody'
-| 'Program'
-| 'BreakStatement'
-| 'ContinueStatement'
-| 'CallExpression'
-| 'NewExpression'
-| 'CatchClause'
-| 'ClassDeclaration'
-| 'ClassExpression'
-| 'ConditionalExpression'
-| 'IfStatement'
-| 'DebuggerStatement'
-| 'EmptyStatement'
-| 'Identifier'
-| 'Literal'
-| 'MetaProperty'
-| 'Super'
-| 'TemplateElement'
-| 'ThisExpression'
-| 'DoWhileStatement'
-| 'ExportAllDeclaration'
-| 'ExportDefaultDeclaration'
-| 'ExportNamedDeclaration'
-| 'ExportSpecifier'
-| 'ExpressionStatement'
-| 'ParenthesizedExpression'
-| 'ForInStatement'
-| 'ForOfStatement'
-| 'ForStatement'
-| 'ImportDeclaration'
-| 'ImportDefaultSpecifier'
-| 'ImportNamespaceSpecifier'
-| 'ImportSpecifier'
-| 'LabeledStatement'
-| 'MemberExpression'
-| 'MethodDefinition'
-| 'Property'
-| 'ObjectExpression'
-| 'ObjectPattern'
-| 'SequenceExpression'
-| 'SwitchCase'
-| 'SwitchStatement'
-| 'TaggedTemplateExpression'
-| 'TemplateLiteral'
-| 'TryStatement'
-| 'VariableDeclaration'
-| 'VariableDeclarator'
-| 'WhileStatement'
-| 'WithStatement';
+'ArrayExpression' | 'ArrayPattern' | 'ArrowFunctionExpression' | 'AssignmentExpression' | 'AssignmentPattern' | 'AwaitExpression' | 'BinaryExpression' | 'BlockStatement' | 'BreakStatement' | 'CallExpression' | 'CatchClause' | 'ClassBody' | 'ClassDeclaration' | 'ClassExpression' | 'ConditionalExpression' | 'ContinueStatement' | 'DebuggerStatement' | 'DoWhileStatement' | 'EmptyStatement' | 'ExportAllDeclaration' | 'ExportDefaultDeclaration' | 'ExportNamedDeclaration' | 'ExportSpecifier' | 'ExpressionStatement' | 'ForInStatement' | 'ForOfStatement' | 'ForStatement' | 'FunctionDeclaration' | 'FunctionExpression' | 'Identifier' | 'IfStatement' | 'ImportDeclaration' | 'ImportDefaultSpecifier' | 'ImportNamespaceSpecifier' | 'ImportSpecifier' | 'LabeledStatement' | 'Literal' | 'LogicalExpression' | 'MemberExpression' | 'MetaProperty' | 'MethodDefinition' | 'NewExpression' | 'ObjectExpression' | 'ObjectPattern' | 'ParenthesizedExpression' | 'Program' | 'Property' | 'RestElement' | 'ReturnStatement' | 'SequenceExpression' | 'SpreadElement' | 'Super' | 'SwitchCase' | 'SwitchStatement' | 'TaggedTemplateExpression' | 'TemplateElement' | 'TemplateLiteral' | 'ThisExpression' | 'ThrowStatement' | 'TryStatement' | 'UnaryExpression' | 'UpdateExpression' | 'VariableDeclaration' | 'VariableDeclarator' | 'WhileStatement' | 'WithStatement' | 'YieldExpression';
 
 interface INode extends acorn.Node {
     type: NodeType,
     key?: IIdentifier,
-    value?: INode | string | number | null | boolean,
+    value?: INode | boolean | number | string | null,
 }
 
 interface ILiteral extends INode {
     type: 'Literal',
     raw: string,
-    value: string | number | null | boolean,
+    value: boolean | number | string | null,
 }
 
 interface IStringLiteral extends ILiteral {
@@ -146,7 +80,7 @@ interface IArrayExpression extends INode {
 
 interface IProgram extends INode {
     type: 'Program',
-    body: Array<IImportDeclaration | IExpressionStatement | IVariableDeclaration | IFunctionDeclaration>,
+    body: Array<IExpressionStatement | IFunctionDeclaration | IImportDeclaration | IVariableDeclaration>,
 }
 
 export interface IVisitors {
@@ -160,6 +94,4 @@ export const simple: (
     visitors: IVisitors,
 ) => void;
 
-export const base: {
-    [key: string]: () => void,
-};
+export const base: Record<string, () => void>;

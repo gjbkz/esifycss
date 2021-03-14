@@ -1,6 +1,6 @@
-import * as postcss from 'postcss';
+import type * as postcss from 'postcss';
 import * as selectorParser from 'postcss-selector-parser';
-import {IEsifyCSSResult, IImports, IPluginMangler} from './types';
+import type {IEsifyCSSResult, IImports, IPluginMangler} from './types';
 import {getMatchedImport} from './getMatchedImport';
 
 export const mangleIdentifiers = async (

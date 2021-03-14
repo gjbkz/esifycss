@@ -1,6 +1,6 @@
-import {INode} from './walker';
+import type {INode} from './walker';
 import {isArrayExpression, isObjectExpression} from './ast';
-import {ICSSRange} from './types';
+import type {ICSSRange} from './types';
 
 export const extractCSSFromArrayExpression = (
     node: INode,

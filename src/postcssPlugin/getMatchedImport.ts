@@ -1,4 +1,4 @@
-import {IImports} from './types';
+import type {IImports} from './types';
 import {normalizePath} from '../util/normalizePath';
 
 export const getMatchedImport = (

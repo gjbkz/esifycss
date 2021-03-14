@@ -2,7 +2,7 @@ import test from 'ava';
 import {ensureArray} from './ensureArray';
 
 interface ITest {
-    input: number | Array<number>,
+    input: Array<number> | number,
     expected: Array<number>,
 }
 

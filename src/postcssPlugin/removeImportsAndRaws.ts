@@ -1,4 +1,4 @@
-import {IImports, IEsifyCSSResult, IIdentifierMap} from './types';
+import type {IImports, IEsifyCSSResult, IIdentifierMap} from './types';
 import {getMatchedImport} from './getMatchedImport';
 
 export const removeImportsAndRaws = (

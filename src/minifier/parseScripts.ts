@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {IParseScriptsResult, IScriptData} from './types';
+import type {IParseScriptsResult, IScriptData} from './types';
 import {parseCSSModuleScript} from './parseCSSModuleScript';
 import {tokenizeString} from '../util/tokenizeString';
 const {readFile} = fs.promises;

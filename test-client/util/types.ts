@@ -1,5 +1,5 @@
-import * as childProcess from 'child_process';
-import * as stream from 'stream';
+import type * as childProcess from 'child_process';
+import type * as stream from 'stream';
 
 export interface ISpawnParameters {
     command: string,

@@ -1,4 +1,4 @@
-import * as postcss from 'postcss';
+import type * as postcss from 'postcss';
 import * as path from 'path';
 
 export const REGEX_IMPORT = /^(['"])([^\s'"]+)\1\s*([^\s]*)$/;

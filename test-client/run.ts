@@ -1,12 +1,13 @@
 /// <reference path="./browserstack-local.d.ts"/>
-import anyTest, {TestInterface} from 'ava';
+import type {TestInterface} from 'ava';
+import anyTest from 'ava';
 import {URL} from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as http from 'http';
-import * as childProcess from 'child_process';
+import type * as childProcess from 'child_process';
 import * as selenium from 'selenium-webdriver';
-import * as BrowserStack from 'browserstack-local';
+import type * as BrowserStack from 'browserstack-local';
 import {createRequestHandler} from './util/createRequestHandler';
 import {browserStack} from './util/constants';
 import {spawn} from './util/spawn';

@@ -3,7 +3,7 @@ import * as vm from 'vm';
 import * as rollup from 'rollup';
 import * as postcss from 'postcss';
 import {createSandbox} from '../util/createSandbox.for-test';
-import {IEsifyCSSResult} from '../postcssPlugin/types';
+import type {IEsifyCSSResult} from '../postcssPlugin/types';
 import {writeFilep} from './writeFilep';
 
 export interface IRunCodeResult extends IEsifyCSSResult {

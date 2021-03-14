@@ -4,7 +4,7 @@ import {normalizePath} from '../util/normalizePath';
 export const parseImport = (
     parameter: string,
     id: string,
-): null | {from: string, localName: string} => {
+): {from: string, localName: string} | null => {
     const matched = (/^(?:url\(\s*)?(['"])(.+)\1\s*\)?\s*/).exec(parameter);
     if (matched) {
         const localName = parameter.slice(matched[0].length);

@@ -1,4 +1,5 @@
-import {Hash, createHash, BinaryToTextEncoding} from 'crypto';
+import type {Hash, BinaryToTextEncoding} from 'crypto';
+import {createHash} from 'crypto';
 
 export interface IHashOptions {
     algorithm: string,
@@ -8,7 +9,7 @@ export interface IHashOptions {
 export const getHash = (
     data: Parameters<Hash['update']>[0],
     {algorithm, encoding}: IHashOptions = {algorithm: 'sha256', encoding: 'base64url'},
-): string | Buffer => {
+): Buffer | string => {
     const hash = createHash(algorithm);
     hash.update(data);
     switch (encoding) {

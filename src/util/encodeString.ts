@@ -1,4 +1,4 @@
-import {IIdentifier} from './createIdentifier';
+import type {IIdentifier} from './createIdentifier';
 import {tokenizeString} from './tokenizeString';
 import * as vlq from 'vlq';
 

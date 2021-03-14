@@ -1,5 +1,5 @@
-import * as postcss from 'postcss';
-import {IEsifyCSSResult} from '../postcssPlugin/types';
+import type * as postcss from 'postcss';
+import type {IEsifyCSSResult} from '../postcssPlugin/types';
 import {PluginName} from '../postcssPlugin/plugin';
 
 export const extractPluginResult = (

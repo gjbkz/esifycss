@@ -1,5 +1,5 @@
 import test from 'ava';
-import {Rule, Declaration, AtRule} from 'postcss';
+import type {Rule, Declaration, AtRule} from 'postcss';
 import {postcss} from '../util/postcss';
 import * as parser from '@hookun/parse-animation-shorthand';
 import {plugin} from './plugin';

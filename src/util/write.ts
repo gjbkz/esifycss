@@ -1,5 +1,5 @@
 import * as util from 'util';
-import * as stream from 'stream';
+import type * as stream from 'stream';
 
 /**
  * Stringify the given values and write them to the given stream.

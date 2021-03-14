@@ -1,15 +1,15 @@
-import * as anymatch from 'anymatch';
-import * as chokidar from 'chokidar';
-import * as postcss from 'postcss';
-import * as stream from 'stream';
-import {IPluginOptions} from '../postcssPlugin/types';
+import type * as anymatch from 'anymatch';
+import type * as chokidar from 'chokidar';
+import type * as postcss from 'postcss';
+import type * as stream from 'stream';
+import type {IPluginOptions} from '../postcssPlugin/types';
 
 export interface ISessionOptions {
     /**
      * Pattern(s) to be included
      * @default "*"
      */
-    include?: string | Array<string>,
+    include?: Array<string> | string,
     /**
      * Pattern(s) to be excluded.
      * @default ['node_modules']
@@ -86,7 +86,7 @@ export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
 }
 
 export interface ISessionOutput {
-    type: 'script' | 'css',
+    type: 'css' | 'script',
     path: string,
 }
 
@@ -105,7 +105,7 @@ export interface ISessionConfiguration {
 
 export interface ICSSParserParameters {
     file: string,
-    css?: string | Buffer,
+    css?: Buffer | string,
     options?: postcss.ProcessOptions,
     plugins: Array<postcss.AcceptedPlugin>,
     map?: postcss.SourceMapOptions,

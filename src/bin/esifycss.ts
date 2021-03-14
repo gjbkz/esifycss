@@ -5,7 +5,7 @@ import * as commander from 'commander';
 import {write} from '../util/write';
 import {Session} from '../runner/Session.js';
 import {loadParameters} from './loadParameters';
-import {IEsifyCSSCommand} from './types';
+import type {IEsifyCSSCommand} from './types';
 
 const packageData = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8')) as {
     version: string,

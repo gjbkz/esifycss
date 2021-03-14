@@ -4,7 +4,7 @@ const {mkdir, writeFile} = fs.promises;
 
 export const writeFilep = async (
     filePath: string,
-    data: string | Uint8Array,
+    data: Uint8Array | string,
 ): Promise<void> => {
     await mkdir(path.dirname(filePath), {recursive: true});
     await writeFile(filePath, data);

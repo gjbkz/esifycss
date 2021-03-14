@@ -1,5 +1,5 @@
 export const ensureArray = <TType>(
-    arg: Array<TType> | TType | undefined | null,
+    arg: Array<TType> | TType | null | undefined,
 ): Array<TType> => {
     if (Array.isArray(arg)) {
         return arg.slice();

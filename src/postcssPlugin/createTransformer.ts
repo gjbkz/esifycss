@@ -1,5 +1,5 @@
-import * as postcss from 'postcss';
-import {IPluginConfiguration, IEsifyCSSResult} from './types';
+import type * as postcss from 'postcss';
+import type {IPluginConfiguration, IEsifyCSSResult} from './types';
 import {transformDeclarations} from './transformDeclarations';
 import {getImports} from './getImports';
 import {minify} from './minify';

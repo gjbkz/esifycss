@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as chokidar from 'chokidar';
 import * as path from 'path';
-import {ISessionOptions, ISessionConfiguration} from './types';
+import type {ISessionOptions, ISessionConfiguration} from './types';
 import {getSessionConfiguration} from './getSessionConfiguration';
 import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
@@ -9,7 +9,8 @@ import {extractPluginResult} from './extractPluginResult';
 import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
-import {createExposedPromise, IExposedPromise} from '../util/createExposedPromise';
+import type {IExposedPromise} from '../util/createExposedPromise';
+import {createExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 import {deleteFile} from '../util/deleteFile';
 import {writeFilep} from '../util/writeFilep';

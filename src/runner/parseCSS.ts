@@ -1,6 +1,6 @@
-import {Result} from 'postcss';
+import type {Result} from 'postcss';
 import {postcss} from '../util/postcss';
-import {ICSSParserParameters} from './types';
+import type {ICSSParserParameters} from './types';
 import {getCSSParserConfiguration} from './getCSSParserConfiguration';
 
 export const parseCSS = async (

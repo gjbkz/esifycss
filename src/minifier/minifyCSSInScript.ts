@@ -1,5 +1,5 @@
-import {ICSSRange} from './types';
-import {IIdentifier} from '../util/createIdentifier';
+import type {ICSSRange} from './types';
+import type {IIdentifier} from '../util/createIdentifier';
 import {encodeString} from '../util/encodeString';
 
 export const minifyCSSInScript = (

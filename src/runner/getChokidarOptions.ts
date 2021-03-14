@@ -1,4 +1,4 @@
-import {ISessionOptions, IReadonlyWatchOptions} from './types';
+import type {ISessionOptions, IReadonlyWatchOptions} from './types';
 import {ensureArray} from '../util/ensureArray';
 
 export const getChokidarOptions = (
