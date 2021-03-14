@@ -61,13 +61,9 @@ if (browserStack) {
         'browserName': 'Safari',
         'bstack:options': generateOptions({osVersion: '14', deviceName: 'iPhone 12', realMobile: 'true'}),
     });
-    capabilities.push({
-        'browserName': 'Chrome',
-        'bstack:options': generateOptions({osVersion: '11.0', deviceName: 'Google Pixel 4', realMobile: 'true'}),
-    });
 } else {
     capabilities.push({
-        'browserName': 'chrome',
+        'browserName': 'Chrome',
         'bstack:options': {
             sessionName,
             localIdentifier: generateLocalIdentifier(),
