@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {ICSSParserParameters, ICSSParserConfigurations} from './types';
+import type {ICSSParserParameters, ICSSParserConfigurations} from './types';
 const {readFile} = fs.promises;
 
 export const getCSSParserConfiguration = async (

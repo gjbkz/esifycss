@@ -1,5 +1,5 @@
-import * as postcss from 'postcss';
-import {IEsifyCSSResult, IImports, IPluginMangler} from './types';
+import type * as postcss from 'postcss';
+import type {IEsifyCSSResult, IImports, IPluginMangler} from './types';
 import {getMatchedImport} from './getMatchedImport';
 
 export const mangleKeyFrames = (

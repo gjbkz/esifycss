@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as postcss from 'postcss';
-import {IEsifyCSSResult} from '../postcssPlugin/types';
+import type * as postcss from 'postcss';
+import type {IEsifyCSSResult} from '../postcssPlugin/types';
 
 const getCSS = (
     node: postcss.ChildNode,

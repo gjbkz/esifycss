@@ -1,6 +1,6 @@
-import * as postcss from 'postcss';
+import type * as postcss from 'postcss';
 import {parseImport} from './parseImport';
-import {IImports} from './types';
+import type {IImports} from './types';
 
 export const getImports = (
     root: postcss.Root,

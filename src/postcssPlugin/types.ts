@@ -1,4 +1,4 @@
-import {IIdentifier} from '../util/createIdentifier';
+import type {IIdentifier} from '../util/createIdentifier';
 
 export interface IPluginOptions {
     /**
@@ -50,9 +50,7 @@ export interface IPluginConfiguration {
     readonly rawPrefix: string,
 }
 
-export interface IIdentifierMap {
-    [name: string]: string | undefined,
-}
+export type IIdentifierMap = Record<string, string | undefined>;
 
 export interface IEsifyCSSResult {
     className: IIdentifierMap,

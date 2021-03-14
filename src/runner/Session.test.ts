@@ -1,13 +1,15 @@
 import * as path from 'path';
 import * as stream from 'stream';
-import anyTest, {TestInterface, ExecutionContext} from 'ava';
-import * as postcss from 'postcss';
+import type {TestInterface, ExecutionContext} from 'ava';
+import anyTest from 'ava';
+import type * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
 import * as parser from '@hookun/parse-animation-shorthand';
-import {ISessionOptions} from './types';
+import type {ISessionOptions} from './types';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
-import {runCode, IRunCodeResult} from '../util/runCode.for-test';
+import type {IRunCodeResult} from '../util/runCode.for-test';
+import {runCode} from '../util/runCode.for-test';
 import {writeFilep} from '../util/writeFilep';
 
 interface ITestContext {

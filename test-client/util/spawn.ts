@@ -1,5 +1,5 @@
 import * as childProcess from 'child_process';
-import {ISpawnParameters} from './types';
+import type {ISpawnParameters} from './types';
 
 export const spawn = async (
     parameters: ISpawnParameters,

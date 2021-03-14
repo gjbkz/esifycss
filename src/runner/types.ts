@@ -1,20 +1,20 @@
-import * as anymatch from 'anymatch';
-import * as chokidar from 'chokidar';
-import * as postcss from 'postcss';
-import * as stream from 'stream';
-import {IPluginOptions} from '../postcssPlugin/types';
+import type {Matcher} from 'anymatch';
+import type {AwaitWriteFinishOptions, WatchOptions} from 'chokidar';
+import type {Writable} from 'stream';
+import type {AcceptedPlugin, ProcessOptions, SourceMapOptions} from 'postcss';
+import type {IPluginOptions} from '../postcssPlugin/types';
 
 export interface ISessionOptions {
     /**
      * Pattern(s) to be included
      * @default "*"
      */
-    include?: string | Array<string>,
+    include?: Array<string> | string,
     /**
      * Pattern(s) to be excluded.
      * @default ['node_modules']
      */
-    exclude?: anymatch.Matcher,
+    exclude?: Matcher,
     /**
      * File extension(s) to be included.
      * @default ['.css']
@@ -53,18 +53,18 @@ export interface ISessionOptions {
      *   useFsEvents: false,
      * }
      */
-    chokidar?: chokidar.WatchOptions,
+    chokidar?: WatchOptions,
     /**
      * An array of postcss plugins.
      * esifycss.plugin is appended to this array.
      * @default []
      */
-    postcssPlugins?: Array<postcss.AcceptedPlugin>,
+    postcssPlugins?: Array<AcceptedPlugin>,
     /**
      * https://github.com/postcss/postcss#options
      * @default undefined
      */
-    postcssOptions?: postcss.ProcessOptions,
+    postcssOptions?: ProcessOptions,
     /**
      * Parameters for esifycss.plugin.
      */
@@ -73,20 +73,20 @@ export interface ISessionOptions {
      * A stream where the runner outputs logs.
      * @default process.stdout
      */
-    stdout?: stream.Writable,
+    stdout?: Writable,
     /**
      * A stream where the runner outputs errorlogs.
      * @default process.stderr
      */
-    stderr?: stream.Writable,
+    stderr?: Writable,
 }
 
-export interface IReadonlyWatchOptions extends Readonly<chokidar.WatchOptions> {
-    awaitWriteFinish?: Readonly<chokidar.AwaitWriteFinishOptions> | boolean,
+export interface IReadonlyWatchOptions extends Readonly<WatchOptions> {
+    awaitWriteFinish?: Readonly<AwaitWriteFinishOptions> | boolean,
 }
 
 export interface ISessionOutput {
-    type: 'script' | 'css',
+    type: 'css' | 'script',
     path: string,
 }
 
@@ -96,26 +96,26 @@ export interface ISessionConfiguration {
     readonly ext: string,
     readonly path: ReadonlyArray<string>,
     readonly chokidar: IReadonlyWatchOptions,
-    readonly stdout: stream.Writable,
-    readonly stderr: stream.Writable,
-    readonly postcssPlugins: Array<postcss.AcceptedPlugin>,
-    readonly postcssOptions: postcss.ProcessOptions,
+    readonly stdout: Writable,
+    readonly stderr: Writable,
+    readonly postcssPlugins: Array<AcceptedPlugin>,
+    readonly postcssOptions: ProcessOptions,
     readonly cssKey: string,
 }
 
 export interface ICSSParserParameters {
     file: string,
-    css?: string | Buffer,
-    options?: postcss.ProcessOptions,
-    plugins: Array<postcss.AcceptedPlugin>,
-    map?: postcss.SourceMapOptions,
+    css?: Buffer | string,
+    options?: ProcessOptions,
+    plugins: Array<AcceptedPlugin>,
+    map?: SourceMapOptions,
 }
 
 export interface ICSSParserConfigurations {
     readonly css: string,
-    readonly plugins: Array<postcss.AcceptedPlugin>,
+    readonly plugins: Array<AcceptedPlugin>,
     readonly options: {
         readonly from: string,
-        readonly map: postcss.SourceMapOptions,
+        readonly map: SourceMapOptions,
     },
 }

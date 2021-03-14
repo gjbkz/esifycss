@@ -1,4 +1,4 @@
-import * as chokidar from 'chokidar';
+import type * as chokidar from 'chokidar';
 
 export const waitForInitialScanCompletion = async (
     watcher: chokidar.FSWatcher,

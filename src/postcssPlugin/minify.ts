@@ -1,4 +1,4 @@
-import {Root} from 'postcss';
+import type {Root} from 'postcss';
 
 export const minify = (
     root: Root,

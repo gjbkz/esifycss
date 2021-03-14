@@ -5,14 +5,14 @@ import {
 } from './constants';
 
 interface BrowsetStackOptions {
-    os?: 'Windows' | 'OS X',
+    os?: 'OS X' | 'Windows',
     osVersion?: string,
     deviceName?: string,
-    realMobile?: 'true' | 'false',
+    realMobile?: 'false' | 'true',
     projectName?: string,
     buildName?: string,
     sessionName: string,
-    local?: 'true' | 'false',
+    local?: 'false' | 'true',
     localIdentifier: string,
     seleniumVersion?: string,
     userName?: string,
@@ -61,13 +61,9 @@ if (browserStack) {
         'browserName': 'Safari',
         'bstack:options': generateOptions({osVersion: '14', deviceName: 'iPhone 12', realMobile: 'true'}),
     });
-    capabilities.push({
-        'browserName': 'Chrome',
-        'bstack:options': generateOptions({osVersion: '11.0', deviceName: 'Google Pixel 4', realMobile: 'true'}),
-    });
 } else {
     capabilities.push({
-        'browserName': 'chrome',
+        'browserName': 'Chrome',
         'bstack:options': {
             sessionName,
             localIdentifier: generateLocalIdentifier(),

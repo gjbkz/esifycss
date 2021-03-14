@@ -11,7 +11,7 @@ test('#0 without listener', (t) => {
 });
 
 test('#1 with listener', (t) => {
-    const log: {[key: string]: number | undefined} = {};
+    const log: Record<string, number | undefined> = {};
     const identifier = createIdentifier((key, id) => {
         log[key] = id;
     });

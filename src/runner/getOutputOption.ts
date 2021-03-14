@@ -1,4 +1,4 @@
-import {ISessionConfiguration, ISessionOutput} from './types';
+import type {ISessionConfiguration, ISessionOutput} from './types';
 import {getHash} from '../util/getHash';
 
 export const getOutputOption = (

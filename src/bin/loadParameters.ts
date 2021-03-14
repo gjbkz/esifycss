@@ -1,26 +1,36 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import {ISessionOptions} from '../runner/types.js';
-import {IEsifyCSSCommand} from './types';
+import type {ISessionOptions} from '../runner/types.js';
 const {readFile} = fs.promises;
 
+interface EsifyCSSCommandOptions {
+    exclude: Array<string>,
+    helper: string,
+    config: string,
+    noMangle: boolean,
+    watch: boolean,
+    css: string,
+    ext: string,
+}
+
 export const loadParameters = async (
-    program: IEsifyCSSCommand,
+    include: Array<string>,
+    args: EsifyCSSCommandOptions,
     directory: string = process.cwd(),
 ): Promise<ISessionOptions> => {
     const parameters: Partial<ISessionOptions> = {
-        include: program.args,
-        helper: program.helper,
-        css: program.css as string,
-        ext: program.ext as string,
-        exclude: program.exclude,
+        include,
+        helper: args.helper,
+        css: args.css,
+        ext: args.ext,
+        exclude: args.exclude,
         esifycssPluginParameter: {
-            mangle: !program.noMangle,
+            mangle: !args.noMangle,
         },
-        watch: program.watch,
+        watch: args.watch,
     };
-    if (program.config) {
-        const configPath = path.isAbsolute(program.config) ? program.config : path.join(directory, program.config);
+    if (args.config) {
+        const configPath = path.isAbsolute(args.config) ? args.config : path.join(directory, args.config);
         const configJSON = await readFile(configPath, 'utf8');
         Object.assign(parameters, JSON.parse(configJSON) as ISessionOptions);
     }

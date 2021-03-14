@@ -8,8 +8,8 @@ export interface IExposedPromise {
 }
 
 export const createExposedPromise = (): IExposedPromise => {
-    let resolve: null | Resolve = null;
-    let reject: null | Reject = null;
+    let resolve: Resolve | null = null;
+    let reject: Reject | null = null;
     const promise = new Promise<void>((res, rej) => {
         resolve = res;
         reject = rej;

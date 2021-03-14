@@ -1,9 +1,10 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import anyTest, {TestInterface} from 'ava';
+import type {TestInterface} from 'ava';
+import anyTest from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
-import * as postcss from 'postcss';
+import type * as postcss from 'postcss';
 import * as parser from '@hookun/parse-animation-shorthand';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
@@ -35,7 +36,7 @@ test('watch', async (t) => {
     const codePath = `${cssPath}${path.extname(helper)}`;
     const messageListener = new events.EventEmitter();
     const waitForMessage = async (
-        expected: string | RegExp,
+        expected: RegExp | string,
     ) => await new Promise<void>((resolve, reject) => {
         const timeoutId = setTimeout(() => reject(new Error(`Timeout: waiting ${expected}`)), 1000);
         const onData = (message: string) => {
