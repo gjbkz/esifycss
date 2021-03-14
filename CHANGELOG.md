@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.27 (2021-03-14)
+
+### Dependency Upgrades
+
+- upgrade dependencies (#235) (8074d39)
+
+
 ## v1.4.26 (2020-12-20)
 
 ### Dependency Upgrades
