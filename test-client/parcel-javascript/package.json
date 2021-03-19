@@ -8,6 +8,6 @@
     "devDependencies": {
         "esifycss": "file:../..",
         "npm-run-all": "*",
-        "parcel-bundler": "1.12.3"
+        "parcel-bundler": "1.12.5"
     }
 }
