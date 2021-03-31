@@ -63,7 +63,7 @@
         "@nlib/changelog": "0.1.9",
         "@nlib/eslint-config": "3.17.21",
         "@nlib/lint-commit": "0.1.3",
-        "@nlib/nodetool": "0.1.11",
+        "@nlib/nodetool": "0.1.17",
         "@types/anymatch": "1.3.1",
         "@types/jsdom": "16.2.9",
         "@types/micromatch": "4.0.1",
