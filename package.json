@@ -46,8 +46,7 @@
         "test-client": "ava --config ava.config.client.cjs",
         "version": "run-s version:changelog version:add",
         "version:changelog": "nlib-changelog --output CHANGELOG.md",
-        "version:add": "git add .",
-        "prepare": "husky install"
+        "version:add": "git add ."
     },
     "dependencies": {
         "@hookun/parse-animation-shorthand": "0.1.2",
