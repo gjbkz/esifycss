@@ -3,7 +3,6 @@ import * as chokidar from 'chokidar';
 import * as path from 'path';
 import type {ISessionOptions, ISessionConfiguration} from './types';
 import {getSessionConfiguration} from './getSessionConfiguration';
-import {write} from '../util/write';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
 import {generateScript} from './generateScript';
@@ -14,6 +13,7 @@ import {createExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 import {deleteFile} from '../util/deleteFile';
 import {writeFilep} from '../util/writeFilep';
+import {serialize} from '../util/serialize';
 const {copyFile} = fs.promises;
 
 export class Session {
@@ -141,12 +141,18 @@ export class Session {
         }
     }
 
-    protected log(...messages: Parameters<typeof write>[1]): void {
-        write(this.configuration.stdout, messages);
+    protected log(...values: Array<unknown>): void {
+        const {configuration: {stdout}} = this;
+        for (const value of values) {
+            stdout.write(`${serialize(value)}\n`);
+        }
     }
 
-    protected logError(...messages: Parameters<typeof write>[1]): void {
-        write(this.configuration.stderr, messages);
+    protected logError(...values: Array<unknown>): void {
+        const {configuration: {stderr}} = this;
+        for (const value of values) {
+            stderr.write(`${serialize(value)}\n`);
+        }
     }
 
     protected async stopWatcher(): Promise<void> {
