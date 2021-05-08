@@ -1,5 +1,5 @@
 import type {ISessionConfiguration, ISessionOutput} from './types';
-import {getHash} from '../util/getHash';
+import {getBase64UrlHash} from '../util/getBase64UrlHash';
 
 export const getOutputOption = (
     {helper, css}: {helper?: string, css?: string},
@@ -12,7 +12,7 @@ export const getOutputOption = (
         }
         output = {type: 'css', path: css};
     } else {
-        const scriptPath = helper || `helper.${getHash(include.join(','))}.css.js`;
+        const scriptPath = helper || `helper.${getBase64UrlHash(...include)}.css.js`;
         output = {type: 'script', path: scriptPath};
     }
     return output;
