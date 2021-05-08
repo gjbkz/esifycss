@@ -1,14 +1,14 @@
 import * as fs from 'fs';
 import * as chokidar from 'chokidar';
 import * as path from 'path';
-import type {ISessionOptions, ISessionConfiguration} from './types';
+import type {SessionOptions, SessionConfiguration} from './types';
 import {getSessionConfiguration} from './getSessionConfiguration';
 import {parseCSS} from './parseCSS';
 import {extractPluginResult} from './extractPluginResult';
 import {generateScript} from './generateScript';
 import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
 import {minifyScripts} from '../minifier/minifyScripts';
-import type {IExposedPromise} from '../util/createExposedPromise';
+import type {ExposedPromise} from '../util/createExposedPromise';
 import {createExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 import {deleteFile} from '../util/deleteFile';
@@ -18,7 +18,7 @@ const {copyFile} = fs.promises;
 
 export class Session {
 
-    public readonly configuration: Readonly<ISessionConfiguration>;
+    public readonly configuration: Readonly<SessionConfiguration>;
 
     protected watcher?: chokidar.FSWatcher;
 
@@ -28,7 +28,7 @@ export class Session {
 
     protected tasks: Set<Promise<void>>;
 
-    public constructor(parameters: ISessionOptions = {}) {
+    public constructor(parameters: SessionOptions = {}) {
         this.configuration = getSessionConfiguration(parameters);
         this.processedFiles = new Set();
         this.initialTask = null;
@@ -101,7 +101,7 @@ export class Session {
         await Promise.all([...this.tasks]);
     }
 
-    protected createExposedPromise(): IExposedPromise {
+    protected createExposedPromise(): ExposedPromise {
         const exposedPromise = createExposedPromise();
         this.tasks.add(exposedPromise.promise);
         const removeTask = () => this.tasks.delete(exposedPromise.promise);

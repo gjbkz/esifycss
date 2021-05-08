@@ -30,7 +30,7 @@
         "build:helper:copy1": "ts-node scripts/copy ./src/helper ./lib/helper",
         "build:helper:copy2": "ts-node scripts/copy ./lib/helper ./src/helper",
         "build:helper": "run-s build:helper:cleanup build:helper:copy1 build:helper:tsc build:helper:copy2",
-        "build:tsc": "tsc",
+        "build:tsc": "tsc --project tsconfig.build.json",
         "build:dts": "ts-node scripts/copy ./src/minifier/walker.d.ts ./lib/minifier/walker.d.ts",
         "build:bin": "ts-node scripts/chmodScripts.ts",
         "build:sample1:cleanup": "rimraf sample/01-mangle",
@@ -42,7 +42,9 @@
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
         "build:sample2": "run-s build:sample2:cleanup build:sample2:copy build:sample2:esifycss",
         "build": "run-s build:cleanup build:tsc build:dts build:helper build:bin build:sample*",
-        "test": "ava --config ava.config.lib.cjs",
+        "test": "run-s test:*",
+        "test:type": "tsc --noEmit",
+        "test:ava": "ava --config ava.config.lib.cjs",
         "test-client": "ava --config ava.config.client.cjs",
         "version": "run-s version:changelog version:add",
         "version:changelog": "nlib-changelog --output CHANGELOG.md",
@@ -105,20 +107,9 @@
                 "files": [
                     "scripts/*.ts"
                 ],
-                "parserOptions": {
-                    "project": "./tsconfig.base.json"
-                },
                 "rules": {
                     "no-bitwise": "off",
                     "no-console": "off"
-                }
-            },
-            {
-                "files": [
-                    "@types/**/*.ts"
-                ],
-                "parserOptions": {
-                    "project": "./tsconfig.base.json"
                 }
             },
             {
@@ -136,9 +127,6 @@
                     "@typescript-eslint/no-floating-promises": "off",
                     "@typescript-eslint/no-unnecessary-condition": "off",
                     "@typescript-eslint/triple-slash-reference": "off"
-                },
-                "parserOptions": {
-                    "project": "./tsconfig.base.json"
                 }
             },
             {
@@ -147,9 +135,6 @@
                 ],
                 "rules": {
                     "no-bitwise": "off"
-                },
-                "parserOptions": {
-                    "project": "./tsconfig.helper.json"
                 }
             },
             {

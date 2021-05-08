@@ -21,6 +21,7 @@ export const program = new commander.Command()
 .option('--noMangle', 'Keep the original name for debugging.')
 .option('--watch', 'Watch files and update the modules automatically.')
 .action(async (include: Array<string>, options) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     await new Session(await loadParameters(include, options)).start();
 });
 

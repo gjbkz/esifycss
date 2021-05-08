@@ -1,17 +1,17 @@
-export interface IIdentifier {
+export interface Identifier {
     readonly idList: Array<string>,
     (key: string): number,
 }
 
-export interface IIdListener {
+interface IdListener {
     (key: string, id: number): void,
 }
 
 export const createIdentifier = (
-    listener: IIdListener = () => {
+    listener: IdListener = () => {
         // noop
     },
-): IIdentifier => {
+): Identifier => {
     const knownIdList = new Map<string, number>();
     let count = 0;
     const identifier = (key: string): number => {
@@ -32,5 +32,5 @@ export const createIdentifier = (
             return result;
         },
     });
-    return identifier as IIdentifier;
+    return identifier as Identifier;
 };

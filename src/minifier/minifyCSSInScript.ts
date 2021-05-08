@@ -1,11 +1,11 @@
-import type {ICSSRange} from './types';
-import type {IIdentifier} from '../util/createIdentifier';
+import type {CSSRange} from './types';
+import type {Identifier} from '../util/createIdentifier';
 import {encodeString} from '../util/encodeString';
 
 export const minifyCSSInScript = (
     script: string,
-    cssRanges: Array<ICSSRange>,
-    identifier: IIdentifier,
+    cssRanges: Array<CSSRange>,
+    identifier: Identifier,
 ): string => {
     let minified = script;
     for (let index = cssRanges.length; index--;) {

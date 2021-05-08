@@ -1,10 +1,5 @@
-import type {BinaryToTextEncoding, BinaryLike} from 'crypto';
+import type {BinaryLike} from 'crypto';
 import {createHash} from 'crypto';
-
-export interface IHashOptions {
-    algorithm: string,
-    encoding: BinaryToTextEncoding | 'base64url' | 'buffer',
-}
 
 export const getBase64UrlHash = (...dataList: Array<BinaryLike>): Buffer | string => {
     const hash = createHash('sha256');

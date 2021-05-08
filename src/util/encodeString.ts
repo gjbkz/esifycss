@@ -1,10 +1,10 @@
-import type {IIdentifier} from './createIdentifier';
+import type {Identifier} from './createIdentifier';
 import {tokenizeString} from './tokenizeString';
 import * as vlq from 'vlq';
 
 export const encodeString = (
     string: string,
-    identifier: IIdentifier,
+    identifier: Identifier,
 ): string => {
     const encoded: Array<number> = [];
     for (const token of tokenizeString(string)) {
