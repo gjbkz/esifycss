@@ -1,14 +1,14 @@
-import type {Identifier} from './createIdentifier';
+import type {IdGenerator} from './createIdGenerator';
 import {tokenizeString} from './tokenizeString';
 import * as vlq from 'vlq';
 
 export const encodeString = (
     string: string,
-    identifier: Identifier,
+    idGenerator: IdGenerator,
 ): string => {
     const encoded: Array<number> = [];
     for (const token of tokenizeString(string)) {
-        encoded.push(identifier(token));
+        encoded.push(idGenerator(token));
     }
     return vlq.encode(encoded);
 };

@@ -1,4 +1,4 @@
-import type {Identifier} from '../util/createIdentifier';
+import type {IdGenerator} from '../util/createIdGenerator';
 
 export interface PluginOptions {
     /**
@@ -13,7 +13,7 @@ export interface PluginOptions {
      * of mangled outputs.
      * @default esifycss.createIdentifier()
      */
-    identifier?: Identifier,
+    identifier?: IdGenerator,
     /**
      * Names starts with this value are not passed to mangler but replaced with
      * unprefixed names.

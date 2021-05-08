@@ -291,9 +291,9 @@ export interface PluginOptions {
    * CSS files in multiple postcss processes, you should create an identifier
    * outside the processes and pass it as this value to keep the uniqueness
    * of mangled outputs.
-   * @default esifycss.createIdentifier()
+   * @default esifycss.createIdGenerator()
    */
-  identifier?: Identifier,
+  identifier?: IdGenerator,
   /**
    * Names starts with this value are not passed to mangler but replaced with
    * unprefixed names.

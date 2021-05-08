@@ -1,6 +1,6 @@
 import test from 'ava';
 import {encodeString, decodeString} from './encodeString';
-import {createIdentifier} from './createIdentifier';
+import {createIdentifier} from './createIdGenerator';
 
 interface Test {
     input: string,

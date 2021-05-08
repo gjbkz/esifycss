@@ -3,7 +3,7 @@ import type {
     PluginConfiguration,
     PluginMangler,
 } from './types';
-import {createIdentifier} from '../util/createIdentifier';
+import {createIdentifier} from '../util/createIdGenerator';
 
 export const getPluginMangler = (
     {
