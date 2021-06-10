@@ -71,7 +71,7 @@
         "@types/node-fetch": "2.5.10",
         "@types/selenium-webdriver": "4.0.13",
         "@typescript-eslint/eslint-plugin": "4.26.1",
-        "@typescript-eslint/parser": "4.26.0",
+        "@typescript-eslint/parser": "4.26.1",
         "ava": "3.15.0",
         "browserstack-local": "1.4.8",
         "eslint": "7.28.0",
