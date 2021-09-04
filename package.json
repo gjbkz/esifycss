@@ -81,7 +81,7 @@
         "postcss-scss": "3.0.5",
         "rimraf": "3.0.2",
         "rollup": "2.56.3",
-        "selenium-webdriver": "4.0.0-beta.4",
+        "selenium-webdriver": "4.0.0-rc-1",
         "ts-node": "9.1.1",
         "typescript": "4.4.2"
     },
