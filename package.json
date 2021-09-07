@@ -82,10 +82,9 @@
     },
     "eslintConfig": {
         "extends": [
-            "@nlib"
+            "@nlib/eslint-config"
         ],
         "env": {
-            "es6": true,
             "node": true
         },
         "ignorePatterns": [
@@ -122,6 +121,9 @@
                     "*.test.ts",
                     "*.for-test.ts"
                 ],
+                "parserOptions": {
+                    "project": "./tsconfig.base.json"
+                },
                 "rules": {
                     "no-console": "off",
                     "no-process-env": "off",
@@ -131,20 +133,17 @@
                     "@typescript-eslint/no-floating-promises": "off",
                     "@typescript-eslint/no-unnecessary-condition": "off",
                     "@typescript-eslint/triple-slash-reference": "off"
-                },
-                "parserOptions": {
-                    "project": "./tsconfig.base.json"
                 }
             },
             {
                 "files": [
                     "src/helper/**/*"
                 ],
-                "rules": {
-                    "no-bitwise": "off"
-                },
                 "parserOptions": {
                     "project": "./tsconfig.helper.json"
+                },
+                "rules": {
+                    "no-bitwise": "off"
                 }
             },
             {
@@ -156,32 +155,6 @@
                 "env": {
                     "node": false,
                     "browser": true
-                }
-            },
-            {
-                "files": [
-                    "src/helper/**/*.js"
-                ],
-                "rules": {
-                    "brace-style": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/util/createExposedPromise.ts",
-                    "src/util/tokenizeString.ts",
-                    "src/minifier/parseCSSModuleScript.ts"
-                ],
-                "rules": {
-                    "@typescript-eslint/no-unnecessary-condition": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/runner/getChokidarOptions.ts"
-                ],
-                "rules": {
-                    "@typescript-eslint/no-unsafe-assignment": "off"
                 }
             }
         ]

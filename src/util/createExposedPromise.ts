@@ -14,6 +14,7 @@ export const createExposedPromise = (): IExposedPromise => {
         resolve = res;
         reject = rej;
     });
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (resolve && reject) {
         return {promise, resolve, reject};
     }

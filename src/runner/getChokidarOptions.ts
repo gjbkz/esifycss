@@ -3,16 +3,16 @@ import type {ISessionOptions, IReadonlyWatchOptions} from './types';
 import {ensureArray} from '../util/ensureArray';
 
 export const getChokidarOptions = (
-    parameters: ISessionOptions,
+    {chokidar: chokidarOptions = {}, exclude}: ISessionOptions,
 ): IReadonlyWatchOptions => {
     const options: WatchOptions = {
-        ...parameters.chokidar,
+        ...chokidarOptions,
         ignoreInitial: false,
         alwaysStat: true,
     };
     const ignored = [
-        ...ensureArray(parameters.chokidar && parameters.chokidar.ignored),
-        ...ensureArray(parameters.exclude),
+        ...ensureArray(chokidarOptions.ignored as Array<string>),
+        ...ensureArray(exclude),
     ];
     if (0 < ignored.length) {
         options.ignored = ignored;

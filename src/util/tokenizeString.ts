@@ -7,6 +7,7 @@ export const tokenizeString = function* (
 ): IterableIterator<string> {
     let pos = 0;
     const REGEXP = /[.0-9]+|[^a-zA-Z]/g;
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (1) {
         const match = REGEXP.exec(string);
         if (match) {
