@@ -24,7 +24,7 @@
         "lint": "eslint --ext .ts src scripts @types test-client",
         "build": "run-s build:*",
         "build:cleanup": "rimraf lib src/helper/*.js",
-        "build:index": "npx indexen --input src --exclude '**/bin/*' --exclude '**/helper/*' --exclude '*.test.*' --exclude '*.d.ts' --output src/index.ts",
+        "build:index": "npx @nlib/indexen --input src --exclude '**/bin/*' --exclude '**/helper/*' --exclude '*.test.*' --exclude '*.d.ts' --output src/index.ts",
         "build:tsc": "tsc --project tsconfig.build.json",
         "build:dts": "ts-node scripts/copy ./src/minifier/walker.d.ts ./lib/minifier/walker.d.ts",
         "build:helper": "run-s build:helper:*",
