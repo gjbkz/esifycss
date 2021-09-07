@@ -15,9 +15,7 @@
     "main": "lib/index.js",
     "files": [
         "lib",
-        "@types",
-        "!*.test.*",
-        "!*.map"
+        "@types"
     ],
     "bin": {
         "esifycss": "lib/bin/esifycss.js"
@@ -47,53 +45,49 @@
         "test:type": "tsc --noEmit",
         "test:ava": "ava --config ava.config.lib.cjs",
         "test-client": "ava --config ava.config.client.cjs",
-        "version": "run-s version:*",
-        "version:changelog": "nlib-changelog --output CHANGELOG.md",
+        "version": "run-s version:changelog version:add",
+        "version:changelog": "npx @nlib/changelog --output CHANGELOG.md",
         "version:add": "git add ."
     },
     "dependencies": {
         "@hookun/parse-animation-shorthand": "0.1.2",
-        "acorn": "8.2.4",
-        "acorn-walk": "8.1.0",
-        "chokidar": "3.5.1",
-        "commander": "7.2.0",
-        "postcss": "8.2.14",
-        "postcss-selector-parser": "6.0.5",
+        "acorn": "8.5.0",
+        "acorn-walk": "8.2.0",
+        "chokidar": "3.5.2",
+        "commander": "8.1.0",
+        "postcss": "8.3.6",
+        "postcss-selector-parser": "6.0.6",
         "vlq": "1.0.1"
     },
     "devDependencies": {
-        "@nlib/changelog": "0.1.9",
-        "@nlib/eslint-config": "3.17.22",
-        "@nlib/githooks": "0.0.5",
-        "@nlib/lint-commit": "0.1.4",
-        "@nlib/nodetool": "0.1.17",
-        "@types/anymatch": "1.3.1",
-        "@types/jsdom": "16.2.10",
-        "@types/micromatch": "4.0.1",
-        "@types/node": "15.0.2",
-        "@types/node-fetch": "2.5.10",
-        "@types/selenium-webdriver": "4.0.12",
-        "@typescript-eslint/eslint-plugin": "4.22.1",
-        "@typescript-eslint/parser": "4.22.1",
+        "@nlib/eslint-config": "3.17.25",
+        "@nlib/githooks": "0.1.0",
+        "@types/anymatch": "3.0.0",
+        "@types/jsdom": "16.2.13",
+        "@types/micromatch": "4.0.2",
+        "@types/node": "16.7.13",
+        "@types/node-fetch": "3.0.3",
+        "@types/selenium-webdriver": "4.0.15",
+        "@typescript-eslint/eslint-plugin": "4.31.0",
+        "@typescript-eslint/parser": "4.31.0",
         "ava": "3.15.0",
         "browserstack-local": "1.4.8",
-        "eslint": "7.26.0",
-        "lint-staged": "11.0.0",
-        "node-fetch": "2.6.1",
+        "eslint": "7.32.0",
+        "lint-staged": "11.1.2",
+        "node-fetch": "3.0.0",
         "npm-run-all": "4.1.5",
-        "postcss-scss": "3.0.5",
+        "postcss-scss": "4.0.0",
         "rimraf": "3.0.2",
-        "rollup": "2.47.0",
-        "selenium-webdriver": "4.0.0-beta.3",
-        "ts-node": "9.1.1",
-        "typescript": "4.2.4"
+        "rollup": "2.56.3",
+        "selenium-webdriver": "4.0.0-rc-1",
+        "ts-node": "10.2.1",
+        "typescript": "4.4.2"
     },
     "eslintConfig": {
         "extends": [
-            "@nlib"
+            "@nlib/eslint-config"
         ],
         "env": {
-            "es6": true,
             "node": true
         },
         "ignorePatterns": [
@@ -119,6 +113,9 @@
                     "*.test.ts",
                     "*.for-test.ts"
                 ],
+                "parserOptions": {
+                    "project": "./tsconfig.base.json"
+                },
                 "rules": {
                     "no-console": "off",
                     "no-process-env": "off",
@@ -134,6 +131,9 @@
                 "files": [
                     "src/helper/**/*"
                 ],
+                "parserOptions": {
+                    "project": "./tsconfig.helper.json"
+                },
                 "rules": {
                     "no-bitwise": "off"
                 }
@@ -147,32 +147,6 @@
                 "env": {
                     "node": false,
                     "browser": true
-                }
-            },
-            {
-                "files": [
-                    "src/helper/**/*.js"
-                ],
-                "rules": {
-                    "brace-style": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/util/createExposedPromise.ts",
-                    "src/util/tokenizeString.ts",
-                    "src/minifier/parseCSSModuleScript.ts"
-                ],
-                "rules": {
-                    "@typescript-eslint/no-unnecessary-condition": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/runner/getChokidarOptions.ts"
-                ],
-                "rules": {
-                    "@typescript-eslint/no-unsafe-assignment": "off"
                 }
             }
         ]
