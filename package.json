@@ -15,9 +15,7 @@
     "main": "lib/index.js",
     "files": [
         "lib",
-        "@types",
-        "!*.test.*",
-        "!*.map"
+        "@types"
     ],
     "bin": {
         "esifycss": "lib/bin/esifycss.js"
@@ -45,7 +43,7 @@
         "test": "ava --config ava.config.lib.cjs",
         "test-client": "ava --config ava.config.client.cjs",
         "version": "run-s version:changelog version:add",
-        "version:changelog": "nlib-changelog --output CHANGELOG.md",
+        "version:changelog": "npx @nlib/changelog --output CHANGELOG.md",
         "version:add": "git add ."
     },
     "dependencies": {
@@ -59,10 +57,8 @@
         "vlq": "1.0.1"
     },
     "devDependencies": {
-        "@nlib/changelog": "0.1.9",
         "@nlib/eslint-config": "3.17.24",
         "@nlib/githooks": "0.0.5",
-        "@nlib/lint-commit": "0.1.4",
         "@nlib/nodetool": "0.1.17",
         "@types/anymatch": "1.3.1",
         "@types/jsdom": "16.2.13",
