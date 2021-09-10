@@ -5,7 +5,7 @@ import anyTest from 'ava';
 import * as stream from 'stream';
 import * as events from 'events';
 import type * as postcss from 'postcss';
-import * as parser from '@hookun/parse-animation-shorthand';
+import * as animationParser from '@hookun/parse-animation-shorthand';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
@@ -104,12 +104,12 @@ test('watch', async (t) => {
         t.is(declarations2.length, 1);
         t.is(declarations2[0].prop, 'animation');
         t.deepEqual(
-            parser.parse(declarations1[0].value),
-            parser.parse(`1s 0.5s linear infinite ${result1.keyframes.foo}`),
+            animationParser.parse(declarations1[0].value),
+            animationParser.parse(`1s 0.5s linear infinite ${result1.keyframes.foo}`),
         );
         t.deepEqual(
-            parser.parse(declarations2[0].value),
-            parser.parse(`2s 1s linear infinite ${result1.keyframes.foo}`),
+            animationParser.parse(declarations2[0].value),
+            animationParser.parse(`2s 1s linear infinite ${result1.keyframes.foo}`),
         );
     }
 });

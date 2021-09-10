@@ -113,9 +113,6 @@
                     "*.test.ts",
                     "*.for-test.ts"
                 ],
-                "parserOptions": {
-                    "project": "./tsconfig.base.json"
-                },
                 "rules": {
                     "no-console": "off",
                     "no-process-env": "off",

@@ -4,7 +4,7 @@ import type {TestInterface, ExecutionContext} from 'ava';
 import anyTest from 'ava';
 import type * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
-import * as parser from '@hookun/parse-animation-shorthand';
+import * as animationParser from '@hookun/parse-animation-shorthand';
 import type {SessionOptions} from './types';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
@@ -136,8 +136,8 @@ interface Test {
                         t.is(declarations.length, 1);
                         t.is(declarations[0].prop, 'animation');
                         t.deepEqual(
-                            parser.parse(declarations[0].value),
-                            parser.parse([
+                            animationParser.parse(declarations[0].value),
+                            animationParser.parse([
                                 `1s 0.5s linear infinite ${keyframes.foo}`,
                                 `1s 0.5s ease 5 ${keyframes.bar}`,
                             ].join(',')),
