@@ -1,5 +1,6 @@
 import type * as postcss from 'postcss';
-import * as parser from '@hookun/parse-animation-shorthand';
+import * as console from 'console';
+import * as animationParser from '@hookun/parse-animation-shorthand';
 import type {EsifyCSSResult, Imports, PluginMangler} from './types';
 import {getMatchedImport} from './getMatchedImport';
 
@@ -31,12 +32,16 @@ export const transformDeclarations = (
             }
         } else if (prop === 'animation') {
             const animations: Array<string> = [];
-            for (const animation of parser.parse(declaration.value)) {
-                const renamed = getRenamed(animation.name);
-                if (renamed) {
-                    animation.name = renamed;
+            try {
+                for (const animation of animationParser.parse(declaration.value)) {
+                    const renamed = getRenamed(animation.name);
+                    if (renamed) {
+                        animation.name = renamed;
+                    }
+                    animations.push(animationParser.serialize(animation));
                 }
-                animations.push(parser.serialize(animation));
+            } catch (error: unknown) {
+                console.error(error);
             }
             declaration.value = animations.join(',');
         }
