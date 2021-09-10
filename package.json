@@ -43,8 +43,8 @@
         "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
         "test": "run-s test:*",
         "test:type": "tsc --noEmit",
-        "test:ava": "ava --config ava.config.cjs",
-        "test-client": "ava --config ava.config.client.cjs",
+        "test:ava": "ava",
+        "test-client": "ava test-client/run.ts",
         "version": "run-s version:changelog version:add",
         "version:changelog": "npx @nlib/changelog --output CHANGELOG.md",
         "version:add": "git add ."
