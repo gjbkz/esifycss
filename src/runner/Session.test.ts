@@ -1,8 +1,10 @@
 import * as path from 'path';
+import * as fs from 'fs';
 import * as stream from 'stream';
+import * as events from 'events';
 import type {TestInterface, ExecutionContext} from 'ava';
 import anyTest from 'ava';
-import type * as postcss from 'postcss';
+import * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
 import * as animationParser from '@hookun/parse-animation-shorthand';
 import type {SessionOptions} from './types';
@@ -11,6 +13,7 @@ import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import type {RunCodeResult} from '../util/runCode.for-test';
 import {runCode} from '../util/runCode.for-test';
 import {updateFile} from '../util/updateFile';
+import {deleteFile} from '..';
 
 interface TestContext {
     directory: string,
@@ -18,6 +21,24 @@ interface TestContext {
 }
 
 const test = anyTest as TestInterface<TestContext>;
+const isRule = (input: postcss.ChildNode): input is postcss.Rule => input.type === 'rule';
+const createMessageListener = () => {
+    const messageListener = new events.EventEmitter();
+    const waitForMessage = async (
+        expected: RegExp | string,
+    ) => await new Promise<void>((resolve, reject) => {
+        const timeoutId = setTimeout(() => reject(new Error(`Timeout: waiting ${expected}`)), 1000);
+        const onData = (message: string) => {
+            if (typeof expected === 'string' ? message.includes(expected) : expected.test(message)) {
+                clearTimeout(timeoutId);
+                messageListener.removeListener('message', onData);
+                resolve();
+            }
+        };
+        messageListener.on('message', onData);
+    });
+    return {messageListener, waitForMessage};
+};
 
 test.beforeEach(async (t) => {
     t.context.directory = await createTemporaryDirectory();
@@ -203,4 +224,186 @@ interface Test {
             file.test(t, result);
         }));
     });
+});
+
+test('ignore output even if it is covered by the "include" pattern.', async (t) => {
+    const files = [
+        {
+            path: 'input1.css',
+            content: [
+                '.a1 {color: a1; width: 10%}',
+                '.b1 {color: b1; width: 20%}',
+            ],
+        },
+        {
+            path: 'input2.css',
+            content: [
+                '@charset "utf-8";',
+                '.a2 {color: a2; width: 30%}',
+                '.b2 {color: b2; width: 40%}',
+            ],
+        },
+    ];
+    await Promise.all(files.map(async (file) => {
+        await updateFile(
+            path.join(t.context.directory, file.path),
+            file.content.join('\n'),
+        );
+    }));
+    const cssPath = path.join(t.context.directory, 'output.css');
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            t.log(`${chunk}`.trim());
+            callback();
+        },
+    });
+    const session = t.context.session = new Session({
+        css: cssPath,
+        include: t.context.directory,
+        watch: false,
+        stdout: writable,
+        stderr: writable,
+    });
+    await session.start();
+    await t.throwsAsync(async () => {
+        await fs.promises.stat(`${cssPath}.js`);
+    }, {code: 'ENOENT'});
+    /** this call may include the output */
+    await session.start();
+    await t.throwsAsync(async () => {
+        await fs.promises.stat(`${cssPath}.js`);
+    }, {code: 'ENOENT'});
+    const outputScriptPath1 = path.join(t.context.directory, 'input1.css.js');
+    const outputScript1 = await fs.promises.readFile(outputScriptPath1, 'utf-8');
+    t.log(`==== outputScript1 ====\n${outputScript1.trim()}\n===================`);
+    t.false(outputScript1.includes('addStyle'));
+    const result1 = await runCode(outputScriptPath1);
+    t.deepEqual(result1.className, {
+        a1: '_0',
+        b1: '_1',
+    });
+    const outputScriptPath2 = path.join(t.context.directory, 'input2.css.js');
+    const outputScript2 = await fs.promises.readFile(outputScriptPath2, 'utf-8');
+    t.log(`==== outputScript2 ====\n${outputScript2.trim()}\n===================`);
+    t.false(outputScript2.includes('addStyle'));
+    const result2 = await runCode(outputScriptPath2);
+    t.deepEqual(result2.className, {
+        a2: '_2',
+        b2: '_3',
+    });
+    const resultCSS = await fs.promises.readFile(cssPath, 'utf8');
+    t.log(`==== resultCSS ====\n${resultCSS}\n===================`);
+    const root = postcss.parse(resultCSS);
+    t.log(root.toJSON());
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result1.className.a1}`));
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result1.className.b1}`));
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result2.className.a2}`));
+    t.truthy(root.nodes.find((node) => isRule(node) && node.selector === `.${result2.className.b2}`));
+});
+
+test('watch', async (t) => {
+    const cssPath = path.join(t.context.directory, '/components/style.css');
+    const helper = path.join(t.context.directory, 'helper.js');
+    const codePath = `${cssPath}${path.extname(helper)}`;
+    const {messageListener, waitForMessage} = createMessageListener();
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            const message = `${chunk}`.trim();
+            messageListener.emit('message', message);
+            t.log(message);
+            callback();
+        },
+    });
+    t.context.session = new Session({
+        helper,
+        watch: true,
+        include: t.context.directory,
+        stdout: writable,
+        stderr: writable,
+    });
+    await updateFile(cssPath, [
+        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '.foo#bar {animation: 1s 0.5s linear infinite foo}',
+    ].join(''));
+    t.context.session.start().catch(t.fail);
+    await waitForMessage(`written: ${codePath}`);
+    const result1 = await runCode(codePath);
+    await updateFile(cssPath, [
+        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '.foo#bar {animation: 2s 1s linear infinite foo}',
+    ].join(''));
+    await waitForMessage(`written: ${codePath}`);
+    const result2 = await runCode(codePath);
+    await deleteFile(cssPath);
+    await waitForMessage(`deleted: ${codePath}`);
+    await t.throwsAsync(async () => await fs.promises.stat(codePath), {code: 'ENOENT'});
+    t.deepEqual(result1.className, result2.className);
+    t.deepEqual(result1.id, result2.id);
+    t.deepEqual(result1.keyframes, result2.keyframes);
+    const nodes1 = result1.root.nodes || [];
+    const nodes2 = result2.root.nodes || [];
+    {
+        const atRule1 = nodes1[0] as postcss.AtRule;
+        const atRule2 = nodes2[0] as postcss.AtRule;
+        t.is(atRule1.name, 'keyframes');
+        t.is(atRule2.name, 'keyframes');
+        t.is(atRule1.params, result1.keyframes.foo);
+        t.is(atRule1.params, result1.keyframes.foo);
+    }
+    {
+        const rule1 = nodes1[1] as postcss.Rule;
+        const rule2 = nodes2[1] as postcss.Rule;
+        t.is(rule1.selector, `.${result1.className.foo}#${result1.id.bar}`);
+        t.is(rule2.selector, `.${result1.className.foo}#${result1.id.bar}`);
+        const declarations1 = (rule1.nodes || []) as Array<postcss.Declaration>;
+        const declarations2 = (rule2.nodes || []) as Array<postcss.Declaration>;
+        t.is(declarations1.length, 1);
+        t.is(declarations1[0].prop, 'animation');
+        t.is(declarations2.length, 1);
+        t.is(declarations2[0].prop, 'animation');
+        t.deepEqual(
+            animationParser.parse(declarations1[0].value),
+            animationParser.parse(`1s 0.5s linear infinite ${result1.keyframes.foo}`),
+        );
+        t.deepEqual(
+            animationParser.parse(declarations2[0].value),
+            animationParser.parse(`2s 1s linear infinite ${result1.keyframes.foo}`),
+        );
+    }
+});
+
+test('watch-css', async (t) => {
+    const cssPath = path.join(t.context.directory, '/components/style.css');
+    const cssOutputPath = path.join(t.context.directory, 'output.css');
+    const {messageListener, waitForMessage} = createMessageListener();
+    const writable = new stream.Writable({
+        write(chunk, _encoding, callback) {
+            const message = `${chunk}`.trim();
+            messageListener.emit('message', message);
+            t.log(message);
+            callback();
+        },
+    });
+    t.context.session = new Session({
+        css: cssOutputPath,
+        watch: true,
+        include: t.context.directory,
+        stdout: writable,
+        stderr: writable,
+    });
+    await updateFile(cssPath, [
+        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '.foo#bar {animation: 1s 0.5s linear infinite foo}',
+    ].join(''));
+    await t.context.session.start().catch(t.fail);
+    const outputCss1 = await fs.promises.readFile(cssOutputPath, 'utf-8');
+    await updateFile(cssPath, [
+        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '.foo#bar {animation: 2s 1s linear infinite foo}',
+    ].join(''));
+    await waitForMessage(`written: ${cssOutputPath}`);
+    const outputCss2 = await fs.promises.readFile(cssOutputPath, 'utf-8');
+    t.log('outputCss1', outputCss1);
+    t.log('outputCss2', outputCss2);
+    t.true(outputCss1 !== outputCss2);
 });

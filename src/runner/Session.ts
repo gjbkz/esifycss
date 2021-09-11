@@ -98,6 +98,7 @@ export class Session {
         } else {
             await minifyScripts({files, cssKey, dest: output.path});
         }
+        this.log(`written: ${output.path}`);
     }
 
     protected async waitCurrentTasks(): Promise<void> {
@@ -117,6 +118,7 @@ export class Session {
         this.initialTask = [];
         this.log(`watching: ${this.configuration.path.join(', ')}`);
         const onError = this.onError.bind(this);
+        let postUpdate = async () => await Promise.resolve();
         this.watcher = chokidar.watch(this.configuration.path, this.configuration.chokidar)
         .on('error', onError)
         .on('add', (file, stats) => {
@@ -125,20 +127,25 @@ export class Session {
             if (this.initialTask) {
                 this.initialTask.push(promise);
             }
-            promise.catch(onError);
+            promise.then(postUpdate).catch(onError);
         })
         .on('change', (file, stats) => {
             this.log(`[change] ${file}`);
-            this.onChange(file, stats).catch(onError);
+            this.onChange(file, stats).then(postUpdate).catch(onError);
         })
         .on('unlink', (file) => {
             this.log(`[unlink] ${file}`);
-            this.onUnlink(file).catch(onError);
+            this.onUnlink(file).then(postUpdate).catch(onError);
         });
         await waitForInitialScanCompletion(this.watcher);
         await Promise.all(this.initialTask);
         this.initialTask = null;
-        if (!this.configuration.watch) {
+        if (this.configuration.watch) {
+            if (this.configuration.output.type === 'css') {
+                await this.minifyScripts();
+                postUpdate = this.minifyScripts.bind(this);
+            }
+        } else {
             await this.minifyScripts();
             await this.stop();
         }

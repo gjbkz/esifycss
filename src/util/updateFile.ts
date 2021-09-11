@@ -1,18 +1,20 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import {statOrNull} from './statOrNull';
+import {ignoreNoEntryError} from './ignoreNoEntryError';
 
 export const updateFile = async (filePath: string, source: Uint8Array | string): Promise<void> => {
-    const [stats] = await Promise.all([
-        statOrNull(filePath),
-        fs.promises.mkdir(path.dirname(filePath), {recursive: true}),
-    ]);
+    await ensureDirectory(path.dirname(filePath));
     const buffer = Buffer.from(source);
-    if (stats && stats.isFile()) {
-        const currentBuffer = await fs.promises.readFile(filePath);
-        if (buffer.equals(currentBuffer)) {
-            return;
-        }
+    const currentBuffer = await fs.promises.readFile(filePath).catch(ignoreNoEntryError);
+    if (currentBuffer && buffer.equals(currentBuffer)) {
+        return;
     }
     await fs.promises.writeFile(filePath, buffer);
+};
+
+const ensureDirectory = async (directory: string) => {
+    const directoryStats = await fs.promises.stat(directory).catch(ignoreNoEntryError);
+    if (!directoryStats || !directoryStats.isDirectory()) {
+        await fs.promises.mkdir(directory, {recursive: true});
+    }
 };
