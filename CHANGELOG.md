@@ -1,10 +1,18 @@
 # Changelog
 
-## v1.4.30 (2021-09-11)
+## v1.4.31 (2021-09-11)
 
 ### Features
 
 - add preamble to generated files ([2af96b3](https://github.com/kei-ito/esifycss/commit/2af96b3339a90a046bfb86346abb05fe44a351ff))
+
+### Build System
+
+- rebuild samples ([2ead14b](https://github.com/kei-ito/esifycss/commit/2ead14bc4dd233ae7c1d0632a5aceca86d47be95))
+
+### Dependency Upgrades
+
+- @types/node:16.7.13→16.9.1 commander:8.1.0→8.2.0 typescript:4.4.2→4.4.3 ([764e7ee](https://github.com/kei-ito/esifycss/commit/764e7ee174c500fe889602cf636c1cfca97cdd4d))
 
 
 ## v1.4.29 (2021-09-11)
