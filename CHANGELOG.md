@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.33 (2021-09-11)
+
+### Documentation
+
+- update the Next.js example ([fd7370a](https://github.com/kei-ito/esifycss/commit/fd7370a1374f159dec4e1b48fab67a9397a28bfd))
+
+
 ## v1.4.32 (2021-09-11)
 
 ### Features
