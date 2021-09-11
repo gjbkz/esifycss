@@ -13,5 +13,9 @@
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true
-    }
+    },
+    "exclude": [
+        "./lib/**/*",
+        "./sample/**/*"
+    ]
 }
