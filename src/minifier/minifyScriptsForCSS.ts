@@ -12,7 +12,8 @@ export const minifyScriptForCSS = async (
     }
     code = [...data.expressionStatements, ...data.importDeclarations]
     .sort((range1, range2) => range1.start < range2.start ? 1 : -1)
-    .reduce((node, range) => `${node.slice(0, range.start)}${node.slice(range.end)}`, code);
+    .reduce((node, range) => `${node.slice(0, range.start)}${node.slice(range.end)}`, code)
+    .replace(/\n\s*\n/g, '\n');
     await writeFilep(file, code);
     return cssList.join('\n');
 };
