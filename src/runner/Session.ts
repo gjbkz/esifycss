@@ -76,13 +76,16 @@ export class Session {
         const dest = path.join(`${filePath}${configuration.ext}`);
         this.processedFiles.add(filePath);
         const {output} = configuration;
-        const code = generateScript({
-            output: dest,
-            helper: output.type === 'css' ? this.helperPath : output.path,
-            result: extractPluginResult(postcssResult),
-            root: postcssResult.root,
-            cssKey: this.configuration.cssKey,
-        });
+        const code = [
+            ...generateScript({
+                output: dest,
+                helper: output.type === 'css' ? null : output.path,
+                result: extractPluginResult(postcssResult),
+                root: postcssResult.root,
+                cssKey: this.configuration.cssKey,
+            }),
+            '',
+        ].join('\n');
         exposedPromise.resolve();
         return {dest, code};
     }
