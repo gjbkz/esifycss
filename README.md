@@ -111,6 +111,20 @@ results to `.css.js` or `.css.ts`.
 
 ### CLI
 
+#### example: generate .css.ts and css-helper.ts
+
+```
+esifycss --helper=css-helper.ts --ext=.ts <source-directory>
+```
+
+#### example: TypeScript based Next.js project
+
+```
+esifycss --css=pages/output.css --ext=.ts pages
+```
+
+#### `--help`
+
 ```
 Usage: esifycss [options] <include ...>
 
