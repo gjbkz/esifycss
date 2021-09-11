@@ -111,20 +111,6 @@ results to `.css.js` or `.css.ts`.
 
 ### CLI
 
-#### example: generate .css.ts and css-helper.ts
-
-```
-esifycss --helper=css-helper.ts --ext=.ts <source-directory>
-```
-
-#### example: TypeScript based Next.js project
-
-```
-esifycss --css=pages/output.css --ext=.ts pages
-```
-
-#### `--help`
-
 ```
 Usage: esifycss [options] <include ...>
 
@@ -138,6 +124,41 @@ Options:
   --noMangle            Keep the original name for debugging.
   --watch               Watch files and update the modules automatically.
   -h, --help            output usage information
+```
+
+#### example: generate .css.ts and css-helper.ts
+
+```
+esifycss --helper=css-helper.ts --ext=.ts <source-directory>
+```
+
+#### example: TypeScript based Next.js project
+
+Assume that you have following files:
+
+```
+src/
+  styles/
+    global.css
+  components/
+    Button/
+      index.ts
+      style.module.css
+  pages/
+    _app.tsx
+```
+
+Then, run the following command:
+
+```
+esifycss --css=src/pages/all.css --ext=.ts src
+```
+
+You'll get `src/pages/all.css`. `src/pages/_app.tsx` should import it:
+
+```typescript
+// src/pages/_app.tsx
+import './all.css';
 ```
 
 ## Installation
