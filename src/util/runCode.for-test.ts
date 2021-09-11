@@ -4,7 +4,7 @@ import * as rollup from 'rollup';
 import * as postcss from 'postcss';
 import {createSandbox} from '../util/createSandbox.for-test';
 import type {EsifyCSSResult} from '../postcssPlugin/types';
-import {writeFilep} from './writeFilep';
+import {updateFile} from './updateFile';
 
 export interface RunCodeResult extends EsifyCSSResult {
     root: postcss.Root,
@@ -12,7 +12,7 @@ export interface RunCodeResult extends EsifyCSSResult {
 
 export const runCode = async (file: string): Promise<RunCodeResult> => {
     const testCodePath = `${file}-import.js`;
-    await writeFilep(testCodePath, `import * as imported from './${path.basename(file)}';exports = imported;`);
+    await updateFile(testCodePath, `import * as imported from './${path.basename(file)}';exports = imported;`);
     const bundle = await rollup.rollup({input: testCodePath});
     const {output: [output, undef]} = await bundle.generate({format: 'es'});
     if (undef) {

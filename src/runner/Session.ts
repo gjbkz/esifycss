@@ -12,7 +12,7 @@ import type {ExposedPromise} from '../util/createExposedPromise';
 import {createExposedPromise} from '../util/createExposedPromise';
 import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 import {deleteFile} from '../util/deleteFile';
-import {writeFilep} from '../util/writeFilep';
+import {updateFile} from '../util/updateFile';
 import {serialize} from '../util/serialize';
 const {copyFile} = fs.promises;
 
@@ -188,7 +188,7 @@ export class Session {
             throw new Error(`${file} is not a file.`);
         }
         const {dest, code} = await this.processCSS(file);
-        await writeFilep(dest, code);
+        await updateFile(dest, code);
         this.log(`written: ${dest}`);
     }
 

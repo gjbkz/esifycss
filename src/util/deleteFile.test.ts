@@ -3,13 +3,13 @@ import * as fs from 'fs';
 import ava from 'ava';
 import {createTemporaryDirectory} from './createTemporaryDirectory';
 import {deleteFile} from './deleteFile';
-import {writeFilep} from './writeFilep';
+import {updateFile} from './updateFile';
 const {stat, mkdir} = fs.promises;
 
 ava('delete a file', async (t) => {
     const testDirectory = await createTemporaryDirectory();
     const filePath = path.join(testDirectory, 'file');
-    await writeFilep(filePath, filePath);
+    await updateFile(filePath, filePath);
     t.true((await stat(filePath)).isFile());
     await deleteFile(filePath);
     await t.throwsAsync(async () => {
@@ -34,7 +34,7 @@ ava('delete a directory', async (t) => {
     const directory = path.join(rootDirectory, 'dir2');
     await mkdir(directory, {recursive: true});
     const filePath = path.join(directory, 'file');
-    await writeFilep(path.join(directory, 'file'), directory);
+    await updateFile(path.join(directory, 'file'), directory);
     t.true((await stat(filePath)).isFile());
     await deleteFile(rootDirectory);
     await t.throwsAsync(async () => {

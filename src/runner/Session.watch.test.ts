@@ -10,7 +10,7 @@ import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
 import {deleteFile} from '../util/deleteFile';
-import {writeFilep} from '../util/writeFilep';
+import {updateFile} from '../util/updateFile';
 const {stat} = fs.promises;
 
 interface TestContext {
@@ -63,14 +63,14 @@ test('watch', async (t) => {
         stdout: writable,
         stderr: writable,
     });
-    await writeFilep(cssPath, [
+    await updateFile(cssPath, [
         '@keyframes foo {0%{color:red}100%{color:green}}',
         '.foo#bar {animation: 1s 0.5s linear infinite foo}',
     ].join(''));
     t.context.session.start().catch(t.fail);
     await waitForMessage(`written: ${codePath}`);
     const result1 = await runCode(codePath);
-    await writeFilep(cssPath, [
+    await updateFile(cssPath, [
         '@keyframes foo {0%{color:red}100%{color:green}}',
         '.foo#bar {animation: 2s 1s linear infinite foo}',
     ].join(''));

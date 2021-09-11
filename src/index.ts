@@ -49,4 +49,4 @@ export * from './util/postcss';
 export * from './util/runCode.for-test';
 export * from './util/serialize';
 export * from './util/tokenizeString';
-export * from './util/writeFilep';
+export * from './util/updateFile';

@@ -10,7 +10,7 @@ import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import type {RunCodeResult} from '../util/runCode.for-test';
 import {runCode} from '../util/runCode.for-test';
-import {writeFilep} from '../util/writeFilep';
+import {updateFile} from '../util/updateFile';
 
 interface TestContext {
     directory: string,
@@ -170,7 +170,7 @@ interface Test {
     test.serial(`#${index}`, async (t) => {
         await Promise.all(files.map(async (file) => {
             const filePath = path.join(t.context.directory, file.path);
-            await writeFilep(filePath, file.content.join('\n'));
+            await updateFile(filePath, file.content.join('\n'));
         }));
         const helper = path.join(t.context.directory, 'helper.js');
         const writable = new stream.Writable({

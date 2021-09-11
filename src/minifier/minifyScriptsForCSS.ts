@@ -1,4 +1,4 @@
-import {writeFilep} from '../util/writeFilep';
+import {updateFile} from '../util/updateFile';
 import {parseScripts} from './parseScripts';
 import type {ScriptData} from './types';
 
@@ -14,7 +14,7 @@ export const minifyScriptForCSS = async (
     .sort((range1, range2) => range1.start < range2.start ? 1 : -1)
     .reduce((node, range) => `${node.slice(0, range.start)}${node.slice(range.end)}`, code)
     .replace(/\n\s*\n/g, '\n');
-    await writeFilep(file, code);
+    await updateFile(file, code);
     return cssList.join('\n');
 };
 
@@ -31,5 +31,5 @@ export const minifyScriptsForCSS = async (
 ): Promise<void> => {
     const parseResult = await parseScripts(props);
     const cssList = await Promise.all([...parseResult.scripts].map(minifyScriptForCSS));
-    await writeFilep(props.dest, cssList.join('\n'));
+    await updateFile(props.dest, cssList.join('\n'));
 };

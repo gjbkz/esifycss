@@ -7,7 +7,7 @@ import anyTest from 'ava';
 import {Session} from './Session';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import {runCode} from '../util/runCode.for-test';
-import {writeFilep} from '../util/writeFilep';
+import {updateFile} from '../util/updateFile';
 const {readFile} = fs.promises;
 
 interface TestContext {
@@ -47,7 +47,7 @@ test('ignore output even if it is covered by the "include" pattern.', async (t) 
         },
     ];
     await Promise.all(files.map(async (file) => {
-        await writeFilep(
+        await updateFile(
             path.join(t.context.directory, file.path),
             file.content.join('\n'),
         );
