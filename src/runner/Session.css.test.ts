@@ -28,7 +28,7 @@ test.afterEach(async (t) => {
     }
 });
 
-test('#css', async (t) => {
+test('ignore output even if it is covered by the "include" pattern.', async (t) => {
     const files = [
         {
             path: 'input1.css',
@@ -67,6 +67,15 @@ test('#css', async (t) => {
         stderr: writable,
     });
     await session.start();
+    await t.throwsAsync(async () => {
+        await fs.promises.stat(`${cssPath}.js`);
+    }, {code: 'ENOENT'});
+    /** this call may include the output */
+    await session.start();
+    await t.throwsAsync(async () => {
+        await fs.promises.stat(`${cssPath}.js`);
+    }, {code: 'ENOENT'});
+    t.log(await fs.promises.readdir(t.context.directory));
     const result1 = await runCode(path.join(t.context.directory, 'input1.css.js'));
     t.deepEqual(result1.className, {
         a1: '_0',
