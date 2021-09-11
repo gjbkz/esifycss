@@ -28,7 +28,8 @@ interface Test {
                     end: 62,
                 },
             ],
-            statements: [{start: 36, end: 65}],
+            expressionStatements: [{start: 36, end: 65}],
+            importDeclarations: [{start: 1, end: 35}],
         },
     },
     {
@@ -42,7 +43,8 @@ interface Test {
         },
         expected: {
             ranges: [],
-            statements: [],
+            expressionStatements: [],
+            importDeclarations: [{start: 1, end: 35}],
         },
     },
     {
@@ -59,7 +61,8 @@ interface Test {
                     end: 26,
                 },
             ],
-            statements: [{start: 0, end: 29}],
+            expressionStatements: [{start: 0, end: 29}],
+            importDeclarations: [],
         },
     },
     {
@@ -73,7 +76,8 @@ interface Test {
         },
         expected: {
             ranges: [],
-            statements: [],
+            expressionStatements: [],
+            importDeclarations: [{start: 0, end: 34}],
         },
     },
     {
@@ -87,7 +91,8 @@ interface Test {
         },
         expected: {
             ranges: [],
-            statements: [],
+            expressionStatements: [],
+            importDeclarations: [{start: 0, end: 34}],
         },
     },
     {
@@ -101,7 +106,8 @@ interface Test {
         },
         expected: {
             ranges: [],
-            statements: [],
+            expressionStatements: [],
+            importDeclarations: [{start: 0, end: 34}],
         },
     },
     {
@@ -115,7 +121,8 @@ interface Test {
         },
         expected: {
             ranges: [],
-            statements: [],
+            expressionStatements: [],
+            importDeclarations: [{start: 0, end: 34}],
         },
     },
     {
@@ -157,7 +164,8 @@ interface Test {
                     end: 56,
                 },
             ],
-            statements: [{start: 30, end: 59}],
+            expressionStatements: [{start: 30, end: 59}],
+            importDeclarations: [],
         },
     },
     {
@@ -177,7 +185,8 @@ interface Test {
                     end: 61,
                 },
             ],
-            statements: [{start: 35, end: 64}],
+            expressionStatements: [{start: 35, end: 64}],
+            importDeclarations: [],
         },
     },
     {
@@ -199,7 +208,8 @@ interface Test {
                     end: 61,
                 },
             ],
-            statements: [{start: 35, end: 64}],
+            expressionStatements: [{start: 35, end: 64}],
+            importDeclarations: [],
         },
     },
     {
@@ -219,9 +229,10 @@ interface Test {
                     end: 78,
                 },
             ],
-            statements: [
+            expressionStatements: [
                 {start: 52, end: 81},
             ],
+            importDeclarations: [],
         },
     },
 ] as Array<Test>).forEach(({input, expected}, index) => {
