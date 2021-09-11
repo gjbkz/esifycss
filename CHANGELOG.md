@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.4.29 (2021-09-11)
+
+### Features
+
+- minifyScriptForCSS removes import declarations ([1e73fd1](https://github.com/kei-ito/esifycss/commit/1e73fd1977b4cad833575211b427604cf5da54db))
+
+### Bug Fixes
+
+- temporary scripts must have addStyle ([5f24765](https://github.com/kei-ito/esifycss/commit/5f24765428be96a25d823ce07761126aca095184))
+- omit addStyle() from generated code if the output is css ([2f1bd46](https://github.com/kei-ito/esifycss/commit/2f1bd4647ffb5ab7b3e91556c67ce925d3a7675a))
+- automatically exclude the path of css output ([d7f3eda](https://github.com/kei-ito/esifycss/commit/d7f3edadcd509899325167d5558838fe0a1f3c32))
+- ignore parse animation error (#403) ([df4896a](https://github.com/kei-ito/esifycss/commit/df4896a112687a8d5e9ba0dc912c9b22bc760cec))
+
+### Tests
+
+- run twice to reproduce the error ([86ef1bc](https://github.com/kei-ito/esifycss/commit/86ef1bc30eafa6475c251fd5a2ee7bc04f4bb150))
+
+### Documentation
+
+- update README ([b0bd5ed](https://github.com/kei-ito/esifycss/commit/b0bd5eddd26503ec6248d18bc9c67ccacf285563))
+
+
 ## v1.4.28 (2021-09-09)
 
 ### Bug Fixes
