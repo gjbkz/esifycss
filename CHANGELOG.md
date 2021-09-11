@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.4.32 (2021-09-11)
+
+### Features
+
+- suppress worthless overwrites ([f204e0e](https://github.com/kei-ito/esifycss/commit/f204e0e1ea8b9a0f5e9af8b6fa08705b1b15038a))
+
+### Bug Fixes
+
+- update output css on change ([1c59e7b](https://github.com/kei-ito/esifycss/commit/1c59e7b94f2fdbabdfca66933bde9dcfd8d413e6))
+
+
 ## v1.4.31 (2021-09-11)
 
 ### Features
