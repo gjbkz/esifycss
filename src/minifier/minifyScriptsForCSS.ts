@@ -10,9 +10,9 @@ export const minifyScriptForCSS = async (
     for (let index = data.ranges.length; index--;) {
         cssList[index] = data.ranges[index].css;
     }
-    code = data.statements
+    code = [...data.expressionStatements, ...data.importDeclarations]
     .sort((range1, range2) => range1.start < range2.start ? 1 : -1)
-    .reduce((statement, range) => `${statement.slice(0, range.start)}${statement.slice(range.end)}`, code);
+    .reduce((node, range) => `${node.slice(0, range.start)}${node.slice(range.end)}`, code);
     await writeFilep(file, code);
     return cssList.join('\n');
 };

@@ -9,7 +9,8 @@ export interface CSSRange extends Range {
 
 export interface ParseResult {
     ranges: Array<CSSRange>,
-    statements: Array<Range>,
+    expressionStatements: Array<Range>,
+    importDeclarations: Array<Range>,
 }
 
 export interface ScriptData extends ParseResult {

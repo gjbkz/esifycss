@@ -11,7 +11,8 @@ export const parseCSSModuleScript = (
     },
 ): ParseResult => {
     const ranges: Array<CSSRange> = [];
-    const statements: Array<Range> = [];
+    const importDeclarations: Array<Range> = [];
+    const expressionStatements: Array<Range> = [];
     const ast = acorn.parse(
         props.code,
         {
@@ -20,21 +21,25 @@ export const parseCSSModuleScript = (
         },
     );
     acornWalk.simple(ast, {
+        ImportDeclaration: ({start, end}) => {
+            importDeclarations.push({start, end});
+        },
         ExpressionStatement: (statement) => {
-            const {expression} = statement;
+            const {expression, start, end} = statement;
             if (expression.callee) {
                 const {length} = ranges;
                 for (const argument of expression.arguments) {
                     ranges.push(...extractCSSFromArrayExpression(argument, props.cssKey));
                 }
                 if (length < ranges.length) {
-                    statements.push({start: statement.start, end: statement.end});
+                    expressionStatements.push({start, end});
                 }
             }
         },
     });
     return {
         ranges,
-        statements,
+        expressionStatements,
+        importDeclarations,
     };
 };

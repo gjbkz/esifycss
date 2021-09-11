@@ -15,7 +15,11 @@ export const extractCSSFromArrayExpression = (
                         if (value.type === 'Literal') {
                             const css = value.value;
                             if (typeof css === 'string') {
-                                result.push({css, start: item.start, end: item.end});
+                                result.push({
+                                    css,
+                                    start: item.start,
+                                    end: item.end,
+                                });
                             } else {
                                 throw new Error(`InvalidCSSType: ${JSON.stringify(css)}`);
                             }
