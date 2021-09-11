@@ -79,7 +79,7 @@ export class Session {
         const code = [
             ...generateScript({
                 output: dest,
-                helper: output.type === 'css' ? null : output.path,
+                helper: output.type === 'css' ? this.helperPath : output.path,
                 result: extractPluginResult(postcssResult),
                 root: postcssResult.root,
                 cssKey: this.configuration.cssKey,

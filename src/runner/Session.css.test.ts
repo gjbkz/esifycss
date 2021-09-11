@@ -75,13 +75,20 @@ test('ignore output even if it is covered by the "include" pattern.', async (t) 
     await t.throwsAsync(async () => {
         await fs.promises.stat(`${cssPath}.js`);
     }, {code: 'ENOENT'});
-    t.log(await fs.promises.readdir(t.context.directory));
-    const result1 = await runCode(path.join(t.context.directory, 'input1.css.js'));
+    const outputScriptPath1 = path.join(t.context.directory, 'input1.css.js');
+    const outputScript1 = await fs.promises.readFile(outputScriptPath1, 'utf-8');
+    t.log(`==== outputScript1 ====\n${outputScript1.trim()}\n===================`);
+    t.false(outputScript1.includes('addStyle'));
+    const result1 = await runCode(outputScriptPath1);
     t.deepEqual(result1.className, {
         a1: '_0',
         b1: '_1',
     });
-    const result2 = await runCode(path.join(t.context.directory, 'input2.css.js'));
+    const outputScriptPath2 = path.join(t.context.directory, 'input2.css.js');
+    const outputScript2 = await fs.promises.readFile(outputScriptPath2, 'utf-8');
+    t.log(`==== outputScript2 ====\n${outputScript2.trim()}\n===================`);
+    t.false(outputScript2.includes('addStyle'));
+    const result2 = await runCode(outputScriptPath2);
     t.deepEqual(result2.className, {
         a2: '_2',
         b2: '_3',
