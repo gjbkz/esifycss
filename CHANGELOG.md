@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.4.30 (2021-09-11)
+
+### Features
+
+- add preamble to generated files ([2af96b3](https://github.com/kei-ito/esifycss/commit/2af96b3339a90a046bfb86346abb05fe44a351ff))
+
+
 ## v1.4.29 (2021-09-11)
 
 ### Features
