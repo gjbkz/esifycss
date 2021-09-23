@@ -322,14 +322,14 @@ test('watch', async (t) => {
         stderr: writable,
     });
     await updateFile(cssPath, [
-        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '@keyframes foo {0%{color:gold}100%{color:green}}',
         '.foo#bar {animation: 1s 0.5s linear infinite foo}',
     ].join(''));
     t.context.session.start().catch(t.fail);
     await waitForMessage(`written: ${codePath}`);
     const result1 = await runCode(codePath);
     await updateFile(cssPath, [
-        '@keyframes foo {0%{color:red}100%{color:green}}',
+        '@keyframes foo {0%{color:gold}100%{color:green}}',
         '.foo#bar {animation: 2s 1s linear infinite foo}',
     ].join(''));
     await waitForMessage(`written: ${codePath}`);
@@ -393,34 +393,43 @@ test('watch-css', async (t) => {
         stderr: writable,
     });
     await updateFile(cssPath1, [
-        '@keyframes foo1 {0%{color:red}100%{color:green}}',
+        '@keyframes foo1 {0%{color:gold}100%{color:green}}',
         '.foo1#bar {animation: 1s 0.5s linear infinite foo1}',
     ].join(''));
     await updateFile(cssPath2, [
-        '@keyframes foo2 {0%{color:red}100%{color:pink}}',
+        '@keyframes foo2 {0%{color:gold}100%{color:pink}}',
         '.foo2#bar {animation: 1s 0.5s linear infinite foo2}',
     ].join(''));
     await t.context.session.start().catch(t.fail);
     const outputCss1 = await fs.promises.readFile(cssOutputPath, 'utf-8');
     t.log('outputCss1', outputCss1);
+    t.true(outputCss1.includes('color:green'));
+    t.true(outputCss1.includes('color:pink'));
     const root1 = postcss.parse(outputCss1);
     t.is(root1.nodes.length, 4);
     await updateFile(cssPath1, [
-        '@keyframes bar1 {0%{color:red}100%{color:blue}}',
+        '@keyframes bar1 {0%{color:gold}100%{color:blue}}',
         '.bar1#bar {animation: 2s 1s linear infinite bar1}',
     ].join(''));
     await waitForMessage(`written: ${cssOutputPath}`);
     const outputCss2 = await fs.promises.readFile(cssOutputPath, 'utf-8');
     t.log('outputCss2', outputCss2);
+    t.false(outputCss2.includes('color:green'));
+    t.true(outputCss2.includes('color:blue'));
+    t.true(outputCss2.includes('color:pink'));
     const root2 = postcss.parse(outputCss2);
     t.is(root2.nodes.length, 4);
     await updateFile(cssPath2, [
-        '@keyframes bar2 {0%{color:red}100%{color:red}}',
+        '@keyframes bar2 {0%{color:gold}100%{color:red}}',
         '.bar2#bar {animation: 1s 0.5s linear infinite bar2}',
     ].join(''));
     await waitForMessage(`written: ${cssOutputPath}`);
     const outputCss3 = await fs.promises.readFile(cssOutputPath, 'utf-8');
     t.log('outputCss3', outputCss3);
+    t.false(outputCss3.includes('color:green'));
+    t.false(outputCss3.includes('color:pink'));
+    t.true(outputCss3.includes('color:blue'));
+    t.true(outputCss3.includes('color:red'));
     const root3 = postcss.parse(outputCss3);
     t.is(root3.nodes.length, 4);
 });

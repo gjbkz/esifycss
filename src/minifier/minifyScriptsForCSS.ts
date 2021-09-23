@@ -24,19 +24,12 @@ export const minifyScriptForCSS = async (
  */
 export const minifyScriptsForCSS = async (
     props: {
-        files: Array<string>,
+        files: Map<string, string>,
         cssKey: string,
         dest: string,
     },
 ): Promise<void> => {
     const parseResult = await parseScripts(props);
-    // const cssList = await Promise.all([...parseResult.scripts].map(minifyScriptForCSS));
-    const cssList: Array<string> = [];
-    for (const script of parseResult.scripts) {
-        const css = await minifyScriptForCSS(script).catch((error: unknown) => {
-            throw error;
-        });
-        cssList.push(css);
-    }
+    const cssList = await Promise.all([...parseResult.scripts].map(minifyScriptForCSS));
     await updateFile(props.dest, cssList.join('\n'));
 };
