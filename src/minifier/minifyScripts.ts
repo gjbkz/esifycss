@@ -8,7 +8,7 @@ const {readFile} = fs.promises;
 
 export const minifyScripts = async (
     props: {
-        files: Array<string>,
+        files: Map<string, string>,
         cssKey: string,
         dest: string,
     },

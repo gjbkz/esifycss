@@ -1,5 +1,5 @@
 type Resolve = () => void;
-type Reject = (error: Error) => void;
+type Reject = (error: unknown) => void;
 
 export interface ExposedPromise {
     readonly promise: Promise<void>,

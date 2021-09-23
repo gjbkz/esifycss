@@ -68,8 +68,7 @@ export class Session {
             plugins: configuration.postcssPlugins,
             options: configuration.postcssOptions,
             file: filePath,
-        })
-        .catch((error) => {
+        }).catch((error: unknown) => {
             exposedPromise.resolve();
             throw error;
         });
@@ -91,7 +90,9 @@ export class Session {
     }
 
     public async minifyScripts(): Promise<void> {
-        const files = [...this.processedFiles].map((file) => `${file}${this.configuration.ext}`);
+        const files = new Map(
+            [...this.processedFiles].map((file) => [file, `${file}${this.configuration.ext}`]),
+        );
         const {cssKey, output} = this.configuration;
         if (output.type === 'css') {
             await minifyScriptsForCSS({files, cssKey, dest: output.path});
