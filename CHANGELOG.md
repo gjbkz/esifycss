@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.4.34 (2021-09-23)
+
+### Bug Fixes
+
+- parseScripts caches the results to keep css after minification ([76edcb4](https://github.com/kei-ito/esifycss/commit/76edcb40e32693f04219ddfb75adc98439db0ee2))
+
+### Tests
+
+- output css should have all styles ([c141495](https://github.com/kei-ito/esifycss/commit/c1414951e7a24dd9bf8a8406a796a64bff1b194e))
+
+### Dependency Upgrades
+
+- @types/node:16.9.1→16.9.6 @typescript-eslint/eslint-plugin:4.31.1→4.31.2 @typescript-eslint/parser:4.31.0→4.31.2 postcss:8.3.6→8.3.7 rollup:2.56.3→2.57.0 ([4e35a84](https://github.com/kei-ito/esifycss/commit/4e35a84aa0439fe6c980268e3a6c7d08083da1b3))
+
+
 ## v1.4.33 (2021-09-11)
 
 ### Documentation
