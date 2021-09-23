@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.35 (2021-09-23)
+
+### Bug Fixes
+
+- update file ([17387b5](https://github.com/kei-ito/esifycss/commit/17387b565f88d305ed32d1e06c2e98ec86a6e4da))
+- cache the whole result ([9612833](https://github.com/kei-ito/esifycss/commit/96128331a236c805851e62d6176ef3051e5d3183))
+
+
 ## v1.4.34 (2021-09-23)
 
 ### Bug Fixes
