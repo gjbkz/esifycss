@@ -2,11 +2,11 @@ import {updateFile} from '../util/updateFile';
 import {parseScripts} from './parseScripts';
 import type {ScriptData} from './types';
 
-const cache = new WeakMap<ScriptData, string>();
+const cache = new WeakMap<ScriptData, {code: string, css: string}>();
 
 export const minifyScriptForCSS = async (
     [file, data]: [string, ScriptData],
-) => {
+): Promise<string> => {
     let cached = cache.get(data);
     if (!cached) {
         const cssList: Array<string> = [];
@@ -18,11 +18,12 @@ export const minifyScriptForCSS = async (
         .sort((range1, range2) => range1.start < range2.start ? 1 : -1)
         .reduce((node, range) => `${node.slice(0, range.start)}${node.slice(range.end)}`, code)
         .replace(/\n\s*\n/g, '\n');
-        await updateFile(file, code);
-        cached = cssList.join('\n');
+        const css = cssList.join('\n');
+        cached = {code, css};
         cache.set(data, cached);
     }
-    return cached;
+    await updateFile(file, cached.code);
+    return cached.css;
 };
 
 /**
