@@ -60,7 +60,7 @@
         "vlq": "1.0.1"
     },
     "devDependencies": {
-        "@nlib/eslint-config": "3.17.25",
+        "@nlib/eslint-config": "3.17.28",
         "@nlib/githooks": "0.1.0",
         "@types/anymatch": "3.0.0",
         "@types/jsdom": "16.2.13",
