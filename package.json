@@ -57,7 +57,7 @@
         "commander": "8.2.0",
         "postcss": "8.3.9",
         "postcss-selector-parser": "6.0.6",
-        "vlq": "1.0.1"
+        "vlq": "2.0.4"
     },
     "devDependencies": {
         "@nlib/eslint-config": "3.17.25",
