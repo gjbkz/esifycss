@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.4.36 (2021-11-05)
+
+### Bug Fixes
+
+- transform only once for a root ([c5c27cf](https://github.com/kei-ito/esifycss/commit/c5c27cf98c0cf80b93884bed49a02215a0c63cda))
+
+### Build System
+
+- exclude test.ts ([569b839](https://github.com/kei-ito/esifycss/commit/569b839e8298ffab57bbb2b512bc9d6ca72605a5))
+- disable sourcemap ([755180d](https://github.com/kei-ito/esifycss/commit/755180d98d734d9d2378d3ada7999bcff4d7a22a))
+
+### Dependency Upgrades
+
+- @nlib/eslint-config:3.17.25→3.17.28 @types/node:16.10.3→16.11.6 @types/node-fetch:2.5.12→3.0.3 @types/selenium-webdriver:4.0.15→4.0.16 @typescript-eslint/eslint-plugin:4.32.0→5.3.0 @typescript-eslint/parser:4.31.2→5.3.0 commander:8.2.0→8.3.0 eslint:7.32.0→8.1.0 lint-staged:11.2.3→11.2.6 postcss:8.3.9→8.3.11 typescript:4.4.3→4.4.4 vlq:1.0.1→2.0.4 ([d085782](https://github.com/kei-ito/esifycss/commit/d0857827bbab4cfef657912ba35025d55b3a5e32))
+
+
 ## v1.4.35 (2021-09-23)
 
 ### Bug Fixes
