@@ -1,8 +1,8 @@
 # EsifyCSS
 
-[![.github/workflows/test.yml](https://github.com/kei-ito/esifycss/actions/workflows/test.yml/badge.svg)](https://github.com/kei-ito/esifycss/actions/workflows/test.yml)
+[![.github/workflows/test.yml](https://github.com/gjbkz/esifycss/actions/workflows/test.yml/badge.svg)](https://github.com/gjbkz/esifycss/actions/workflows/test.yml)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=WDQvOHgwbkRNTUFyUVkrc0RmdGgva0diVk01Tm9LWU95ZFNGVTByeHhpVT0tLUc2RW9lNnNaY2k4QkVCSjMyalRGTVE9PQ==--007efb48774305e72904bb3a15d3b0d048dbfb91)](https://www.browserstack.com/automate/public-build/WDQvOHgwbkRNTUFyUVkrc0RmdGgva0diVk01Tm9LWU95ZFNGVTByeHhpVT0tLUc2RW9lNnNaY2k4QkVCSjMyalRGTVE9PQ==--007efb48774305e72904bb3a15d3b0d048dbfb91)
-[![codecov](https://codecov.io/gh/kei-ito/esifycss/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/esifycss)
+[![codecov](https://codecov.io/gh/gjbkz/esifycss/branch/master/graph/badge.svg)](https://codecov.io/gh/gjbkz/esifycss)
 
 ## Introduction
 

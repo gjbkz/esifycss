@@ -5,13 +5,13 @@
     "author": {
         "name": "Kei Ito",
         "email": "kei.itof@gmail.com",
-        "url": "https://github.com/kei-ito"
+        "url": "https://github.com/gjbkz"
     },
     "license": "Apache-2.0",
     "engines": {
         "node": ">=10"
     },
-    "repository": "kei-ito/esifycss",
+    "repository": "https://github.com/gjbkz/esifycss",
     "main": "lib/index.js",
     "files": [
         "lib",
