@@ -16,7 +16,7 @@ export const generateScript = function* (
         /** The main contents of the output script. */
         result: EsifyCSSResult,
         /** The root node will be splitted into rules that can be passed to insertRule. */
-        root: postcss.Root,
+        root: postcss.Document | postcss.Root,
         cssKey: string,
     },
 ): Generator<string> {
