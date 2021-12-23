@@ -65,7 +65,7 @@
         "@nlib/indexen": "0.1.2",
         "@nlib/lint-commit": "0.1.8",
         "@types/anymatch": "3.0.0",
-        "@types/jsdom": "16.2.13",
+        "@types/jsdom": "16.2.14",
         "@types/micromatch": "4.0.2",
         "@types/node": "17.0.0",
         "@types/selenium-webdriver": "4.0.16",
