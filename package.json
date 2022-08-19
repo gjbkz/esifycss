@@ -63,7 +63,7 @@
         "@nlib/eslint-config": "3.19.4",
         "@nlib/githooks": "0.1.0",
         "@nlib/indexen": "0.2.5",
-        "@nlib/lint-commit": "0.1.8",
+        "@nlib/lint-commit": "0.2.0",
         "@types/anymatch": "3.0.0",
         "@types/jsdom": "16.2.14",
         "@types/micromatch": "4.0.2",
