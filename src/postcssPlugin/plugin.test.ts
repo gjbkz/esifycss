@@ -1,9 +1,9 @@
-import test from 'ava';
-import type {Rule, Declaration, AtRule} from 'postcss';
-import {postcss} from '../util/postcss';
 import * as parser from '@hookun/parse-animation-shorthand';
-import {plugin} from './plugin';
+import test from 'ava';
+import type {AtRule, Declaration, Rule} from 'postcss';
 import {extractPluginResult} from '../runner/extractPluginResult';
+import {postcss} from '../util/postcss';
+import {plugin} from './plugin';
 
 const getFirstDeclaration = (
     rule: Rule,
@@ -56,7 +56,7 @@ test('plugin', async (t): Promise<void> => {
         const node = nodes[index++] as AtRule;
         t.is(node.type, 'atrule');
         t.is(node.name, 'keyframes');
-        t.is(node.params, mapA.keyframes.aaa);
+        t.is(node.params, `${mapA.keyframes.aaa}`);
     }
     {
         const node = nodes[index++] as Rule;
@@ -65,7 +65,7 @@ test('plugin', async (t): Promise<void> => {
         {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, mapA.keyframes.aaa);
+            t.is(declaration.value, `${mapA.keyframes.aaa}`);
         }
     }
     {
@@ -88,7 +88,7 @@ test('plugin', async (t): Promise<void> => {
         {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, mapB.keyframes.aaa);
+            t.is(declaration.value, `${mapB.keyframes.aaa}`);
         }
     }
     {
@@ -105,7 +105,7 @@ test('plugin', async (t): Promise<void> => {
         const node = nodes[index++] as AtRule;
         t.is(node.type, 'atrule');
         t.is(node.name, 'keyframes');
-        t.is(node.params, mapB.keyframes.aaa);
+        t.is(node.params, `${mapB.keyframes.aaa}`);
     }
     {
         const node = nodes[index++] as Rule;
@@ -114,7 +114,7 @@ test('plugin', async (t): Promise<void> => {
         {
             const declaration = getFirstDeclaration(node);
             t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, mapA.keyframes.aaa);
+            t.is(declaration.value, `${mapA.keyframes.aaa}`);
         }
     }
     {

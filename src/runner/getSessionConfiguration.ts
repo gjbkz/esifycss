@@ -1,6 +1,6 @@
-import type {SessionConfiguration, SessionOptions} from './types';
 import {plugin} from '../postcssPlugin/plugin';
 import {ensureArray} from '../util/ensureArray';
+import type {SessionConfiguration, SessionOptions} from './types';
 import {getChokidarOptions} from './getChokidarOptions';
 import {getOutputOption} from './getOutputOption';
 import {getExtensionOption} from './getExtensionOption';

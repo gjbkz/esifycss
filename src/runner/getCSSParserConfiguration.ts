@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import type {CSSParserParameters, CSSParserConfigurations} from './types';
+
 const {readFile} = fs.promises;
 
 export const getCSSParserConfiguration = async (

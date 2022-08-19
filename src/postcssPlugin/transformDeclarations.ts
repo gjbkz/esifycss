@@ -1,5 +1,5 @@
-import type * as postcss from 'postcss';
 import * as console from 'console';
+import type * as postcss from 'postcss';
 import * as animationParser from '@hookun/parse-animation-shorthand';
 import type {EsifyCSSResult, Imports, PluginMangler} from './types';
 import {getMatchedImport} from './getMatchedImport';

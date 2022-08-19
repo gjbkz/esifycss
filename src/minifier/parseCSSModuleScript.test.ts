@@ -242,7 +242,7 @@ interface Test {
             t.deepEqual(actual, expected);
         } else {
             const error = t.throws(() => parseCSSModuleScript(input));
-            t.is(error.message.slice(0, input.title.length), input.title);
+            t.is(error && error.message.slice(0, input.title.length), input.title);
         }
     });
 });

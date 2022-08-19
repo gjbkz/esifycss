@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import type {SessionOptions} from '../runner/types.js';
+
 const {readFile} = fs.promises;
 
 interface EsifyCSSCommandOptions {

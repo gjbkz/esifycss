@@ -1,7 +1,7 @@
 import * as fs from 'fs';
+import {tokenizeString} from '../util/tokenizeString';
 import type {ParseScriptsResult, ScriptData} from './types';
 import {parseCSSModuleScript} from './parseCSSModuleScript';
-import {tokenizeString} from '../util/tokenizeString';
 
 const cache = new Map<string, {
     mtimeMs: number,

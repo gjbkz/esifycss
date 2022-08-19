@@ -1,5 +1,5 @@
-import type {Imports} from './types';
 import {normalizePath} from '../util/normalizePath';
+import type {Imports} from './types';
 
 export const getMatchedImport = (
     value: string,

@@ -13,5 +13,5 @@ test('#1 reject', async (t) => {
     const message = 'Expected';
     exposed.reject(new Error(message));
     const error = await t.throwsAsync(exposed.promise);
-    t.is(error.message, message);
+    t.is(error && error.message, message);
 });

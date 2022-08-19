@@ -1,6 +1,6 @@
+import type {Writable} from 'stream';
 import type {Matcher} from 'anymatch';
 import type {AwaitWriteFinishOptions, WatchOptions} from 'chokidar';
-import type {Writable} from 'stream';
 import type {AcceptedPlugin, ProcessOptions, SourceMapOptions} from 'postcss';
 import type {PluginOptions} from '../postcssPlugin/types';
 

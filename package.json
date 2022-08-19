@@ -95,7 +95,9 @@
             "*.css.ts"
         ],
         "rules": {
-            "@nlib/no-globals": "off"
+            "no-lone-blocks": "off",
+            "@nlib/no-globals": "off",
+            "import/no-relative-parent-imports": "off"
         },
         "overrides": [
             {

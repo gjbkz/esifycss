@@ -1,9 +1,9 @@
+import {createIdentifier} from '../util/createIdGenerator';
 import type {
     PluginOptions,
     PluginConfiguration,
     PluginMangler,
 } from './types';
-import {createIdentifier} from '../util/createIdGenerator';
 
 export const getPluginMangler = (
     {

@@ -1,26 +1,26 @@
-import * as path from 'path';
-import * as fs from 'fs';
-import * as stream from 'stream';
 import * as events from 'events';
-import type {TestInterface, ExecutionContext} from 'ava';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as stream from 'stream';
+import * as animationParser from '@hookun/parse-animation-shorthand';
+import type {ExecutionContext, TestFn} from 'ava';
 import anyTest from 'ava';
 import * as postcss from 'postcss';
 import * as scss from 'postcss-scss';
-import * as animationParser from '@hookun/parse-animation-shorthand';
-import type {SessionOptions} from './types';
-import {Session} from './Session';
+import {deleteFile} from '..';
 import {createTemporaryDirectory} from '../util/createTemporaryDirectory';
 import type {RunCodeResult} from '../util/runCode.for-test';
 import {runCode} from '../util/runCode.for-test';
 import {updateFile} from '../util/updateFile';
-import {deleteFile} from '..';
+import {Session} from './Session';
+import type {SessionOptions} from './types';
 
 interface TestContext {
     directory: string,
     session?: Session,
 }
 
-const test = anyTest as TestInterface<TestContext>;
+const test = anyTest as TestFn<TestContext>;
 const isRule = (input: postcss.ChildNode): input is postcss.Rule => input.type === 'rule';
 const createMessageListener = () => {
     const messageListener = new events.EventEmitter();
@@ -76,13 +76,13 @@ interface Test {
                     t.deepEqual(Object.keys(className), ['foo']);
                     t.deepEqual(Object.keys(keyframes), []);
                     const [ruleNode, anotherNode] = root.nodes as Array<postcss.Rule>;
-                    t.is(anotherNode, undefined);
+                    t.falsy(anotherNode);
                     t.like(ruleNode, {
                         type: 'rule',
                         selector: `.${className.foo}`,
                     });
                     const [declaration, anotherDeclaration] = ruleNode.nodes;
-                    t.is(anotherDeclaration, undefined);
+                    t.falsy(anotherDeclaration);
                     t.like(declaration, {
                         type: 'decl',
                         prop: 'color',
@@ -106,13 +106,13 @@ interface Test {
                     t.deepEqual(Object.keys(className), ['foo']);
                     t.deepEqual(Object.keys(keyframes), []);
                     const [ruleNode, anotherNode] = root.nodes as Array<postcss.Rule>;
-                    t.is(anotherNode, undefined);
+                    t.falsy(anotherNode);
                     t.like(ruleNode, {
                         type: 'rule',
                         selector: `.${className.foo}`,
                     });
                     const [declaration, anotherDeclaration] = ruleNode.nodes;
-                    t.is(anotherDeclaration, undefined);
+                    t.falsy(anotherDeclaration);
                     t.like(declaration, {
                         type: 'decl',
                         prop: 'color',
@@ -347,8 +347,8 @@ test('watch', async (t) => {
         const atRule2 = nodes2[0] as postcss.AtRule;
         t.is(atRule1.name, 'keyframes');
         t.is(atRule2.name, 'keyframes');
-        t.is(atRule1.params, result1.keyframes.foo);
-        t.is(atRule1.params, result1.keyframes.foo);
+        t.is(atRule1.params, `${result1.keyframes.foo}`);
+        t.is(atRule1.params, `${result1.keyframes.foo}`);
     }
     {
         const rule1 = nodes1[1] as postcss.Rule;
