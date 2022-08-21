@@ -45,8 +45,8 @@
         "test:type": "tsc --noEmit",
         "test:ava": "ava --config ava.config.cjs",
         "test-client": "ava --config ava.config.client.cjs",
-        "version": "run-s version:changelog version:add",
-        "version:changelog": "npx @nlib/changelog --output CHANGELOG.md",
+        "version": "run-s build:index version:*",
+        "version:changelog": "nlib-changelog --output CHANGELOG.md",
         "version:add": "git add ."
     },
     "dependencies": {
