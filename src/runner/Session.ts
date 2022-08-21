@@ -1,12 +1,6 @@
 import * as fs from 'fs';
-import * as chokidar from 'chokidar';
 import * as path from 'path';
-import type {SessionOptions, SessionConfiguration} from './types';
-import {getSessionConfiguration} from './getSessionConfiguration';
-import {parseCSS} from './parseCSS';
-import {extractPluginResult} from './extractPluginResult';
-import {generateScript} from './generateScript';
-import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
+import * as chokidar from 'chokidar';
 import {minifyScripts} from '../minifier/minifyScripts';
 import type {ExposedPromise} from '../util/createExposedPromise';
 import {createExposedPromise} from '../util/createExposedPromise';
@@ -14,6 +8,13 @@ import {minifyScriptsForCSS} from '../minifier/minifyScriptsForCSS';
 import {deleteFile} from '../util/deleteFile';
 import {updateFile} from '../util/updateFile';
 import {serialize} from '../util/serialize';
+import {waitForInitialScanCompletion} from './waitForInitialScanCompletion';
+import {generateScript} from './generateScript';
+import {extractPluginResult} from './extractPluginResult';
+import {parseCSS} from './parseCSS';
+import {getSessionConfiguration} from './getSessionConfiguration';
+import type {SessionOptions, SessionConfiguration} from './types';
+
 const {copyFile} = fs.promises;
 
 export class Session {

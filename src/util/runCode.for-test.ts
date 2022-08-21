@@ -2,8 +2,8 @@ import * as path from 'path';
 import * as vm from 'vm';
 import * as rollup from 'rollup';
 import * as postcss from 'postcss';
-import {createSandbox} from '../util/createSandbox.for-test';
 import type {EsifyCSSResult} from '../postcssPlugin/types';
+import {createSandbox} from './createSandbox.for-test';
 import {updateFile} from './updateFile';
 
 export interface RunCodeResult extends EsifyCSSResult {

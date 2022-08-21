@@ -1,6 +1,6 @@
-import type {CSSRange} from './types';
 import type {IdGenerator} from '../util/createIdGenerator';
 import {encodeString} from '../util/encodeString';
+import type {CSSRange} from './types';
 
 export const minifyCSSInScript = (
     script: string,

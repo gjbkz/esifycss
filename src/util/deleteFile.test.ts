@@ -4,6 +4,7 @@ import ava from 'ava';
 import {createTemporaryDirectory} from './createTemporaryDirectory';
 import {deleteFile} from './deleteFile';
 import {updateFile} from './updateFile';
+
 const {stat, mkdir} = fs.promises;
 
 ava('delete a file', async (t) => {

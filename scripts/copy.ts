@@ -1,4 +1,5 @@
-import {promises as afs} from 'fs';
+/* eslint-disable import/no-import-module-exports */
+import * as fs from 'fs/promises';
 import * as path from 'path';
 
 /**
@@ -11,16 +12,16 @@ export const copy = async (
 ): Promise<void> => {
     src = path.normalize(src);
     dest = path.normalize(dest);
-    if ((await afs.stat(src)).isDirectory()) {
-        await afs.mkdir(dest, {recursive: true});
-        await Promise.all((await afs.readdir(src)).map(async (name) => {
+    if ((await fs.stat(src)).isDirectory()) {
+        await fs.mkdir(dest, {recursive: true});
+        await Promise.all((await fs.readdir(src)).map(async (name) => {
             const srcFile = path.join(src, name);
             const destFile = path.join(dest, name);
-            await afs.copyFile(srcFile, destFile);
+            await fs.copyFile(srcFile, destFile);
             console.log(`Copied: ${srcFile} → ${destFile}`);
         }));
     } else {
-        await afs.copyFile(src, dest);
+        await fs.copyFile(src, dest);
         console.log(`Copied: ${src} → ${dest}`);
     }
 };

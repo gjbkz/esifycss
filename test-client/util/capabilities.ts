@@ -45,7 +45,7 @@ if (browserStack) {
         ...options,
         localIdentifier: generateLocalIdentifier(),
     });
-    for (const browserName of ['Chrome', 'Firefox', 'Edge', 'IE']) {
+    for (const browserName of ['Chrome', 'Firefox', 'Edge']) {
         capabilities.push({
             browserName,
             'bstack:options': generateOptions({os: 'Windows', osVersion: '10'}),
@@ -54,12 +54,12 @@ if (browserStack) {
     for (const browserName of ['Chrome', 'Firefox', 'Safari']) {
         capabilities.push({
             browserName,
-            'bstack:options': generateOptions({os: 'OS X', osVersion: 'Big Sur'}),
+            'bstack:options': generateOptions({os: 'OS X', osVersion: 'Monterey'}),
         });
     }
     capabilities.push({
         'browserName': 'Safari',
-        'bstack:options': generateOptions({osVersion: '14', deviceName: 'iPhone 12', realMobile: 'true'}),
+        'bstack:options': generateOptions({osVersion: '15', deviceName: 'iPhone 13', realMobile: 'true'}),
     });
 } else {
     capabilities.push({

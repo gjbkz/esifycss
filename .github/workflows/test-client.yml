@@ -1,0 +1,18 @@
+on:
+  - pull_request
+jobs:
+  TestClient:
+    runs-on: ubuntu-latest
+    concurrency: test-client
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test-client
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}

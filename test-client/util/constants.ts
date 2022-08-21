@@ -1,4 +1,5 @@
 import {name as projectName} from '../../package.json';
+
 export {projectName};
 export const buildName = `${projectName}#${process.env.GITHUB_RUN_ID || new Date().toISOString()}`;
 

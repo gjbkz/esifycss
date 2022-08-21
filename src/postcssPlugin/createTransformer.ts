@@ -1,4 +1,5 @@
 import type * as postcss from 'postcss';
+import {normalizePath} from '../util/normalizePath';
 import type {PluginConfiguration, EsifyCSSResult} from './types';
 import {transformDeclarations} from './transformDeclarations';
 import {getImports} from './getImports';
@@ -6,7 +7,6 @@ import {minify} from './minify';
 import {mangleIdentifiers} from './mangleIdentifiers';
 import {mangleKeyFrames} from './mangleKeyFrames';
 import {removeImportsAndRaws} from './removeImportsAndRaws';
-import {normalizePath} from '../util/normalizePath';
 
 export const createTransformer = (
     {mangler, rawPrefix}: PluginConfiguration,

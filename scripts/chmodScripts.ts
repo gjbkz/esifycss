@@ -1,5 +1,7 @@
+/* eslint-disable import/no-import-module-exports */
 import * as path from 'path';
 import * as fs from 'fs';
+
 const afs = fs.promises;
 
 export const permitExecution = async (

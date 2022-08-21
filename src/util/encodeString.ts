@@ -1,6 +1,6 @@
+import * as vlq from 'vlq';
 import type {IdGenerator} from './createIdGenerator';
 import {tokenizeString} from './tokenizeString';
-import * as vlq from 'vlq';
 
 export const encodeString = (
     string: string,

@@ -1,21 +1,22 @@
-import type {TestInterface} from 'ava';
-import anyTest from 'ava';
-import {URL} from 'url';
-import * as path from 'path';
+import type * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as http from 'http';
-import type * as childProcess from 'child_process';
+import * as path from 'path';
+import {URL} from 'url';
 import * as selenium from 'selenium-webdriver';
 import type * as BrowserStack from 'browserstack-local';
-import {createRequestHandler} from './util/createRequestHandler';
-import {browserStack} from './util/constants';
-import {spawn} from './util/spawn';
-import {createBrowserStackLocal} from './util/createBrowserStackLocal';
-import {markResult} from './util/markResult';
+import anyTest from 'ava';
+import type {TestFn} from 'ava';
 import {capabilities} from './util/capabilities';
+import {browserStack} from './util/constants';
+import {createBrowserStackLocal} from './util/createBrowserStackLocal';
+import {createRequestHandler} from './util/createRequestHandler';
+import {markResult} from './util/markResult';
+import {spawn} from './util/spawn';
+
 const {writeFile} = fs.promises;
 
-const test = anyTest as TestInterface<{
+const test = anyTest as TestFn<{
     session?: selenium.Session,
     builder?: selenium.Builder,
     driver?: selenium.ThenableWebDriver,

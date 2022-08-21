@@ -1,5 +1,5 @@
-import type {SessionConfiguration, SessionOutput} from './types';
 import {getBase64UrlHash} from '../util/getBase64UrlHash';
+import type {SessionConfiguration, SessionOutput} from './types';
 
 export const getOutputOption = (
     {helper, css}: {helper?: string, css?: string},

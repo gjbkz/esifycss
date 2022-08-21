@@ -1,9 +1,10 @@
 import * as fs from 'fs';
+import {updateFile} from '../util/updateFile';
 import {createOptimizedIdGenerator} from './createOptimizedIdGenerator';
 import {parseScripts} from './parseScripts';
 import {minifyCSSInScript} from './minifyCSSInScript';
 import {setDictionary} from './setDictionary';
-import {updateFile} from '../util/updateFile';
+
 const {readFile} = fs.promises;
 
 export const minifyScripts = async (
