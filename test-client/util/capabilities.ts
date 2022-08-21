@@ -59,7 +59,7 @@ if (browserStack) {
     }
     capabilities.push({
         'browserName': 'Safari',
-        'bstack:options': generateOptions({osVersion: '15', deviceName: 'iPhone 12', realMobile: 'true'}),
+        'bstack:options': generateOptions({osVersion: '15', deviceName: 'iPhone 13', realMobile: 'true'}),
     });
 } else {
     capabilities.push({
