@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.4.39 (2022-08-21)
+
+### Bug Fixes
+
+- build script ([5c80226](https://github.com/gjbkz/esifycss/commit/5c80226fdae44ce22f699c0bbdc9a13e05be5917))
+- eslint errors ([3a339f8](https://github.com/gjbkz/esifycss/commit/3a339f852dbde98dfca6cf1ff3e9c3d33a791e04))
+
+### Tests
+
+- use iPhone 13 ([d0aadac](https://github.com/gjbkz/esifycss/commit/d0aadacc268cd81255b2e0b2f5d569f0779cbc7f))
+
+### Continuous Integration
+
+- update capabilities ([e904a59](https://github.com/gjbkz/esifycss/commit/e904a592f4315b686cb226a949466fef8498a05f))
+- skip TestClient on push ([ab18a77](https://github.com/gjbkz/esifycss/commit/ab18a776fdecb1ff828259c73d756c1baa668c36))
+- drop v12 ([b9601cd](https://github.com/gjbkz/esifycss/commit/b9601cdf93c5e9c138a7e23dacb27cf78ead60f4))
+
+### Dependency Upgrades
+
+- add @nlib/changelog ([4f0025c](https://github.com/gjbkz/esifycss/commit/4f0025c5f758e7ec87ca61ea589ab5ef855b4b88))
+- npm update ([62ea1f1](https://github.com/gjbkz/esifycss/commit/62ea1f1235b7d0d38e151db0214e39ef43f68159))
+- typescript:4.5.5→4.7.4 ([7626a2a](https://github.com/gjbkz/esifycss/commit/7626a2a4ec0aed861d357699b88170dc9b4c214b))
+- ts-node:10.4.0→10.9.1 ([44c4818](https://github.com/gjbkz/esifycss/commit/44c4818b25bebb23e64929f842606d1545a21e5b))
+- rollup:2.68.0→2.78.1 ([d1ac037](https://github.com/gjbkz/esifycss/commit/d1ac03727eb55d9b2cd7db0db0a11aee65010712))
+- postcss-selector-parser:6.0.7→6.0.10 ([924b7ec](https://github.com/gjbkz/esifycss/commit/924b7ec4696c0b05b54efa469e9a5035ef5beb15))
+- postcss-scss:4.0.3→4.0.4 ([8d9b11d](https://github.com/gjbkz/esifycss/commit/8d9b11d1ba9f90de47b6710de023529fc2ba597b))
+- postcss:8.4.5→8.4.16 ([2cdbd96](https://github.com/gjbkz/esifycss/commit/2cdbd96ca68ae27ef900348f6e3b41df30433e8d))
+- lint-staged:12.3.4→13.0.3 ([26db908](https://github.com/gjbkz/esifycss/commit/26db9087a18b06f1e32ffdc51a372f2642745cc4))
+- commander:8.3.0→9.4.0 ([f53d7d5](https://github.com/gjbkz/esifycss/commit/f53d7d558c15d60fcbf769ab89131c5d4606bf57))
+- chokidar:3.5.2→3.5.3 ([663888d](https://github.com/gjbkz/esifycss/commit/663888dca667a9239679dcf23f67fd179b75e3e5))
+- browserstack-local:1.4.8→1.5.1 ([157b6ae](https://github.com/gjbkz/esifycss/commit/157b6ae174fb913cef1acb20737cf1372c3f5a5b))
+- ava:3.15.0→4.3.1 ([7b8d589](https://github.com/gjbkz/esifycss/commit/7b8d589e545aca7963ead2c2db31278294d15f95))
+- acorn:8.7.0→8.8.0 ([0368d76](https://github.com/gjbkz/esifycss/commit/0368d7635d70f3f0b5d045cf5beae77d2e6bc78a))
+- selenium-webdriver:4.1.1→4.4.0 ([d5456df](https://github.com/gjbkz/esifycss/commit/d5456dff46e21396c1a54be0f506b466f0b4310b))
+- @types/selenium-webdriver:4.0.18→4.1.2 ([2101c8a](https://github.com/gjbkz/esifycss/commit/2101c8a170fc55d24bc74bfb7c2301668841cf75))
+- @types/node:17.0.17→18.7.6 ([4dda217](https://github.com/gjbkz/esifycss/commit/4dda217780946086f51b6f914585ac64c7d013dd))
+- @types/jsdom:16.2.14→20.0.0 ([f356a91](https://github.com/gjbkz/esifycss/commit/f356a91249f22e2e3f545e57605b13e73a2d5414))
+- @nlib/lint-commit:0.1.8→0.2.0 ([417b78f](https://github.com/gjbkz/esifycss/commit/417b78fb9f5259fa2f0bc8b9df993a4a129a6154))
+- @typescript-eslint/eslint-plugin:5.12.0→5.33.1 @typescript-eslint/parser:5.12.1→5.33.1 eslint:8.10.0→8.22.0 ([69b8884](https://github.com/gjbkz/esifycss/commit/69b88846339a28a015793fc645733646afb65095))
+- @nlib/indexen:0.1.2→0.2.5 ([58de373](https://github.com/gjbkz/esifycss/commit/58de3731470caa32edf7405d9729b3ab66935f3b))
+- @nlib/eslint-config:3.17.30→3.19.4 ([a6a8687](https://github.com/gjbkz/esifycss/commit/a6a86870475ed215ed5b3cc0bf0d9c0dcf400d52))
+- @nlib/eslint-config:3.17.29→3.17.30 @types/node:16.11.12→17.0.0 @typescript-eslint/eslint-plugin:5.4.0→5.7.0 @typescript-eslint/parser:5.4.0→5.7.0 eslint:8.3.0→8.5.0 lint-staged:12.1.2→12.1.3 postcss-selector-parser:6.0.6→6.0.7 typescript:4.5.2→4.5.4 ([d5bd860](https://github.com/gjbkz/esifycss/commit/d5bd8608e90c833d3456427ec8df52f98fb7a193))
+- add @nlib/lint-commit ([291e58c](https://github.com/gjbkz/esifycss/commit/291e58c5b07c51664c7550b1a2bf7bfd983c1ca7))
+- install @nlib/lint-commit @nlib/indexen ([baba31b](https://github.com/gjbkz/esifycss/commit/baba31b886c38fda0bb0ebd7d3df18965118f592))
+
+
 ## v1.4.37 (2021-11-25)
 
 ### Documentation
