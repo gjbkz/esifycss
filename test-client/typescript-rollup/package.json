@@ -4,7 +4,7 @@
         "build:esifycss": "esifycss --helper src/helper.css.ts src/**/*.css",
         "build:tsc": "tsc",
         "build:rollup": "rollup temp/page.js --format iife --file output/page.js",
-        "build:html": "cpy src/index.html output",
+        "build:html": "cpy --cwd=src index.html ../output",
         "build": "run-s build:esifycss build:tsc build:rollup build:html"
     },
     "devDependencies": {
