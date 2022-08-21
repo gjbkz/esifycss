@@ -1,6 +1,6 @@
 {
     "name": "esifycss",
-    "version": "1.4.37",
+    "version": "1.4.38",
     "description": "Generates .js or .ts exports class names and custom properties",
     "author": {
         "name": "Kei Ito",
@@ -60,6 +60,7 @@
         "vlq": "2.0.4"
     },
     "devDependencies": {
+        "@nlib/changelog": "0.2.3",
         "@nlib/eslint-config": "3.19.4",
         "@nlib/githooks": "0.1.0",
         "@nlib/indexen": "0.2.5",
