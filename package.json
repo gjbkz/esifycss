@@ -50,7 +50,7 @@
         "version:add": "git add ."
     },
     "dependencies": {
-        "@hookun/parse-animation-shorthand": "0.1.2",
+        "@hookun/parse-animation-shorthand": "0.1.4",
         "acorn": "8.8.0",
         "acorn-walk": "8.2.0",
         "chokidar": "3.5.3",
