@@ -68,7 +68,7 @@
         "@types/anymatch": "3.0.0",
         "@types/jsdom": "20.0.1",
         "@types/micromatch": "4.0.2",
-        "@types/node": "18.11.15",
+        "@types/node": "18.11.16",
         "@types/selenium-webdriver": "4.1.9",
         "@typescript-eslint/eslint-plugin": "5.46.1",
         "@typescript-eslint/parser": "5.46.1",
