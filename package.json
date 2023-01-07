@@ -61,7 +61,7 @@
     },
     "devDependencies": {
         "@nlib/changelog": "0.2.3",
-        "@nlib/eslint-config": "3.19.5",
+        "@nlib/eslint-config": "3.19.6",
         "@nlib/githooks": "0.1.0",
         "@nlib/indexen": "0.2.5",
         "@nlib/lint-commit": "0.2.0",
@@ -70,7 +70,7 @@
         "@types/micromatch": "4.0.2",
         "@types/node": "18.11.18",
         "@types/selenium-webdriver": "4.1.10",
-        "@typescript-eslint/eslint-plugin": "5.47.1",
+        "@typescript-eslint/eslint-plugin": "5.48.0",
         "@typescript-eslint/parser": "5.48.0",
         "ava": "5.1.0",
         "browserstack-local": "1.5.1",
