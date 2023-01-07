@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.4.40 (2023-01-07)
+
+### Dependency Upgrades
+
+- reinstall packages ([21e69ab](https://github.com/gjbkz/esifycss/commit/21e69abf30198c1aa9f89ba1453b3289dbeced36))
+- @hookun/parse-animation-shorthand:0.1.4→0.1.5 ([8c4990d](https://github.com/gjbkz/esifycss/commit/8c4990d3e3237f1663fc8ad2357e8b7d48a72ef2))
+- @nlib/eslint-config:3.19.5→3.19.6 @typescript-eslint/eslint-plugin:5.47.1→5.48.0 ([1fda220](https://github.com/gjbkz/esifycss/commit/1fda2209cd317e983f9184dbc9ede6ccb1190c2c))
+- postcss:8.4.20→8.4.21 ([a33d953](https://github.com/gjbkz/esifycss/commit/a33d953d337f21dd2fa8bd639914dce29bc78922))
+- rollup:2.79.1→3.9.1 ([1cf9d99](https://github.com/gjbkz/esifycss/commit/1cf9d991f18342be7d9c8e4766455be35e463dc9))
+- ava:4.3.3→5.1.0 ([86cb8e3](https://github.com/gjbkz/esifycss/commit/86cb8e375ec296087c36b30cdcd896778368d423))
+
+
 ## v1.4.39 (2022-08-21)
 
 ### Bug Fixes
