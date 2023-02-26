@@ -11,7 +11,7 @@
         "cpy-cli": "4.2.0",
         "esifycss": "file:../..",
         "npm-run-all": "4.1.5",
-        "rollup": "3.17.1",
+        "rollup": "3.17.2",
         "typescript": "4.9.5"
     }
 }
