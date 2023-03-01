@@ -71,7 +71,7 @@
         "@types/node": "18.14.1",
         "@types/selenium-webdriver": "4.1.12",
         "@typescript-eslint/eslint-plugin": "5.53.0",
-        "@typescript-eslint/parser": "5.52.0",
+        "@typescript-eslint/parser": "5.53.0",
         "ava": "5.2.0",
         "browserstack-local": "1.5.1",
         "eslint": "8.34.0",
