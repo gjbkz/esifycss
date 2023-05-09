@@ -56,7 +56,7 @@
         "chokidar": "3.5.3",
         "commander": "9.5.0",
         "postcss": "8.4.23",
-        "postcss-selector-parser": "6.0.11",
+        "postcss-selector-parser": "6.0.12",
         "vlq": "2.0.4"
     },
     "devDependencies": {
