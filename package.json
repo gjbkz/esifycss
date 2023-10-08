@@ -55,7 +55,7 @@
         "acorn-walk": "8.2.0",
         "chokidar": "3.5.3",
         "commander": "9.5.0",
-        "postcss": "8.4.30",
+        "postcss": "8.4.31",
         "postcss-selector-parser": "6.0.13",
         "vlq": "2.0.4"
     },
