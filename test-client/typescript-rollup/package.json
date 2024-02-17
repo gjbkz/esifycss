@@ -8,7 +8,7 @@
         "build": "run-s build:esifycss build:tsc build:rollup build:html"
     },
     "devDependencies": {
-        "cpy-cli": "4.2.0",
+        "cpy-cli": "5.0.0",
         "esifycss": "file:../..",
         "npm-run-all": "4.1.5",
         "rollup": "3.29.4",
