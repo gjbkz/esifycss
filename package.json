@@ -65,7 +65,7 @@
         "@nlib/githooks": "0.2.0",
         "@nlib/indexen": "0.2.9",
         "@nlib/lint-commit": "0.2.0",
-        "@types/anymatch": "3.0.0",
+        "@types/anymatch": "3.0.4",
         "@types/jsdom": "20.0.1",
         "@types/micromatch": "4.0.6",
         "@types/node": "18.17.18",
