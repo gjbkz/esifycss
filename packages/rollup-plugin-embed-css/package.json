@@ -10,7 +10,7 @@
     "author": {
         "name": "Kei Ito",
         "email": "kei.itof@gmail.com",
-        "url": "https://github.com/kei-ito"
+        "url": "https://github.com/gjbkz"
     },
     "license": "Apache-2.0",
     "engines": {
@@ -27,7 +27,7 @@
         "prepack": "npm run build"
     },
     "dependencies": {
-        "esifycss": "1.4.40",
+        "esifycss": "^1.4.40",
         "@rollup/pluginutils": "5.4.0"
     },
     "types": "lib/index.d.ts",

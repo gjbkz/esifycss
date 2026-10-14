@@ -37,10 +37,9 @@ npm pack --workspace esifycss --dry-run --ignore-scripts
 npm pack --workspace rollup-plugin-embed-css --dry-run --ignore-scripts
 ```
 
-The root is private and cannot be published. GitHub releases tagged `v<version>`
-publish only esifycss; `rollup-plugin-embed-css-v<version>` releases publish only
-the plugin. Creating a release is a publishing operation; migration alone does
-not publish either package or archive the former plugin repository.
+The root is private and cannot be published. Keep both npm package names and
+package versions independent. Submit selected workspace tarballs through npm staging and approve the
+package version on npmjs.com.
 
 ## Maintenance policy
 
