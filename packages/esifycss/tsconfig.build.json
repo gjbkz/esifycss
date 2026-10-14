@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./lib"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "src/helper/*.ts",
+        "**/*.test.ts",
+        "**/*.for-test.ts"
+    ]
+}

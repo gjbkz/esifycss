@@ -6,15 +6,29 @@ jobs:
     runs-on: ubuntu-latest
     environment: deployment
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 24.x
           cache: npm
           registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm run build
-      - run: npx @nlib/cleanup-package-json --file package.json
-      - run: npm publish
+      - run: npm run lint
+      - run: npm test
+      - name: Publish selected package
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          case "$RELEASE_TAG" in
+            rollup-plugin-embed-css-v*)
+              node -e 'const p = require("./packages/rollup-plugin-embed-css/package.json"); if (process.env.RELEASE_TAG !== "rollup-plugin-embed-css-v" + p.version) process.exit(1)'
+              npm publish --workspace rollup-plugin-embed-css
+              ;;
+            v*)
+              node -e 'const p = require("./packages/esifycss/package.json"); if (process.env.RELEASE_TAG !== "v" + p.version) process.exit(1)'
+              npm publish --workspace esifycss
+              ;;
+            *) echo "Unknown package release tag: $RELEASE_TAG"; exit 1 ;;
+          esac

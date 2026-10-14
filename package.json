@@ -1,159 +1,32 @@
 {
-    "name": "esifycss",
-    "version": "1.4.40",
-    "description": "Generates .js or .ts exports class names and custom properties",
-    "author": {
-        "name": "Kei Ito",
-        "email": "kei.itof@gmail.com",
-        "url": "https://github.com/gjbkz"
-    },
-    "license": "Apache-2.0",
-    "engines": {
-        "node": ">=10"
-    },
-    "repository": "https://github.com/gjbkz/esifycss",
-    "main": "lib/index.js",
-    "files": [
-        "lib",
-        "@types"
+    "name": "esifycss-workspace",
+    "private": true,
+    "workspaces": [
+        "packages/*"
     ],
-    "bin": {
-        "esifycss": "lib/bin/esifycss.js"
+    "engines": {
+        "node": ">=22"
     },
     "scripts": {
-        "lint": "eslint --ext .ts src scripts @types test-client",
-        "build": "run-s build:*",
-        "build:cleanup": "rimraf lib src/helper/*.js",
-        "build:index": "node scripts/generate-index.js",
-        "build:tsc": "tsc --project tsconfig.build.json",
-        "build:dts": "ts-node scripts/copy ./src/minifier/walker.d.ts ./lib/minifier/walker.d.ts",
-        "build:helper": "run-s build:helper:*",
-        "build:helper:cleanup": "rimraf lib/helper",
-        "build:helper:copy1": "ts-node scripts/copy ./src/helper ./lib/helper",
-        "build:helper:tsc": "tsc --project tsconfig.helper.json",
-        "build:helper:copy2": "ts-node scripts/copy ./lib/helper ./src/helper",
-        "build:bin": "ts-node scripts/chmodScripts.ts",
-        "build:sample1": "run-s build:sample1:*",
-        "build:sample1:cleanup": "rimraf sample/01-mangle",
-        "build:sample1:copy": "ts-node scripts/copy sample/00-src sample/01-mangle",
-        "build:sample1:esifycss": "node ./lib/bin/esifycss.js --helper sample/01-mangle/helper.js 'sample/01-mangle/**/*.css'",
-        "build:sample2": "run-s build:sample2:*",
-        "build:sample2:cleanup": "rimraf sample/02-no-mangle",
-        "build:sample2:copy": "ts-node scripts/copy sample/00-src sample/02-no-mangle",
-        "build:sample2:esifycss": "node ./lib/bin/esifycss.js --noMangle --helper sample/02-no-mangle/helper.js 'sample/02-no-mangle/**/*.css'",
-        "test": "run-s test:*",
-        "test:type": "tsc --noEmit",
-        "test:ava": "ava --config ava.config.cjs",
-        "test-client": "ava --config ava.config.client.cjs",
-        "version": "run-s build:index version:*",
-        "version:changelog": "nlib-changelog --output CHANGELOG.md",
-        "version:add": "git add ."
-    },
-    "dependencies": {
-        "@hookun/parse-animation-shorthand": "0.1.5",
-        "acorn": "8.10.0",
-        "acorn-walk": "8.2.0",
-        "chokidar": "3.5.3",
-        "commander": "9.5.0",
-        "postcss": "8.4.35",
-        "postcss-selector-parser": "6.0.13",
-        "vlq": "2.0.4"
+        "build": "npm run build --workspaces",
+        "lint": "eslint --ext .ts packages/esifycss/src packages/esifycss/test-client packages/esifycss/@types packages/rollup-plugin-embed-css/src",
+        "test": "npm run test --workspaces",
+        "test-client": "npm run test-client --workspace esifycss"
     },
     "devDependencies": {
-        "@nlib/changelog": "0.3.1",
-        "@nlib/eslint-config": "3.20.5",
-        "@nlib/githooks": "0.2.0",
-        "@nlib/lint-commit": "0.2.0",
-        "@types/anymatch": "3.0.0",
+        "@eslint/js": "9.39.5",
         "@types/jsdom": "20.0.1",
-        "@types/micromatch": "4.0.6",
-        "@types/node": "18.17.18",
+        "@types/node": "22.20.5",
         "@types/selenium-webdriver": "4.1.16",
-        "@typescript-eslint/eslint-plugin": "5.62.0",
-        "@typescript-eslint/parser": "5.62.0",
+        "@typescript-eslint/parser": "8.71.2",
         "ava": "5.3.1",
         "browserstack-local": "1.5.5",
-        "eslint": "8.49.0",
-        "lint-staged": "13.3.0",
-        "npm-run-all": "4.1.5",
+        "eslint": "9.39.5",
         "postcss-scss": "4.0.9",
-        "rimraf": "3.0.2",
-        "rollup": "3.29.4",
+        "rollup": "4.64.6",
         "selenium-webdriver": "4.12.0",
         "ts-node": "10.9.1",
-        "typescript": "4.9.5"
-    },
-    "eslintConfig": {
-        "extends": [
-            "@nlib/eslint-config"
-        ],
-        "env": {
-            "node": true
-        },
-        "ignorePatterns": [
-            "**/temp/*",
-            "*.css.ts"
-        ],
-        "rules": {
-            "no-lone-blocks": "off",
-            "@nlib/no-globals": "off",
-            "import/no-relative-parent-imports": "off"
-        },
-        "overrides": [
-            {
-                "files": [
-                    "scripts/*.ts"
-                ],
-                "rules": {
-                    "no-bitwise": "off",
-                    "no-console": "off"
-                }
-            },
-            {
-                "files": [
-                    "test-client/**/*.ts",
-                    "*.test.ts",
-                    "*.for-test.ts"
-                ],
-                "rules": {
-                    "no-console": "off",
-                    "no-process-env": "off",
-                    "max-lines-per-function": "off",
-                    "class-methods-use-this": "off",
-                    "require-atomic-updates": "off",
-                    "@typescript-eslint/no-floating-promises": "off",
-                    "@typescript-eslint/no-unnecessary-condition": "off",
-                    "@typescript-eslint/triple-slash-reference": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/helper/**/*"
-                ],
-                "parserOptions": {
-                    "project": "./tsconfig.helper.json"
-                },
-                "rules": {
-                    "no-bitwise": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/helper/**/*",
-                    "test-client/*/src/*",
-                    "sample/**/*"
-                ],
-                "env": {
-                    "node": false,
-                    "browser": true
-                }
-            }
-        ]
-    },
-    "lint-staged": {
-        "*.ts": [
-            "eslint"
-        ]
+        "typescript": "5.9.3"
     },
     "renovate": {
         "extends": [

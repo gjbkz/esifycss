@@ -10,3 +10,5 @@ test-client/**/*.css.js
 test-client/**/*.css.ts
 test-client/**/*.css.d.ts
 test-client/**/package-lock.json
+
+*.tgz
