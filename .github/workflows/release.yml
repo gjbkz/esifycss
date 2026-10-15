@@ -1,6 +1,6 @@
 # Release and recovery: https://github.com/nlibjs/actions#release-procedure
-# npm Trusted Publisher (both packages): gjbkz / esifycss / release.yml / deployment.
-# Tags: esifycss=v<version>; rollup-plugin-embed-css=rollup-plugin-embed-css-v<version>.
+# npm Trusted Publisher (each package): gjbkz / esifycss / release.yml / deployment.
+# Tags: esifycss=v<version>; plugins=<package-name>-v<version>.
 # For Stage retries, select the published tag as the dispatch ref and enter the same tag.
 name: Release
 on:
@@ -64,6 +64,8 @@ jobs:
         run: |
           case "$TAG" in
             rollup-plugin-embed-css-v*) package=rollup-plugin-embed-css; version=${TAG#rollup-plugin-embed-css-v} ;;
+            esifycss-webpack-plugin-v*) package=esifycss-webpack-plugin; version=${TAG#esifycss-webpack-plugin-v} ;;
+            parcel-plugin-esifycss-v*) package=parcel-plugin-esifycss; version=${TAG#parcel-plugin-esifycss-v} ;;
             v*) package=esifycss; version=${TAG#v} ;;
             *) exit 1 ;;
           esac

@@ -1,4 +1,4 @@
-import * as css from './page.css.js';
+import * as css from './page.css';
 
 const outputElement = document.body.appendChild(document.createElement('div'));
 outputElement.id = 'output';

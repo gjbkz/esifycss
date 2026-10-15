@@ -19,5 +19,4 @@ jobs:
       - run: npm run build
       - run: npm run lint
       - run: npm test
-      - run: npm pack --workspace esifycss --dry-run --ignore-scripts
-      - run: npm pack --workspace rollup-plugin-embed-css --dry-run --ignore-scripts
+      - run: npm pack --workspaces --dry-run --ignore-scripts

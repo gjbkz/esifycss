@@ -9,7 +9,7 @@
     },
     "scripts": {
         "build": "npm run build --workspaces",
-        "lint": "eslint --ext .ts packages/esifycss/src packages/esifycss/test-client packages/esifycss/@types packages/rollup-plugin-embed-css/src",
+        "lint": "eslint --ext .ts packages/esifycss/src packages/esifycss/test-client packages/esifycss/@types packages/rollup-plugin-embed-css/src packages/esifycss-webpack-plugin/src packages/parcel-plugin-esifycss/src",
         "test": "npm run test --workspaces",
         "test-client": "npm run test-client --workspace esifycss"
     },
@@ -22,11 +22,13 @@
         "ava": "5.3.1",
         "browserstack-local": "1.5.5",
         "eslint": "9.39.5",
+        "parcel-bundler": "1.12.5",
         "postcss-scss": "4.0.9",
         "rollup": "4.64.6",
         "selenium-webdriver": "4.12.0",
         "ts-node": "10.9.1",
-        "typescript": "5.9.3"
+        "typescript": "5.9.3",
+        "webpack": "5.112.0"
     },
     "renovate": {
         "extends": [
