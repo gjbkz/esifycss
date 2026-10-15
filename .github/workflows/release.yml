@@ -1,0 +1,81 @@
+# Release and recovery: https://github.com/nlibjs/actions#release-procedure
+# npm Trusted Publisher (both packages): gjbkz / esifycss / release.yml / deployment.
+# Tags: esifycss=v<version>; rollup-plugin-embed-css=rollup-plugin-embed-css-v<version>.
+# For Stage retries, select the published tag as the dispatch ref and enter the same tag.
+name: Release
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Operation
+        type: choice
+        options: [verify, stage]
+        default: verify
+        required: true
+      tag:
+        description: Published stable Release tag for Stage retry
+        type: string
+        default: ""
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.event.release.tag_name || inputs.tag || github.ref }}
+  cancel-in-progress: false
+jobs:
+  Verify:
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'verify'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26.x
+          package-manager-cache: false
+      - run: npm install --global npm@11.21.0
+      - run: npm ci && npm run lint && npm run build && npm test
+      - run: npm pack --workspaces --ignore-scripts --dry-run
+  Stage:
+    if: (github.event_name == 'release' && !github.event.release.prerelease) || inputs.action == 'stage'
+    runs-on: ubuntu-latest
+    environment: deployment
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26.x # Release tooling only; consumer Node support stays in package.json.
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org
+      - run: npm install --global npm@11.21.0
+      - name: Select released workspace
+        id: package
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "$TAG" in
+            rollup-plugin-embed-css-v*) package=rollup-plugin-embed-css; version=${TAG#rollup-plugin-embed-css-v} ;;
+            v*) package=esifycss; version=${TAG#v} ;;
+            *) exit 1 ;;
+          esac
+          [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          test "$(node -p "require('./packages/$package/package.json').version")" = "$version"
+          if [ "$MANUAL" = true ]; then
+            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" | jq -e '.draft == false and .prerelease == false'
+            test "$(gh api "repos/$GITHUB_REPOSITORY/commits/$TAG" --jq .sha)" = "$GITHUB_SHA"
+          fi
+          echo "name=$package" >> "$GITHUB_OUTPUT"
+      - run: npm ci && npm run lint && npm run build && npm test
+      - name: Stage selected workspace
+        env:
+          PACKAGE: ${{ steps.package.outputs.name }}
+        run: npm stage publish --workspace "$PACKAGE" --provenance --access=public --ignore-scripts --registry=https://registry.npmjs.org/

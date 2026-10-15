@@ -30,18 +30,9 @@ The suite installs its fixture dependencies and is separate from `npm test`.
 
 ## Releases
 
-Keep package versions independent and update CHANGELOG.md manually. If the core
-version changes, update the plugin's `esifycss` dependency as needed. Build and test
-both packages before inspecting the selected package's tarball:
-
-```sh
-npm pack --workspace esifycss --dry-run --ignore-scripts
-npm pack --workspace rollup-plugin-embed-css --dry-run --ignore-scripts
-```
-
-The root is private and cannot be published. Keep both npm package names and
-package versions independent. Submit selected workspace tarballs through npm staging and approve the
-package version on npmjs.com.
+Release tags and npm Trusted Publisher settings are listed in
+[release.yml](.github/workflows/release.yml). Follow the shared
+[release procedure](https://github.com/nlibjs/actions#release-procedure).
 
 ## Maintenance policy
 
