@@ -60,5 +60,3 @@
 ### Dependency Upgrades
 
 - @typescript-eslint/eslint-plugin:4.30.0→4.31.0 @typescript-eslint/parser:4.30.0→4.31.0 typescript:4.4.2→4.4.3 ([aac01fc](https://github.com/kei-ito/esifycss-loader/commit/aac01fca7522f8533b4881cb862cdf3aff5e0443))
-
-

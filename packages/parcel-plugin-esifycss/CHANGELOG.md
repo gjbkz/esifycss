@@ -36,6 +36,3 @@
 ### Features
 
 * use bundled event ([24d827e](https://github.com/kei-ito/parcel-plugin-esifycss/commit/24d827e))
-
-
-
