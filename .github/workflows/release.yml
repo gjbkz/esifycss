@@ -1,8 +1,7 @@
 # Release and recovery: https://github.com/nlibjs/actions#release-procedure
 # npm Trusted Publisher (both packages): gjbkz / esifycss / release.yml / deployment.
 # Tags: esifycss=v<version>; rollup-plugin-embed-css=rollup-plugin-embed-css-v<version>.
-# For a Stage retry, select the published tag as the dispatch ref and enter the same tag.
-# Pending versions cannot be staged twice; inspect npmjs.com Staged Packages after an uncertain submission.
+# For Stage retries, select the published tag as the dispatch ref and enter the same tag.
 name: Release
 on:
   release:
@@ -26,17 +25,29 @@ concurrency:
   cancel-in-progress: false
 jobs:
   Verify:
-    if: github.event_name == 'workflow_dispatch' || !github.event.release.prerelease
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'verify'
     runs-on: ubuntu-latest
-    outputs:
-      stage: ${{ steps.source.outputs.stage }}
-      tarball: ${{ steps.pack.outputs.tarball }}
-      artifact: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26.x
+          package-manager-cache: false
+      - run: npm install --global npm@11.21.0
+      - run: npm ci && npm run lint && npm run build && npm test
+      - run: npm pack --workspaces --ignore-scripts --dry-run
+  Stage:
+    if: (github.event_name == 'release' && !github.event.release.prerelease) || inputs.action == 'stage'
+    runs-on: ubuntu-latest
+    environment: deployment
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
@@ -44,96 +55,27 @@ jobs:
           package-manager-cache: false
           registry-url: https://registry.npmjs.org
       - run: npm install --global npm@11.21.0
-      - id: source
-        name: Select and verify Release source
+      - name: Select released workspace
+        id: package
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.event.release.tag_name || inputs.tag }}
-          STAGE: ${{ github.event_name == 'release' || inputs.action == 'stage' }}
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          packages="esifycss rollup-plugin-embed-css"
-          if [ "$STAGE" = true ]; then
-            case "$TAG" in
-              v*) packages=esifycss ;;
-              rollup-plugin-embed-css-v*) packages=rollup-plugin-embed-css ;;
-              *) echo "Unsupported Release tag"; exit 1 ;;
-            esac
-            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" > "$RUNNER_TEMP/release.json"
-            jq -e --arg tag "$TAG" '.draft == false and .prerelease == false and .tag_name == $tag' "$RUNNER_TEMP/release.json"
-            test "$(git rev-parse "refs/tags/$TAG^{commit}")" = "$GITHUB_SHA"
-          else
-            test -z "$TAG"
+          case "$TAG" in
+            rollup-plugin-embed-css-v*) package=rollup-plugin-embed-css; version=${TAG#rollup-plugin-embed-css-v} ;;
+            v*) package=esifycss; version=${TAG#v} ;;
+            *) exit 1 ;;
+          esac
+          [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          test "$(node -p "require('./packages/$package/package.json').version")" = "$version"
+          if [ "$MANUAL" = true ]; then
+            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" | jq -e '.draft == false and .prerelease == false'
+            test "$(gh api "repos/$GITHUB_REPOSITORY/commits/$TAG" --jq .sha)" = "$GITHUB_SHA"
           fi
-          for package in $packages; do
-            version=$(node -p "require('./packages/$package/package.json').version")
-            [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
-            prefix=v
-            if [ "$package" = rollup-plugin-embed-css ]; then prefix=rollup-plugin-embed-css-v; fi
-            if [ "$STAGE" = true ]; then test "$TAG" = "$prefix$version"; fi
-            PACKAGE="$package" node <<'JS'
-          const fs = require('node:fs');
-          const directory = 'packages/' + process.env.PACKAGE;
-          const {version} = require('./' + directory + '/package.json');
-          const lines = fs.readFileSync(directory + '/CHANGELOG.md', 'utf8').split(/\r?\n/);
-          const start = lines.findIndex(line => line.startsWith(`## v${version} (`));
-          const end = lines.findIndex((line, index) => index > start && /^## /.test(line));
-          if (start < 0 || !lines.slice(start + 1, end < 0 ? undefined : end).join('\n').trim()) throw new Error('Missing nonempty version changelog section');
-          JS
-          done
-          echo "packages=$packages" >> "$GITHUB_OUTPUT"
-          echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test
-      - id: pack
-        name: Clean and inspect npm tarballs
+          echo "name=$package" >> "$GITHUB_OUTPUT"
+      - run: npm ci && npm run lint && npm run build && npm test
+      - name: Stage selected workspace
         env:
-          PACKAGES: ${{ steps.source.outputs.packages }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/npm-release"
-          for package in $PACKAGES; do
-            npx --yes --package @nlib/cleanup-package-json@0.5.0 cleanup-package-json --file "packages/$package/package.json"
-            npm pack --workspace "$package" --ignore-scripts --json --pack-destination "$RUNNER_TEMP/npm-release" > "$RUNNER_TEMP/pack.json"
-            filename=$(jq -er 'if length == 1 then .[0].filename else error("Expected one tarball") end' "$RUNNER_TEMP/pack.json")
-            jq -r '.[0] | "\(.name)@\(.version): \(.integrity)", (.files[].path)' "$RUNNER_TEMP/pack.json" >> "$GITHUB_STEP_SUMMARY"
-          done
-          echo "tarball=$filename" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
-        id: upload
-        with:
-          name: npm-release-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/npm-release/*.tgz
-          if-no-files-found: error
-          retention-days: 0
-  Stage:
-    needs: Verify
-    if: needs.Verify.outputs.stage == 'true'
-    runs-on: ubuntu-latest
-    environment: deployment
-    permissions:
-      contents: read
-      actions: read
-      id-token: write
-    steps:
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
-        with:
-          node-version: 26.x
-          package-manager-cache: false
-          registry-url: https://registry.npmjs.org
-      - run: npm install --global npm@11.21.0
-      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
-        with:
-          artifact-ids: ${{ needs.Verify.outputs.artifact }}
-          path: ${{ runner.temp }}/npm-release
-          merge-multiple: true
-      - name: Stage inspected tarball
-        env:
-          TARBALL: ${{ needs.Verify.outputs.tarball }}
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name || inputs.tag }}
-        working-directory: ${{ runner.temp }}/npm-release
-        run: |
-          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" | jq -e --arg tag "$TAG" '.draft == false and .prerelease == false and .tag_name == $tag'
-          test "$(gh api "repos/$GITHUB_REPOSITORY/commits/$TAG" --jq .sha)" = "$GITHUB_SHA"
-          npm stage publish "./$TARBALL" --provenance --access=public --ignore-scripts --registry=https://registry.npmjs.org/
+          PACKAGE: ${{ steps.package.outputs.name }}
+        run: npm stage publish --workspace "$PACKAGE" --provenance --access=public --ignore-scripts --registry=https://registry.npmjs.org/
