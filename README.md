@@ -22,9 +22,11 @@ together. Shared development tools and one lockfile live at the root. Builds use
 Node.js file operations; lint configuration is local and no dependency installs
 git hooks. The plugin's integration tests build both embedded and extracted CSS.
 
-The existing BrowserStack suite remains available with `npm run test-client` and
-a manually triggered workflow. It requires BrowserStack credentials and installs
-its fixture dependencies. It is separate from the default build checks.
+The BrowserStack suite runs automatically for same-repository pull requests and
+can also be started manually or with `npm run test-client`. Fork and Dependabot
+pull requests are skipped because they cannot access repository secrets. Configure
+`BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` in repository secrets.
+The suite installs its fixture dependencies and is separate from `npm test`.
 
 ## Releases
 

@@ -3,7 +3,7 @@ const js = require('@eslint/js');
 const parser = require('@typescript-eslint/parser');
 
 module.exports = [
-    {ignores: ['**/lib/**', '**/temp/**', '**/*.css.ts']},
+    {ignores: ['**/lib/**', '**/temp/**', '**/output/**', '**/*.css.ts', '**/*.css.js']},
     {
         files: ['packages/**/*.ts'],
         languageOptions: {parser},
