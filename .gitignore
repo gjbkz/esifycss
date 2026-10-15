@@ -6,9 +6,9 @@ output
 .cache
 .nyc_output
 !sample
-test-client/**/*.css.js
-test-client/**/*.css.ts
-test-client/**/*.css.d.ts
-test-client/**/package-lock.json
+packages/esifycss/test-client/**/*.css.js
+packages/esifycss/test-client/**/*.css.ts
+packages/esifycss/test-client/**/*.css.d.ts
+packages/esifycss/test-client/**/package-lock.json
 
 *.tgz
