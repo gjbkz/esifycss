@@ -1,0 +1,46 @@
+{
+    "name": "esifycss",
+    "version": "1.4.40",
+    "description": "Generates .js or .ts exports class names and custom properties",
+    "author": {
+        "name": "Kei Ito",
+        "email": "kei.itof@gmail.com",
+        "url": "https://github.com/gjbkz"
+    },
+    "license": "Apache-2.0",
+    "engines": {
+        "node": ">=22"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gjbkz/esifycss.git",
+        "directory": "packages/esifycss"
+    },
+    "main": "lib/index.js",
+    "files": [
+        "lib",
+        "@types"
+    ],
+    "bin": {
+        "esifycss": "lib/bin/esifycss.js"
+    },
+    "scripts": {
+        "build": "node scripts/build.js",
+        "test": "npm run test:type && npm run test:ava",
+        "test:type": "tsc --noEmit",
+        "test:ava": "ava --config ava.config.cjs",
+        "test-client": "ava --config ava.config.client.cjs",
+        "prepack": "npm run build"
+    },
+    "dependencies": {
+        "@hookun/parse-animation-shorthand": "0.1.5",
+        "acorn": "8.10.0",
+        "acorn-walk": "8.2.0",
+        "chokidar": "3.6.0",
+        "commander": "9.5.0",
+        "postcss": "8.5.30",
+        "postcss-selector-parser": "7.1.6",
+        "vlq": "2.0.4"
+    },
+    "types": "lib/index.d.ts"
+}
