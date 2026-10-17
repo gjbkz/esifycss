@@ -6,7 +6,6 @@ maintains the core and its bundler integrations together, preserving their npm n
 - [esifycss](packages/esifycss/README.md): PostCSS plugin, Runner, and CLI.
 - [rollup-plugin-embed-css](packages/rollup-plugin-embed-css/README.md): Rollup 4 integration.
 - [esifycss-webpack-plugin](packages/esifycss-webpack-plugin/README.md): Webpack 5 resolver for generated CSS modules.
-- [parcel-plugin-esifycss](packages/parcel-plugin-esifycss/README.md): Parcel 1 integration.
 
 ## Development
 
@@ -22,7 +21,7 @@ npm test
 npm workspaces links the plugins to the local core, so tests exercise changes
 together. Shared development tools and one lockfile live at the root. Builds use
 Node.js file operations; lint configuration is local and no dependency installs
-git hooks. Integration tests build Rollup, Webpack, and Parcel bundles.
+git hooks. Integration tests build Rollup and Webpack bundles.
 
 The BrowserStack suite runs automatically for same-repository pull requests and
 can also be started manually or with `npm run test-client`. Fork and Dependabot

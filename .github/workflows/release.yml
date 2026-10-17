@@ -65,7 +65,6 @@ jobs:
           case "$TAG" in
             rollup-plugin-embed-css-v*) package=rollup-plugin-embed-css; version=${TAG#rollup-plugin-embed-css-v} ;;
             esifycss-webpack-plugin-v*) package=esifycss-webpack-plugin; version=${TAG#esifycss-webpack-plugin-v} ;;
-            parcel-plugin-esifycss-v*) package=parcel-plugin-esifycss; version=${TAG#parcel-plugin-esifycss-v} ;;
             v*) package=esifycss; version=${TAG#v} ;;
             *) exit 1 ;;
           esac

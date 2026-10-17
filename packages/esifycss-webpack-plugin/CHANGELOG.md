@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Maintain the plugin in the esifycss workspace with shared build tools and real Webpack 5 integration tests.
-- Require Node.js 22+ and declare Webpack 5 as a peer dependency.
+- Breaking: require Node.js 22+ and declare Webpack 5 as a peer dependency. Publish these changes in the next minor release (0.2.0 or later).
 
 ## v0.1.3 (2021-09-11)
 
