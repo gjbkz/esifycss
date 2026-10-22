@@ -14,7 +14,7 @@
         "test-client": "npm run test-client --workspace esifycss"
     },
     "devDependencies": {
-        "@eslint/js": "9.39.5",
+        "@eslint/js": "10.0.1",
         "@types/jsdom": "20.0.1",
         "@types/node": "22.20.5",
         "@types/selenium-webdriver": "4.35.7",
