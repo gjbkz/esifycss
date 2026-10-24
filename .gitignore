@@ -3,7 +3,6 @@ node_modules
 lib
 temp
 output
-.cache
 .parcel-cache
 .nyc_output
 !sample
