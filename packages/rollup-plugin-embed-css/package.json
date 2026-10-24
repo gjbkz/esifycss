@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "esifycss": "^2.0.0",
-        "@rollup/pluginutils": "5.4.0"
+        "@rollup/pluginutils": "5.5.1"
     },
     "types": "lib/index.d.ts",
     "peerDependencies": {
