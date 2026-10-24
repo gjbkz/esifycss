@@ -1,12 +1,21 @@
-## Unreleased
-
-- Move the core to `packages/esifycss` and maintain the Rollup plugin in the same npm workspace.
-- Require Node.js 22 or newer; update PostCSS and selector parser security fixes.
-- Replace shared development tooling, git hooks, task runners, and cleanup helpers with local configuration and Node.js scripts.
-- Keep test-only helpers out of the generated public index and npm tarball.
-- Fix CSS extraction crashing on sparse JavaScript arrays (#783).
-
 # Changelog
+
+## v2.0.0 (2026-10-24)
+
+### Breaking Changes
+
+- Require Node.js 22 or newer.
+
+### Bug Fixes
+
+- Fix CSS extraction crashing on sparse JavaScript arrays.
+- Keep test-only helpers out of the generated public index and npm tarball.
+
+### Maintenance
+
+- Move the core into the shared npm workspace with the Rollup and Webpack plugins.
+- Update runtime dependencies, including PostCSS and postcss-selector-parser security fixes.
+- Replace shared development tooling, git hooks, task runners, and cleanup helpers with local configuration and Node.js scripts.
 
 ## v1.4.40 (2023-01-07)
 

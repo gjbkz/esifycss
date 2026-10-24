@@ -1,11 +1,16 @@
-## Unreleased
-
-- Maintain this package in the esifycss npm workspace while preserving its npm name and plugin exports.
-- Require Node.js 22+ and Rollup 4; use the maintained @rollup/pluginutils.
-- Remove the unused direct PostCSS dependency and share development tooling with the core.
-- Validate embedded CSS, extracted assets, dynamic imports, and include/exclude behavior in integration tests.
-
 # Changelog
+
+## v2.0.0 (2026-10-24)
+
+### Breaking Changes
+
+- Require Node.js 22 or newer and Rollup 4.
+
+### Maintenance
+
+- Move the plugin into the esifycss npm workspace, preserving its npm name and plugin exports.
+- Replace the retired plugin utilities with `@rollup/pluginutils` and remove the unused direct PostCSS dependency.
+- Share development tooling with the core and add integration coverage for embedded CSS, extracted assets, dynamic imports, and include/exclude filters.
 
 ## v1.0.26 (2023-01-09)
 
