@@ -26,11 +26,11 @@
     },
     "scripts": {
         "build": "node scripts/build.js",
-        "test": "npm run test:type && npm run test:unit",
-        "test:type": "tsc --noEmit",
-        "test-client": "node --require ts-node/register --test --test-timeout=120000 test-client/run.ts",
+        "test": "npm run test:unit",
+        "test-client": "npm run test:compile && node --test --test-timeout=120000 temp/test/test-client/run.js",
         "prepack": "npm run build",
-        "test:unit": "node --require ts-node/register --test --test-timeout=120000 \"src/**/*.test.ts\""
+        "test:unit": "npm run test:compile && node --test --test-timeout=120000 \"temp/test/src/**/*.test.js\"",
+        "test:compile": "node -e \"require('node:fs').rmSync('temp/test', {recursive:true,force:true})\" && tsc --project tsconfig.test.json && tsc --project tsconfig.helper.json --outDir temp/test/src/helper"
     },
     "dependencies": {
         "@hookun/parse-animation-shorthand": "0.1.5",
