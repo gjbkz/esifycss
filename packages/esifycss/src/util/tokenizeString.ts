@@ -5,7 +5,7 @@
 export const tokenizeString = function* (string: string): Generator<string> {
     let pos = 0;
     const REGEXP = /[.0-9]+|[^a-zA-Z]/g;
-    while (1) {
+    for (;;) {
         const match = REGEXP.exec(string);
         if (match) {
             const {0: matched, index} = match;
