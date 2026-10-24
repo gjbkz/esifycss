@@ -5,7 +5,6 @@
 ### Breaking Changes
 
 - Require Node.js 22 or newer and Rollup 4.
-- Upgrade the esifycss dependency to `^2.0.0`.
 
 ### Maintenance
 
@@ -372,4 +371,3 @@
 
 
 ## v0.0.1 (2017-06-29)
-
