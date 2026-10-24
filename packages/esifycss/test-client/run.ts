@@ -129,7 +129,8 @@ for (const testName of testNameList) {
                     localIdentifier: capability['bstack:options'].localIdentifier,
                 });
             }
-            const driver = t.context.driver = builder.build();
+            const driver = builder.build();
+            t.context.driver = driver;
             const baseURL = (/safari/i).test(capability.browserName) ? new URL(`http://bs-local.com:${t.context.port}`) : t.context.baseURL;
             t.context.session = await driver.getSession();
             await driver.get(`${new URL('/index.html', baseURL)}`);

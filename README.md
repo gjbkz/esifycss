@@ -20,7 +20,7 @@ npm test
 
 npm workspaces links the plugins to the local core, so tests exercise changes
 together. Shared development tools and one lockfile live at the root. Builds use
-Node.js file operations; lint configuration is local and no dependency installs
+Node.js file operations; Biome lint configuration is local and no dependency installs
 git hooks. Integration tests build Rollup and Webpack bundles.
 
 The BrowserStack suite runs automatically for same-repository pull requests and

@@ -200,7 +200,7 @@ interface Test {
                 callback();
             },
         });
-        const session = t.context.session = new Session({
+        const session = new Session({
             ...parameters,
             include: t.context.directory,
             helper,
@@ -208,6 +208,7 @@ interface Test {
             stdout: writable,
             stderr: writable,
         });
+        t.context.session = session;
         await session.start();
         const identifiers = new Map<string, string>();
         await Promise.all(files.map(async (file) => {
@@ -257,13 +258,14 @@ test('ignore output even if it is covered by the "include" pattern.', async (t) 
             callback();
         },
     });
-    const session = t.context.session = new Session({
+    const session = new Session({
         css: cssPath,
         include: t.context.directory,
         watch: false,
         stdout: writable,
         stderr: writable,
     });
+    t.context.session = session;
     await session.start();
     await t.throwsAsync(async () => {
         await fs.promises.stat(`${cssPath}.js`);

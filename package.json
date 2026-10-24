@@ -9,19 +9,17 @@
     },
     "scripts": {
         "build": "npm run build --workspaces",
-        "lint": "eslint --ext .ts packages/esifycss/src packages/esifycss/test-client packages/esifycss/@types packages/rollup-plugin-embed-css/src packages/esifycss-webpack-plugin/src",
+        "lint": "biome lint packages/esifycss/src packages/esifycss/test-client packages/esifycss/@types packages/rollup-plugin-embed-css/src packages/esifycss-webpack-plugin/src",
         "test": "npm run test --workspaces",
         "test-client": "npm run test-client --workspace esifycss"
     },
     "devDependencies": {
-        "@eslint/js": "9.39.5",
+        "@biomejs/biome": "2.6.2",
         "@types/jsdom": "20.0.1",
         "@types/node": "22.20.5",
         "@types/selenium-webdriver": "4.35.7",
-        "@typescript-eslint/parser": "8.71.2",
         "ava": "5.3.1",
         "browserstack-local": "1.5.9",
-        "eslint": "9.39.5",
         "postcss-scss": "4.0.9",
         "rollup": "4.64.7",
         "selenium-webdriver": "4.51.0",
