@@ -2,12 +2,11 @@
     "private": true,
     "scripts": {
         "build:esifycss": "esifycss src/**/*.css",
-        "build:parcel": "parcel build src/index.html --no-minify --out-dir output",
-        "build": "run-s build:esifycss build:parcel"
+        "build:parcel": "parcel build src/index.html --no-optimize --dist-dir output",
+        "build": "npm run build:esifycss && npm run build:parcel"
     },
     "devDependencies": {
         "esifycss": "file:../..",
-        "npm-run-all": "4.1.5",
-        "parcel-bundler": "1.12.5"
+        "parcel": "2.16.4"
     }
 }
