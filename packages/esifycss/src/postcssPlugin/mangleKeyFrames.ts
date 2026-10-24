@@ -17,7 +17,7 @@ export const mangleKeyFrames = (
         if (name === 'keyframes') {
             const {params: before} = rule;
             if (before) {
-                let after = before;
+                let after: string;
                 if (before.startsWith(rawPrefix)) {
                     after = before.slice(rawPrefix.length);
                 } else {

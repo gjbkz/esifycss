@@ -5,7 +5,7 @@
         "packages/*"
     ],
     "engines": {
-        "node": ">=22"
+        "node": "^22.13.0 || >=24"
     },
     "scripts": {
         "build": "npm run build --workspaces",
@@ -21,7 +21,7 @@
         "@typescript-eslint/parser": "8.71.2",
         "ava": "5.3.1",
         "browserstack-local": "1.5.9",
-        "eslint": "9.39.5",
+        "eslint": "10.13.0",
         "postcss-scss": "4.0.9",
         "rollup": "4.64.7",
         "selenium-webdriver": "4.51.0",

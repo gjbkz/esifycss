@@ -118,7 +118,7 @@ test('plugin', async (t): Promise<void> => {
         }
     }
     {
-        const node = nodes[index++] as Rule;
+        const node = nodes[index] as Rule;
         t.is(node.type, 'rule');
         t.is(node.selector, `#${mapB.id.bar}`);
         {

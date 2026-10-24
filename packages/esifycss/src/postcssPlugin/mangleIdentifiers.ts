@@ -20,7 +20,7 @@ export const mangleIdentifiers = async (
         selectors.walk((selector) => {
             if (selectorParser.isClassName(selector) || selectorParser.isIdentifier(selector)) {
                 const {value: before} = selector;
-                let after = before;
+                let after: string;
                 if (before.startsWith(rawPrefix)) {
                     after = before.slice(rawPrefix.length);
                 } else {
