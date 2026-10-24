@@ -96,9 +96,10 @@ const build = async (
     }
 };
 
-const testNameList = fs.readdirSync(__dirname).filter((name) => {
+const testClientDirectory = path.resolve('test-client');
+const testNameList = fs.readdirSync(testClientDirectory).filter((name) => {
     try {
-        return fs.statSync(path.join(__dirname, name, 'package.json')).isFile();
+        return fs.statSync(path.join(testClientDirectory, name, 'package.json')).isFile();
     } catch {
         return false;
     }
@@ -114,7 +115,7 @@ for (const testName of testNameList) {
                 sessionName: testName,
             },
         };
-        const testDirectory = path.join(__dirname, testName);
+        const testDirectory = path.join(testClientDirectory, testName);
         const outputDirectory = path.join(testDirectory, 'output');
         test(`${testName} ${options.os || options.deviceName || '-'} ${capability.browserName}`, async (t) => {
             const context = await createContext();

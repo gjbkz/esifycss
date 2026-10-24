@@ -1,0 +1,19 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "./temp/test",
+        "declaration": false,
+        "noEmitOnError": true
+    },
+    "include": [
+        "src/**/*",
+        "test-client/run.ts",
+        "test-client/util/**/*.ts"
+    ],
+    "exclude": [
+        "src/helper/**/*",
+        "lib/**/*",
+        "temp/**/*"
+    ]
+}

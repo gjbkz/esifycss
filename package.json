@@ -21,7 +21,6 @@
         "postcss-scss": "4.0.9",
         "rollup": "4.64.7",
         "selenium-webdriver": "4.51.0",
-        "ts-node": "10.9.2",
         "typescript": "5.9.3",
         "webpack": "5.112.0"
     },
