@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {parseImport} from './parseImport';
 
 interface Test {
@@ -45,7 +46,7 @@ interface Test {
         expected: null,
     },
 ] as Array<Test>).forEach(({input, expected}, index) => {
-    test(`#${index + 1} ${input[0]}`, (t) => {
-        t.deepEqual(parseImport(...input), expected);
+    test(`#${index + 1} ${input[0]}`, () => {
+        assert.deepStrictEqual(parseImport(...input), expected);
     });
 });

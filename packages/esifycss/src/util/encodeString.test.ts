@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {encodeString, decodeString} from './encodeString';
 import {createIdentifier} from './createIdGenerator';
 
@@ -27,7 +28,7 @@ interface Test {
         expectedWords: ['foo', ' ', 'bar'],
     },
 ] as Array<Test>).forEach(({input, preset, expected, expectedWords}, index) => {
-    test(`#${index} ${JSON.stringify(input)} ${JSON.stringify(preset || [])} → ${expected}`, (t) => {
+    test(`#${index} ${JSON.stringify(input)} ${JSON.stringify(preset || [])} → ${expected}`, () => {
         const identifier = createIdentifier();
         if (preset) {
             for (const token of preset) {
@@ -35,11 +36,11 @@ interface Test {
             }
         }
         const actual = encodeString(input, identifier);
-        t.is(actual, expected);
-        t.deepEqual(
+        assert.strictEqual(actual, expected);
+        assert.deepStrictEqual(
             identifier.idList,
             expectedWords,
         );
-        t.is(decodeString(actual, identifier.idList), input);
+        assert.strictEqual(decodeString(actual, identifier.idList), input);
     });
 });

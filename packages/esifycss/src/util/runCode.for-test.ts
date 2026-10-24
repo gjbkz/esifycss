@@ -25,5 +25,11 @@ export const runCode = async (file: string): Promise<RunCodeResult> => {
     const sandbox = createSandbox<EsifyCSSResult>();
     vm.runInNewContext(output.code, sandbox);
     const {exports: {className = {}, id = {}, keyframes = {}}} = sandbox;
-    return {className, id, keyframes, root: postcss.parse(sandbox.document.css)};
+    // Copy maps from the VM realm so strict assertions compare ordinary objects.
+    return {
+        className: {...className},
+        id: {...id},
+        keyframes: {...keyframes},
+        root: postcss.parse(sandbox.document.css),
+    };
 };

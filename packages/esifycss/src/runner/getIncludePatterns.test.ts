@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {getIncludePatterns} from './getIncludePatterns';
 
 interface Test {
@@ -15,7 +16,7 @@ interface Test {
         expected: ['aaa.test/**/*.css', 'aaa.test/**/*.scss'],
     },
 ] as Array<Test>).forEach(({input, expected}, index) => {
-    test(`#${index} ${JSON.stringify(input)} → ${expected}`, (t) => {
-        t.deepEqual(getIncludePatterns(...input), expected);
+    test(`#${index} ${JSON.stringify(input)} → ${expected}`, () => {
+        assert.deepStrictEqual(getIncludePatterns(...input), expected);
     });
 });
