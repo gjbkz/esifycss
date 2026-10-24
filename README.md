@@ -9,7 +9,7 @@ maintains the core and its bundler integrations together, preserving their npm n
 
 ## Development
 
-Development requires Node.js 22.13 or newer in the 22.x line, or Node.js 24 or newer. Run all commands from the repository root:
+Node.js 22 or newer is required. Run all commands from the repository root:
 
 ```sh
 npm ci

@@ -2,6 +2,7 @@ import * as events from 'events';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as stream from 'stream';
+import {setTimeout as delay} from 'node:timers/promises';
 import * as animationParser from '@hookun/parse-animation-shorthand';
 import {test, type TestContext as NodeTestContext} from 'node:test';
 import * as assert from 'node:assert/strict';
@@ -74,17 +75,13 @@ interface Test {
                     assert.deepStrictEqual(Object.keys(keyframes), []);
                     const [ruleNode, anotherNode] = root.nodes as Array<postcss.Rule>;
                     assert.ok(!anotherNode);
-                    assert.partialDeepStrictEqual(ruleNode, {
-                        type: 'rule',
-                        selector: `.${className.foo}`,
-                    });
+                    assert.strictEqual(ruleNode.type, 'rule');
+                    assert.strictEqual(ruleNode.selector, `.${className.foo}`);
                     const [declaration, anotherDeclaration] = ruleNode.nodes;
                     assert.ok(!anotherDeclaration);
-                    assert.partialDeepStrictEqual(declaration, {
-                        type: 'decl',
-                        prop: 'color',
-                        value: 'red',
-                    });
+                    assert.strictEqual(declaration.type, 'decl');
+                    assert.strictEqual((declaration as postcss.Declaration).prop, 'color');
+                    assert.strictEqual((declaration as postcss.Declaration).value, 'red');
                 },
             },
         ],
@@ -104,17 +101,13 @@ interface Test {
                     assert.deepStrictEqual(Object.keys(keyframes), []);
                     const [ruleNode, anotherNode] = root.nodes as Array<postcss.Rule>;
                     assert.ok(!anotherNode);
-                    assert.partialDeepStrictEqual(ruleNode, {
-                        type: 'rule',
-                        selector: `.${className.foo}`,
-                    });
+                    assert.strictEqual(ruleNode.type, 'rule');
+                    assert.strictEqual(ruleNode.selector, `.${className.foo}`);
                     const [declaration, anotherDeclaration] = ruleNode.nodes;
                     assert.ok(!anotherDeclaration);
-                    assert.partialDeepStrictEqual(declaration, {
-                        type: 'decl',
-                        prop: 'color',
-                        value: 'blue',
-                    });
+                    assert.strictEqual(declaration.type, 'decl');
+                    assert.strictEqual((declaration as postcss.Declaration).prop, 'color');
+                    assert.strictEqual((declaration as postcss.Declaration).value, 'blue');
                 },
             },
         ],
@@ -134,22 +127,16 @@ interface Test {
                     assert.deepStrictEqual(Object.keys(className), ['foo']);
                     assert.deepStrictEqual(Object.keys(keyframes), ['foo', 'bar']);
                     assert.strictEqual(root.nodes.length, 3);
-                    assert.partialDeepStrictEqual(root.nodes[0], {
-                        type: 'atrule',
-                        name: 'keyframes',
-                        params: keyframes.foo,
-                    });
-                    assert.partialDeepStrictEqual(root.nodes[1], {
-                        type: 'atrule',
-                        name: 'keyframes',
-                        params: keyframes.bar,
-                    });
+                    assert.strictEqual(root.nodes[0].type, 'atrule');
+                    assert.strictEqual((root.nodes[0] as postcss.AtRule).name, 'keyframes');
+                    assert.strictEqual((root.nodes[0] as postcss.AtRule).params, keyframes.foo);
+                    assert.strictEqual(root.nodes[1].type, 'atrule');
+                    assert.strictEqual((root.nodes[1] as postcss.AtRule).name, 'keyframes');
+                    assert.strictEqual((root.nodes[1] as postcss.AtRule).params, keyframes.bar);
                     {
                         const node = root.nodes[2] as postcss.Rule;
-                        assert.partialDeepStrictEqual(node, {
-                            type: 'rule',
-                            selector: `.${className.foo}#${id.bar}`,
-                        });
+                        assert.strictEqual(node.type, 'rule');
+                        assert.strictEqual(node.selector, `.${className.foo}#${id.bar}`);
                         const declarations = node.nodes as Array<postcss.Declaration>;
                         assert.strictEqual(declarations.length, 1);
                         assert.strictEqual(declarations[0].prop, 'animation');
@@ -380,11 +367,21 @@ test('watch-css', async (t) => {
     const cssPath1 = path.join(context.directory, '/components/style1.css');
     const cssPath2 = path.join(context.directory, '/components/style2.css');
     const cssOutputPath = path.join(context.directory, 'output.css');
-    const {messageListener, waitForMessage} = createMessageListener();
+    const waitForCSS = async (ready: (css: string) => boolean): Promise<string> => {
+        const deadline = Date.now() + 5000;
+        let css = '';
+        while (Date.now() < deadline) {
+            css = await fs.promises.readFile(cssOutputPath, 'utf-8');
+            if (ready(css)) {
+                return css;
+            }
+            await delay(20);
+        }
+        assert.fail(`Timed out waiting for expected CSS. Last output: ${css}`);
+    };
     const writable = new stream.Writable({
         write(chunk, _encoding, callback) {
             const message = `${chunk}`.trim();
-            messageListener.emit('message', message);
             console.log(message);
             callback();
         },
@@ -405,32 +402,30 @@ test('watch-css', async (t) => {
         '.foo2#bar {animation: 1s 0.5s linear infinite foo2}',
     ].join(''));
     await context.session.start().catch((error: Error) => assert.fail(error));
-    const outputCss1 = await fs.promises.readFile(cssOutputPath, 'utf-8');
+    const outputCss1 = await waitForCSS((css) => css.includes('color:green') && css.includes('color:pink'));
     console.log('outputCss1', outputCss1);
     assert.strictEqual(outputCss1.includes('color:green'), true);
     assert.strictEqual(outputCss1.includes('color:pink'), true);
     const root1 = postcss.parse(outputCss1);
     assert.strictEqual(root1.nodes.length, 4);
-    const updated1 = waitForMessage(`written: ${cssOutputPath}`);
     await updateFile(cssPath1, [
         '@keyframes bar1 {0%{color:gold}100%{color:blue}}',
         '.bar1#bar {animation: 2s 1s linear infinite bar1}',
     ].join(''));
-    await updated1;
-    const outputCss2 = await fs.promises.readFile(cssOutputPath, 'utf-8');
+    const outputCss2 = await waitForCSS((css) => !css.includes('color:green')
+        && css.includes('color:blue') && css.includes('color:pink'));
     console.log('outputCss2', outputCss2);
     assert.strictEqual(outputCss2.includes('color:green'), false);
     assert.strictEqual(outputCss2.includes('color:blue'), true);
     assert.strictEqual(outputCss2.includes('color:pink'), true);
     const root2 = postcss.parse(outputCss2);
     assert.strictEqual(root2.nodes.length, 4);
-    const updated2 = waitForMessage(`written: ${cssOutputPath}`);
     await updateFile(cssPath2, [
         '@keyframes bar2 {0%{color:gold}100%{color:red}}',
         '.bar2#bar {animation: 1s 0.5s linear infinite bar2}',
     ].join(''));
-    await updated2;
-    const outputCss3 = await fs.promises.readFile(cssOutputPath, 'utf-8');
+    const outputCss3 = await waitForCSS((css) => !css.includes('color:green')
+        && !css.includes('color:pink') && css.includes('color:blue') && css.includes('color:red'));
     console.log('outputCss3', outputCss3);
     assert.strictEqual(outputCss3.includes('color:green'), false);
     assert.strictEqual(outputCss3.includes('color:pink'), false);
