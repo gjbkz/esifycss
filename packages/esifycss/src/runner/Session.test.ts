@@ -367,6 +367,12 @@ test('watch-css', async (t) => {
     const cssPath1 = path.join(context.directory, '/components/style1.css');
     const cssPath2 = path.join(context.directory, '/components/style2.css');
     const cssOutputPath = path.join(context.directory, 'output.css');
+    const updateCSS = async (file: string, lines: Array<string>): Promise<void> => {
+        // Publish complete fixture contents so watchers cannot read a truncated file.
+        const temporary = `${file}.tmp`;
+        await updateFile(temporary, lines.join(''));
+        await fs.promises.rename(temporary, file);
+    };
     const waitForCSS = async (ready: (css: string) => boolean): Promise<string> => {
         const deadline = Date.now() + 5000;
         let css = '';
@@ -393,14 +399,14 @@ test('watch-css', async (t) => {
         stdout: writable,
         stderr: writable,
     });
-    await updateFile(cssPath1, [
+    await updateCSS(cssPath1, [
         '@keyframes foo1 {0%{color:gold}100%{color:green}}',
         '.foo1#bar {animation: 1s 0.5s linear infinite foo1}',
-    ].join(''));
-    await updateFile(cssPath2, [
+    ]);
+    await updateCSS(cssPath2, [
         '@keyframes foo2 {0%{color:gold}100%{color:pink}}',
         '.foo2#bar {animation: 1s 0.5s linear infinite foo2}',
-    ].join(''));
+    ]);
     await context.session.start().catch((error: Error) => assert.fail(error));
     const outputCss1 = await waitForCSS((css) => css.includes('color:green') && css.includes('color:pink'));
     console.log('outputCss1', outputCss1);
@@ -408,10 +414,10 @@ test('watch-css', async (t) => {
     assert.strictEqual(outputCss1.includes('color:pink'), true);
     const root1 = postcss.parse(outputCss1);
     assert.strictEqual(root1.nodes.length, 4);
-    await updateFile(cssPath1, [
+    await updateCSS(cssPath1, [
         '@keyframes bar1 {0%{color:gold}100%{color:blue}}',
         '.bar1#bar {animation: 2s 1s linear infinite bar1}',
-    ].join(''));
+    ]);
     const outputCss2 = await waitForCSS((css) => !css.includes('color:green')
         && css.includes('color:blue') && css.includes('color:pink'));
     console.log('outputCss2', outputCss2);
@@ -420,10 +426,10 @@ test('watch-css', async (t) => {
     assert.strictEqual(outputCss2.includes('color:pink'), true);
     const root2 = postcss.parse(outputCss2);
     assert.strictEqual(root2.nodes.length, 4);
-    await updateFile(cssPath2, [
+    await updateCSS(cssPath2, [
         '@keyframes bar2 {0%{color:gold}100%{color:red}}',
         '.bar2#bar {animation: 1s 0.5s linear infinite bar2}',
-    ].join(''));
+    ]);
     const outputCss3 = await waitForCSS((css) => !css.includes('color:green')
         && !css.includes('color:pink') && css.includes('color:blue') && css.includes('color:red'));
     console.log('outputCss3', outputCss3);
