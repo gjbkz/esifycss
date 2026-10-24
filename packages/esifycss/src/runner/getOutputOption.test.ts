@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {getOutputOption} from './getOutputOption';
 
 interface Test {
@@ -28,11 +29,11 @@ interface Test {
         expected: null,
     },
 ] as Array<Test>).forEach(({input, expected}, index) => {
-    test(`#${index} ${JSON.stringify(input)} → ${expected ? JSON.stringify(expected) : 'Error'}`, (t) => {
+    test(`#${index} ${JSON.stringify(input)} → ${expected ? JSON.stringify(expected) : 'Error'}`, () => {
         if (expected) {
-            t.deepEqual(getOutputOption(...input), expected);
+            assert.deepStrictEqual(getOutputOption(...input), expected);
         } else {
-            t.throws(() => getOutputOption(...input));
+            assert.throws(() => getOutputOption(...input));
         }
     });
 });

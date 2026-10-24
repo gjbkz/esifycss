@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {parseCSSModuleScript} from './parseCSSModuleScript';
 
 interface Test {
@@ -236,22 +237,25 @@ interface Test {
         },
     },
 ] as Array<Test>).forEach(({input, expected}, index) => {
-    test(`#${index} ${input.title}${expected ? '' : ' → Error'}`, (t) => {
+    test(`#${index} ${input.title}${expected ? '' : ' → Error'}`, () => {
         if (expected) {
             const actual = parseCSSModuleScript(input);
-            t.deepEqual(actual, expected);
+            assert.deepStrictEqual(actual, expected);
         } else {
-            const error = t.throws(() => parseCSSModuleScript(input));
-            t.is(error && error.message.slice(0, input.title.length), input.title);
+            assert.throws(() => parseCSSModuleScript(input), (error: unknown) => {
+                assert.ok(error instanceof Error);
+                assert.strictEqual(error.message.slice(0, input.title.length), input.title);
+                return true;
+            });
         }
     });
 });
 
-test('sparse arrays in application code do not crash CSS extraction', (t) => {
+test('sparse arrays in application code do not crash CSS extraction', () => {
     const result = parseCSSModuleScript({
         code: "noop([,]); addStyle([, {$$esifycss: '.foo{color:red}'}]);",
         cssKey: '$$esifycss',
     });
-    t.deepEqual(result.ranges.map(({css}) => css), ['.foo{color:red}']);
-    t.is(result.expressionStatements.length, 1);
+    assert.deepStrictEqual(result.ranges.map(({css}) => css), ['.foo{color:red}']);
+    assert.strictEqual(result.expressionStatements.length, 1);
 });

@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {getExtensionOption} from './getExtensionOption';
 
 interface Test {
@@ -13,8 +14,8 @@ interface Test {
     {input: [{ext: undefined}, {type: 'css', path: 'test.css'}], expected: '.js'},
     {input: [{ext: '.ts'}, {type: 'css', path: 'test.css'}], expected: '.ts'},
 ] as Array<Test>).forEach(({input, expected}, index) => {
-    test(`#${index} ${JSON.stringify(input)} → ${expected}`, (t) => {
-        t.is(getExtensionOption(...input), expected);
+    test(`#${index} ${JSON.stringify(input)} → ${expected}`, () => {
+        assert.strictEqual(getExtensionOption(...input), expected);
     });
 
 });

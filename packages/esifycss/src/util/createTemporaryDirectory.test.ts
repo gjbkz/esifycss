@@ -1,4 +1,5 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {createTemporaryDirectory} from './createTemporaryDirectory';
 
 interface Test {
@@ -10,8 +11,8 @@ interface Test {
     {expected: /node-tmp-/},
     {prefix: 'foo-temporary-', expected: /foo-temporary-/},
 ] as Array<Test>).forEach(({prefix, expected}, index) => {
-    test(`#${index} createTemporaryDirectory(${JSON.stringify(prefix)}) → ${JSON.stringify(expected)}`, async (t) => {
+    test(`#${index} createTemporaryDirectory(${JSON.stringify(prefix)}) → ${JSON.stringify(expected)}`, async () => {
         const actual = await createTemporaryDirectory(prefix);
-        t.true(expected.test(actual));
+        assert.strictEqual(expected.test(actual), true);
     });
 });

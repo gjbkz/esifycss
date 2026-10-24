@@ -5,8 +5,8 @@ import * as path from 'path';
 import {URL} from 'url';
 import * as selenium from 'selenium-webdriver';
 import type * as BrowserStack from 'browserstack-local';
-import anyTest from 'ava';
-import type {TestFn} from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {capabilities} from './util/capabilities';
 import {browserStack} from './util/constants';
 import {createBrowserStackLocal} from './util/createBrowserStackLocal';
@@ -16,16 +16,16 @@ import {spawn} from './util/spawn';
 
 const {writeFile} = fs.promises;
 
-const test = anyTest as TestFn<{
+interface BrowserTestContext {
     session?: selenium.Session,
     builder?: selenium.Builder,
     driver?: selenium.ThenableWebDriver,
-    bsLocal: BrowserStack.Local,
+    bsLocal?: BrowserStack.Local,
     server: http.Server,
     port: number,
     baseURL: URL,
     passed: boolean,
-}>;
+}
 
 /**
  * https://www.browserstack.com/question/664
@@ -34,9 +34,8 @@ const test = anyTest as TestFn<{
  * → We support all ports for all browsers other than Safari.
  */
 let port = 9200;
-test.beforeEach(async (t) => {
-    t.context.passed = false;
-    t.context.server = await new Promise((resolve, reject) => {
+const createContext = async (): Promise<BrowserTestContext> => {
+    const server = await new Promise<http.Server>((resolve, reject) => {
         const server = http.createServer()
         .once('error', reject)
         .once('listening', () => {
@@ -45,24 +44,28 @@ test.beforeEach(async (t) => {
         });
         server.listen(port++);
     });
-    const address = t.context.server.address();
+    const address = server.address();
     if (address && typeof address === 'object') {
-        t.context.port = address.port;
-        t.context.baseURL = new URL(`http://localhost:${address.port}`);
+        return {
+            server,
+            port: address.port,
+            baseURL: new URL(`http://localhost:${address.port}`),
+            passed: false,
+        };
     } else {
         throw new Error(`Invalid address: ${address}`);
     }
-});
+};
 
-test.afterEach(async (t) => {
-    if (t.context.session) {
-        await markResult(t.context.session, t.context.passed);
+const closeContext = async (context: BrowserTestContext) => {
+    if (context.session) {
+        await markResult(context.session, context.passed);
     }
-    if (t.context.driver) {
-        await t.context.driver.quit();
+    if (context.driver) {
+        await context.driver.quit();
     }
     await new Promise<void>((resolve, reject) => {
-        t.context.server.close((error) => {
+        context.server.close((error) => {
             if (error) {
                 reject(error);
             } else {
@@ -70,12 +73,13 @@ test.afterEach(async (t) => {
             }
         });
     });
-    if (t.context.bsLocal) {
+    const bsLocal = context.bsLocal;
+    if (bsLocal) {
         await new Promise<void>((resolve) => {
-            t.context.bsLocal.stop(resolve);
+            bsLocal.stop(resolve);
         });
     }
-});
+};
 
 const builtProjects = new Set<string>();
 const build = async (
@@ -112,27 +116,28 @@ for (const testName of testNameList) {
         };
         const testDirectory = path.join(__dirname, testName);
         const outputDirectory = path.join(testDirectory, 'output');
-        test.serial(`${testName} ${options.os || options.deviceName || '-'} ${capability.browserName}`, async (t) => {
-            t.timeout(120000);
+        test(`${testName} ${options.os || options.deviceName || '-'} ${capability.browserName}`, async (t) => {
+            const context = await createContext();
+            t.after(() => closeContext(context));
             await build(testDirectory);
-            t.context.server.on('request', createRequestHandler(
+            context.server.on('request', createRequestHandler(
                 outputDirectory,
-                (message) => t.log(message),
+                (message) => t.diagnostic(message),
             ));
             const builder = new selenium.Builder().withCapabilities(capability);
-            t.context.builder = builder;
+            context.builder = builder;
             if (browserStack) {
                 builder.usingServer(browserStack.server);
-                t.context.bsLocal = await createBrowserStackLocal({
+                context.bsLocal = await createBrowserStackLocal({
                     accessKey: browserStack.accessKey,
-                    port: t.context.port,
+                    port: context.port,
                     localIdentifier: capability['bstack:options'].localIdentifier,
                 });
             }
             const driver = builder.build();
-            t.context.driver = driver;
-            const baseURL = (/safari/i).test(capability.browserName) ? new URL(`http://bs-local.com:${t.context.port}`) : t.context.baseURL;
-            t.context.session = await driver.getSession();
+            context.driver = driver;
+            const baseURL = (/safari/i).test(capability.browserName) ? new URL(`http://bs-local.com:${context.port}`) : context.baseURL;
+            context.session = await driver.getSession();
             await driver.get(`${new URL('/index.html', baseURL)}`);
             await driver.wait(selenium.until.titleMatches(/(?:passed|failed)$/), 10000);
             const base64 = await driver.takeScreenshot();
@@ -140,8 +145,8 @@ for (const testName of testNameList) {
             await writeFile(path.join(outputDirectory, `${Date.now()}.png`), screenShot);
             const title = await driver.getTitle();
             const passed = title === `${path.basename(testDirectory)} → passed`;
-            t.true(passed);
-            t.context.passed = passed;
+            assert.strictEqual(passed, true);
+            context.passed = passed;
         });
     }
 }

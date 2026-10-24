@@ -1,17 +1,16 @@
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import {createExposedPromise} from './createExposedPromise';
 
-test('#0 resolve', async (t) => {
+test('#0 resolve', async () => {
     const exposed = createExposedPromise();
     exposed.resolve();
     await exposed.promise;
-    t.pass();
 });
 
-test('#1 reject', async (t) => {
+test('#1 reject', async () => {
     const exposed = createExposedPromise();
     const message = 'Expected';
     exposed.reject(new Error(message));
-    const error = await t.throwsAsync(exposed.promise);
-    t.is(error && error.message, message);
+    await assert.rejects(exposed.promise, {message});
 });

@@ -1,5 +1,6 @@
 import * as parser from '@hookun/parse-animation-shorthand';
-import test from 'ava';
+import {test} from 'node:test';
+import * as assert from 'node:assert/strict';
 import type {AtRule, Declaration, Rule} from 'postcss';
 import {extractPluginResult} from '../runner/extractPluginResult';
 import {postcss} from '../util/postcss';
@@ -17,7 +18,7 @@ const getFirstDeclaration = (
     throw new Error(`The given rule has no nodes: ${rule}`);
 };
 
-test('plugin', async (t): Promise<void> => {
+test('plugin', async (): Promise<void> => {
     const transformer = plugin();
     const resultA = await postcss([transformer]).process([
         '@import "./b.css" c-;',
@@ -45,8 +46,8 @@ test('plugin', async (t): Promise<void> => {
             mapB.id.bar,
             mapB.keyframes.aaa,
         ];
-        t.true(identifiers.every((identifier) => Boolean(identifier)));
-        t.is(identifiers.length, new Set(identifiers).size);
+        assert.strictEqual(identifiers.every((identifier) => Boolean(identifier)), true);
+        assert.strictEqual(identifiers.length, new Set(identifiers).size);
     }
     const rootA = postcss.parse(resultA.css);
     const rootB = postcss.parse(resultB.css);
@@ -54,28 +55,28 @@ test('plugin', async (t): Promise<void> => {
     let index = 0;
     {
         const node = nodes[index++] as AtRule;
-        t.is(node.type, 'atrule');
-        t.is(node.name, 'keyframes');
-        t.is(node.params, `${mapA.keyframes.aaa}`);
+        assert.strictEqual(node.type, 'atrule');
+        assert.strictEqual(node.name, 'keyframes');
+        assert.strictEqual(node.params, `${mapA.keyframes.aaa}`);
     }
     {
         const node = nodes[index++] as Rule;
-        t.is(node.type, 'rule');
-        t.is(node.selector, `.${mapA.className.foo}:first-child[data-hello=abc]`);
+        assert.strictEqual(node.type, 'rule');
+        assert.strictEqual(node.selector, `.${mapA.className.foo}:first-child[data-hello=abc]`);
         {
             const declaration = getFirstDeclaration(node);
-            t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, `${mapA.keyframes.aaa}`);
+            assert.strictEqual(declaration.prop, 'animation-name');
+            assert.strictEqual(declaration.value, `${mapA.keyframes.aaa}`);
         }
     }
     {
         const node = nodes[index++] as Rule;
-        t.is(node.type, 'rule');
-        t.is(node.selector, `#${mapA.id.bar1},#${mapA.id.bar2}:nth-of-type(2):not([data-hello=abc])`);
+        assert.strictEqual(node.type, 'rule');
+        assert.strictEqual(node.selector, `#${mapA.id.bar1},#${mapA.id.bar2}:nth-of-type(2):not([data-hello=abc])`);
         {
             const declaration = getFirstDeclaration(node);
-            t.is(declaration.prop, 'animation');
-            t.deepEqual(
+            assert.strictEqual(declaration.prop, 'animation');
+            assert.deepStrictEqual(
                 parser.parse(declaration.value),
                 parser.parse(`linear ${mapA.keyframes.aaa} 1s 123ms`),
             );
@@ -83,48 +84,48 @@ test('plugin', async (t): Promise<void> => {
     }
     {
         const node = nodes[index++] as Rule;
-        t.is(node.type, 'rule');
-        t.is(node.selector, `.${mapB.className.foo}>.foo`);
+        assert.strictEqual(node.type, 'rule');
+        assert.strictEqual(node.selector, `.${mapB.className.foo}>.foo`);
         {
             const declaration = getFirstDeclaration(node);
-            t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, `${mapB.keyframes.aaa}`);
+            assert.strictEqual(declaration.prop, 'animation-name');
+            assert.strictEqual(declaration.value, `${mapB.keyframes.aaa}`);
         }
     }
     {
         const node = nodes[index++] as Rule;
-        t.is(node.type, 'rule');
-        t.is(node.selector, `#${mapB.id.bar}>#bar`);
+        assert.strictEqual(node.type, 'rule');
+        assert.strictEqual(node.selector, `#${mapB.id.bar}>#bar`);
         {
             const declaration = getFirstDeclaration(node);
-            t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, 'ccc');
+            assert.strictEqual(declaration.prop, 'animation-name');
+            assert.strictEqual(declaration.value, 'ccc');
         }
     }
     {
         const node = nodes[index++] as AtRule;
-        t.is(node.type, 'atrule');
-        t.is(node.name, 'keyframes');
-        t.is(node.params, `${mapB.keyframes.aaa}`);
+        assert.strictEqual(node.type, 'atrule');
+        assert.strictEqual(node.name, 'keyframes');
+        assert.strictEqual(node.params, `${mapB.keyframes.aaa}`);
     }
     {
         const node = nodes[index++] as Rule;
-        t.is(node.type, 'rule');
-        t.is(node.selector, `.${mapB.className.foo}`);
+        assert.strictEqual(node.type, 'rule');
+        assert.strictEqual(node.selector, `.${mapB.className.foo}`);
         {
             const declaration = getFirstDeclaration(node);
-            t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, `${mapA.keyframes.aaa}`);
+            assert.strictEqual(declaration.prop, 'animation-name');
+            assert.strictEqual(declaration.value, `${mapA.keyframes.aaa}`);
         }
     }
     {
         const node = nodes[index++] as Rule;
-        t.is(node.type, 'rule');
-        t.is(node.selector, `#${mapB.id.bar}`);
+        assert.strictEqual(node.type, 'rule');
+        assert.strictEqual(node.selector, `#${mapB.id.bar}`);
         {
             const declaration = getFirstDeclaration(node);
-            t.is(declaration.prop, 'animation-name');
-            t.is(declaration.value, 'ccc');
+            assert.strictEqual(declaration.prop, 'animation-name');
+            assert.strictEqual(declaration.value, 'ccc');
         }
     }
 });
