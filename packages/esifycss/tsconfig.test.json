@@ -9,7 +9,11 @@
     "include": [
         "src/**/*",
         "test-client/run.ts",
-        "test-client/util/**/*.ts"
+        "test-client/util/**/*.ts",
+        "@types/**/*",
+        "scripts/**/*",
+        "test-client/parcel-javascript/src/page.js",
+        "test-client/typescript-rollup/src/page.ts"
     ],
     "exclude": [
         "src/helper/**/*",

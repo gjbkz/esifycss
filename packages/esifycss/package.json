@@ -26,8 +26,7 @@
     },
     "scripts": {
         "build": "node scripts/build.js",
-        "test": "npm run test:type && npm run test:unit",
-        "test:type": "tsc --noEmit",
+        "test": "npm run test:unit",
         "test-client": "npm run test:compile && node --test --test-timeout=120000 temp/test/test-client/run.js",
         "prepack": "npm run build",
         "test:unit": "npm run test:compile && node --test --test-timeout=120000 \"temp/test/src/**/*.test.js\"",
