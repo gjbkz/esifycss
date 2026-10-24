@@ -14,15 +14,15 @@
         "test-client": "npm run test-client --workspace esifycss"
     },
     "devDependencies": {
-        "@biomejs/biome": "2.6.2",
+        "@biomejs/biome": "2.6.3",
         "@types/node": "22.20.5",
         "@types/selenium-webdriver": "4.35.7",
-        "browserstack-local": "1.5.9",
+        "browserstack-local": "1.5.16",
         "postcss-scss": "4.0.9",
-        "rollup": "4.64.7",
+        "rollup": "4.65.0",
         "selenium-webdriver": "4.51.0",
         "typescript": "5.9.3",
-        "webpack": "5.112.0"
+        "webpack": "5.112.2"
     },
     "renovate": {
         "extends": [
