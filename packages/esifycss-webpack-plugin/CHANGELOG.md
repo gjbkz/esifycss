@@ -1,9 +1,16 @@
 # Changelog
 
-## Unreleased
+## v0.2.0 (2026-10-24)
 
-- Maintain the plugin in the esifycss workspace with shared build tools and real Webpack 5 integration tests.
-- Breaking: require Node.js 22+ and declare Webpack 5 as a peer dependency. Publish these changes in the next minor release (0.2.0 or later).
+### Breaking Changes
+
+- Require Node.js 22 or newer.
+- Declare Webpack 5 as a peer dependency.
+
+### Maintenance
+
+- Move the plugin into the esifycss npm workspace with shared build tools.
+- Add real Webpack 5 integration tests for CSS module resolution and plugin behavior.
 
 ## v0.1.3 (2021-09-11)
 
@@ -60,3 +67,4 @@
 ### Dependency Upgrades
 
 - @typescript-eslint/eslint-plugin:4.30.0→4.31.0 @typescript-eslint/parser:4.30.0→4.31.0 typescript:4.4.2→4.4.3 ([aac01fc](https://github.com/kei-ito/esifycss-loader/commit/aac01fca7522f8533b4881cb862cdf3aff5e0443))
+
