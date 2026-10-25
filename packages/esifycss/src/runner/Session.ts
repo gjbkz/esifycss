@@ -13,6 +13,7 @@ import {generateScript} from './generateScript';
 import {extractPluginResult} from './extractPluginResult';
 import {parseCSS} from './parseCSS';
 import {getSessionConfiguration} from './getSessionConfiguration';
+import {getWatchConfiguration} from './getWatchConfiguration';
 import type {SessionOptions, SessionConfiguration} from './types';
 
 const {copyFile} = fs.promises;
@@ -120,10 +121,14 @@ export class Session {
         this.initialTask = [];
         this.log(`watching: ${this.configuration.path.join(', ')}`);
         const onError = this.onError.bind(this);
+        const {cwd} = this.configuration.chokidar;
+        const resolveFile = (file: string) => cwd ? path.resolve(cwd, file) : file;
+        const watch = getWatchConfiguration(this.configuration.path, this.configuration.chokidar);
         let postUpdate = async () => await Promise.resolve();
-        this.watcher = chokidar.watch(this.configuration.path, this.configuration.chokidar)
+        this.watcher = chokidar.watch(watch.paths, watch.options)
         .on('error', onError)
-        .on('add', (file, stats) => {
+        .on('add', (watchedPath, stats) => {
+            const file = resolveFile(watchedPath);
             this.log(`[add] ${file}`);
             const promise = this.onAdd(file, stats);
             if (this.initialTask) {
@@ -131,11 +136,13 @@ export class Session {
             }
             promise.then(postUpdate).catch(onError);
         })
-        .on('change', (file, stats) => {
+        .on('change', (watchedPath, stats) => {
+            const file = resolveFile(watchedPath);
             this.log(`[change] ${file}`);
             this.onChange(file, stats).then(postUpdate).catch(onError);
         })
-        .on('unlink', (file) => {
+        .on('unlink', (watchedPath) => {
+            const file = resolveFile(watchedPath);
             this.log(`[unlink] ${file}`);
             this.onUnlink(file).then(postUpdate).catch(onError);
         });
@@ -175,7 +182,7 @@ export class Session {
         await Promise.resolve(null);
     }
 
-    protected onError(error: Error): void {
+    protected onError(error: unknown): void {
         this.logError(error);
     }
 

@@ -1,8 +1,19 @@
 import type {Writable} from 'stream';
 import type {Matcher} from 'anymatch';
-import type {AwaitWriteFinishOptions, WatchOptions} from 'chokidar';
+import type {ChokidarOptions} from 'chokidar';
 import type {AcceptedPlugin, ProcessOptions, SourceMapOptions} from 'postcss';
 import type {PluginOptions} from '../postcssPlugin/types';
+
+export interface WatchOptions extends Omit<ChokidarOptions, 'ignored'> {
+    /** Glob strings, regular expressions, and functions retain their Chokidar 3 semantics. */
+    ignored?: Matcher,
+    /** Treat include patterns as literal paths. */
+    disableGlobbing?: boolean,
+    /** @deprecated Accepted for compatibility; Chokidar 4 ignores this option. */
+    useFsEvents?: boolean,
+}
+
+export type AwaitWriteFinishOptions = Exclude<ChokidarOptions['awaitWriteFinish'], boolean | undefined>;
 
 export interface SessionOptions {
     /**
@@ -48,9 +59,9 @@ export interface SessionOptions {
      * Options passed to chokidar.
      * You can't set ignoreInitial to true.
      * @default {
-     *   ignore: exclude,
+     *   ignored: exclude,
      *   ignoreInitial: false,
-     *   useFsEvents: false,
+     *   alwaysStat: true,
      * }
      */
     chokidar?: WatchOptions,

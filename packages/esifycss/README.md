@@ -207,6 +207,12 @@ new Session(options).start()
 
 ### Options
 
+`include`, `exclude`, and `chokidar.ignored` continue to support glob patterns.
+Use the exported `WatchOptions` type for `chokidar` options; regular expressions
+and ignore callbacks are also supported. `disableGlobbing` treats include paths
+literally. The legacy `useFsEvents` option is accepted for compatibility but has
+no effect with Chokidar 4's native watchers.
+
 ```typescript
 export interface SessionOptions {
   /**
@@ -252,12 +258,12 @@ export interface SessionOptions {
    * Options passed to chokidar.
    * You can't set ignoreInitial to true.
    * @default {
-   *   ignore: exclude,
+   *   ignored: exclude,
    *   ignoreInitial: false,
-   *   useFsEvents: false,
+   *   alwaysStat: true,
    * }
    */
-  chokidar?: chokidar.WatchOptions,
+  chokidar?: import('esifycss').WatchOptions,
   /**
    * An array of postcss plugins.
    * esifycss.plugin is appended to this array.
