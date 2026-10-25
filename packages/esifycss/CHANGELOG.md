@@ -1,21 +1,28 @@
 # Changelog
 
-## v2.0.0 (2026-10-24)
+## v2.0.0 (2026-10-25)
 
 ### Breaking Changes
 
 - Require Node.js 22 or newer.
+- Chokidar 4 no longer supports `useFsEvents`; the option is accepted for compatibility but has no effect.
 
 ### Bug Fixes
 
 - Fix CSS extraction crashing on sparse JavaScript arrays.
+- Always release CSS processing tasks after errors so subsequent conversions can proceed.
 - Keep test-only helpers out of the generated public index and npm tarball.
+
+### Dependency Upgrades
+
+- Update Commander to 14; CLI behavior is unchanged.
+- Update Chokidar to 4. The `chokidar` option is now typed as esifycss's `WatchOptions`; glob, regular expression, and function exclusions keep working.
 
 ### Maintenance
 
 - Move the core into the shared npm workspace with the Rollup and Webpack plugins.
 - Update runtime dependencies, including PostCSS and postcss-selector-parser security fixes.
-- Replace shared development tooling, git hooks, task runners, and cleanup helpers with local configuration and Node.js scripts.
+- Replace shared development tooling, git hooks, task runners, and cleanup helpers with local configuration and Node.js scripts; use Biome for linting and Node.js built-in tests instead of ESLint, AVA, and ts-node.
 
 ## v1.4.40 (2023-01-07)
 
