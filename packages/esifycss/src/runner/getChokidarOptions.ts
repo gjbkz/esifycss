@@ -1,4 +1,5 @@
 import * as path from 'node:path';
+import type {Stats} from 'node:fs';
 import picomatch = require('picomatch');
 import {ensureArray} from '../util/ensureArray';
 import {getWatchRoot} from './getWatchConfiguration';
@@ -30,29 +31,35 @@ export const getChokidarOptions = (
             matches: options.disableGlobbing ? (file: string) => file === absolute : picomatch([absolute], {dot: true}),
         };
     });
+    const isExcluded = (file: string, stats?: Stats): boolean => {
+        const normalized = normalize(file);
+        if (matchKept(normalized)) return false;
+        return matchIgnored(normalized) || ignored.some((matcher) => {
+            if (matcher instanceof RegExp) return matcher.test(normalized);
+            return typeof matcher === 'function' && matcher(normalized, stats);
+        });
+    };
+    const isIncluded = (file: string, stats?: Stats): boolean => {
+        if (!include || !stats) return true;
+        const absolute = normalize(file, base);
+        if (excluded(absolute)) return false;
+        return matchers.some(({root, recursive, matches}) => {
+            const relative = path.relative(root, absolute);
+            const within = relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+            const depth = relative.split(path.sep).filter(Boolean).length - (stats.isDirectory() ? 0 : 1);
+            if (stats.isDirectory()) {
+                const ancestor = path.relative(absolute, root);
+                if (ancestor !== '..' && !ancestor.startsWith(`..${path.sep}`) && !path.isAbsolute(ancestor)) return true;
+                if (!recursive || !within) return false;
+            } else if (!matches(absolute)) return false;
+            return options.depth === undefined || depth <= options.depth;
+        });
+    };
     return {
         ...options,
         ...(cwd ? {cwd} : {}),
         ignoreInitial: false,
         alwaysStat: true,
-        ignored: (file, stats) => {
-            const normalized = normalize(file);
-            if (!matchKept(normalized) && (matchIgnored(normalized) || ignored.some((matcher) => matcher instanceof RegExp
-                ? matcher.test(normalized) : typeof matcher === 'function' && matcher(normalized, stats)))) return true;
-            if (!include || !stats) return false;
-            const absolute = normalize(file, base);
-            if (excluded(absolute)) return true;
-            return !matchers.some(({root, recursive, matches}) => {
-                const relative = path.relative(root, absolute);
-                const within = relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
-                const depth = relative.split(path.sep).filter(Boolean).length - (stats.isDirectory() ? 0 : 1);
-                if (stats.isDirectory()) {
-                    const ancestor = path.relative(absolute, root);
-                    if (ancestor !== '..' && !ancestor.startsWith(`..${path.sep}`) && !path.isAbsolute(ancestor)) return true;
-                    if (!recursive || !within) return false;
-                } else if (!matches(absolute)) return false;
-                return options.depth === undefined || depth <= options.depth;
-            });
-        },
+        ignored: (file, stats) => isExcluded(file, stats) || !isIncluded(file, stats),
     };
 };
