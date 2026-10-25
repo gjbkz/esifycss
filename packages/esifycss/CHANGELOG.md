@@ -15,9 +15,8 @@
 
 ### Dependency Upgrades
 
-- Update Commander to 14 while preserving CLI behavior.
-- Update Chokidar to 4 and handle glob patterns with picomatch 4.
-- Use esifycss’s exported `WatchOptions` type for the `chokidar` option, preserving glob, regular expression, and function exclusions.
+- Update Commander to 14; CLI behavior is unchanged.
+- Update Chokidar to 4. The `chokidar` option is now typed as esifycss's `WatchOptions`; glob, regular expression, and function exclusions keep working.
 
 ### Maintenance
 
