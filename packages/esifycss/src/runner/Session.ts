@@ -13,6 +13,7 @@ import {generateScript} from './generateScript';
 import {extractPluginResult} from './extractPluginResult';
 import {parseCSS} from './parseCSS';
 import {getSessionConfiguration} from './getSessionConfiguration';
+import {getWatchConfiguration} from './getWatchConfiguration';
 import type {SessionOptions, SessionConfiguration} from './types';
 
 const {copyFile} = fs.promises;
@@ -65,6 +66,7 @@ export class Session {
         }
         const exposedPromise = this.createExposedPromise();
         const {configuration} = this;
+        if (configuration.chokidar.cwd) filePath = path.resolve(configuration.chokidar.cwd, filePath);
         const postcssResult = await parseCSS({
             plugins: configuration.postcssPlugins,
             options: configuration.postcssOptions,
@@ -120,8 +122,9 @@ export class Session {
         this.initialTask = [];
         this.log(`watching: ${this.configuration.path.join(', ')}`);
         const onError = this.onError.bind(this);
+        const watch = getWatchConfiguration(this.configuration.path, this.configuration.chokidar);
         let postUpdate = async () => await Promise.resolve();
-        this.watcher = chokidar.watch(this.configuration.path, this.configuration.chokidar)
+        this.watcher = chokidar.watch(watch.paths, watch.options)
         .on('error', onError)
         .on('add', (file, stats) => {
             this.log(`[add] ${file}`);
@@ -175,7 +178,7 @@ export class Session {
         await Promise.resolve(null);
     }
 
-    protected onError(error: Error): void {
+    protected onError(error: unknown): void {
         this.logError(error);
     }
 
@@ -204,6 +207,7 @@ export class Session {
     protected async onUnlink(
         file: string,
     ): Promise<void> {
+        if (this.configuration.chokidar.cwd) file = path.resolve(this.configuration.chokidar.cwd, file);
         const outputPath = path.join(`${file}${this.configuration.ext}`);
         this.processedFiles.delete(file);
         await deleteFile(outputPath);

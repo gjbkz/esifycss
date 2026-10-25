@@ -19,7 +19,7 @@ export const getSessionConfiguration = (
         output,
         path: include,
         ext: getExtensionOption(parameters, output),
-        chokidar: getChokidarOptions(parameters),
+        chokidar: getChokidarOptions(parameters, include),
         stdout: parameters.stdout || process.stdout,
         stderr: parameters.stderr || process.stderr,
         postcssPlugins: [

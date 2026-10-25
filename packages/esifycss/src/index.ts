@@ -32,6 +32,7 @@ export * from './runner/getExtensionOption';
 export * from './runner/getIncludePatterns';
 export * from './runner/getOutputOption';
 export * from './runner/getSessionConfiguration';
+export * from './runner/getWatchConfiguration';
 export * from './runner/parseCSS';
 export * from './runner/types';
 export * from './runner/waitForInitialScanCompletion';
