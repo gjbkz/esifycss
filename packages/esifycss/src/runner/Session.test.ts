@@ -433,3 +433,27 @@ test('watch-css', async (t) => {
     const root3 = postcss.parse(outputCss3);
     assert.strictEqual(root3.nodes.length, 4);
 });
+
+test('processCSS releases its task when script generation fails', {timeout: 2000}, async (t) => {
+    const context = await createContext(t);
+    const failure = new Error('Helper path is unavailable');
+    class FailingSession extends Session {
+        private failOnce = true;
+        public override get helperPath(): string {
+            if (this.failOnce) {
+                this.failOnce = false;
+                throw failure;
+            }
+            return super.helperPath;
+        }
+    }
+    const file = path.join(context.directory, 'style.css');
+    await updateFile(file, '.foo {color: red}');
+    const session = new FailingSession({css: path.join(context.directory, 'output.css')});
+    context.session = session;
+    await assert.rejects(session.processCSS(file), (error) => error === failure);
+    const {dest, code} = await session.processCSS(file);
+    assert.strictEqual(dest, `${file}.js`);
+    assert.ok(code.includes('export const className'));
+    assert.match(code, /color:\s*red/);
+});

@@ -65,31 +65,31 @@ export class Session {
             await this.waitCurrentTasks();
         }
         const exposedPromise = this.createExposedPromise();
-        const {configuration} = this;
-        if (configuration.chokidar.cwd) filePath = path.resolve(configuration.chokidar.cwd, filePath);
-        const postcssResult = await parseCSS({
-            plugins: configuration.postcssPlugins,
-            options: configuration.postcssOptions,
-            file: filePath,
-        }).catch((error: unknown) => {
+        try {
+            const {configuration} = this;
+            if (configuration.chokidar.cwd) filePath = path.resolve(configuration.chokidar.cwd, filePath);
+            const postcssResult = await parseCSS({
+                plugins: configuration.postcssPlugins,
+                options: configuration.postcssOptions,
+                file: filePath,
+            });
+            const dest = path.join(`${filePath}${configuration.ext}`);
+            this.processedFiles.add(filePath);
+            const {output} = configuration;
+            const code = [
+                ...generateScript({
+                    output: dest,
+                    helper: output.type === 'css' ? this.helperPath : output.path,
+                    result: extractPluginResult(postcssResult),
+                    root: postcssResult.root,
+                    cssKey: this.configuration.cssKey,
+                }),
+                '',
+            ].join('\n');
+            return {dest, code};
+        } finally {
             exposedPromise.resolve();
-            throw error;
-        });
-        const dest = path.join(`${filePath}${configuration.ext}`);
-        this.processedFiles.add(filePath);
-        const {output} = configuration;
-        const code = [
-            ...generateScript({
-                output: dest,
-                helper: output.type === 'css' ? this.helperPath : output.path,
-                result: extractPluginResult(postcssResult),
-                root: postcssResult.root,
-                cssKey: this.configuration.cssKey,
-            }),
-            '',
-        ].join('\n');
-        exposedPromise.resolve();
-        return {dest, code};
+        }
     }
 
     public async minifyScripts(): Promise<void> {
