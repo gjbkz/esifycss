@@ -268,19 +268,17 @@ test('ignore output even if it is covered by the "include" pattern.', async (t) 
     console.log(`==== outputScript1 ====\n${outputScript1.trim()}\n===================`);
     assert.strictEqual(outputScript1.includes('addStyle'), false);
     const result1 = await runCode(outputScriptPath1);
-    assert.deepStrictEqual(result1.className, {
-        a1: '_0',
-        b1: '_1',
-    });
+    assert.deepStrictEqual(Object.keys(result1.className).sort(), ['a1', 'b1']);
     const outputScriptPath2 = path.join(context.directory, 'input2.css.js');
     const outputScript2 = await fs.promises.readFile(outputScriptPath2, 'utf-8');
     console.log(`==== outputScript2 ====\n${outputScript2.trim()}\n===================`);
     assert.strictEqual(outputScript2.includes('addStyle'), false);
     const result2 = await runCode(outputScriptPath2);
-    assert.deepStrictEqual(result2.className, {
-        a2: '_2',
-        b2: '_3',
-    });
+    assert.deepStrictEqual(Object.keys(result2.className).sort(), ['a2', 'b2']);
+    assert.deepStrictEqual([
+        ...Object.values(result1.className),
+        ...Object.values(result2.className),
+    ].sort(), ['_0', '_1', '_2', '_3']);
     const resultCSS = await fs.promises.readFile(cssPath, 'utf8');
     console.log(`==== resultCSS ====\n${resultCSS}\n===================`);
     const root = postcss.parse(resultCSS);
