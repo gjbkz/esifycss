@@ -1,12 +1,15 @@
 import type {Writable} from 'stream';
-import type {Matcher} from 'anymatch';
+import type {Stats} from 'node:fs';
 import type {ChokidarOptions} from 'chokidar';
 import type {AcceptedPlugin, ProcessOptions, SourceMapOptions} from 'postcss';
 import type {PluginOptions} from '../postcssPlugin/types';
 
+export type WatchPattern = string | RegExp | ((file: string, stats?: Stats) => boolean);
+export type WatchMatcher = WatchPattern | Array<WatchPattern>;
+
 export interface WatchOptions extends Omit<ChokidarOptions, 'ignored'> {
     /** Glob strings, regular expressions, and functions retain their Chokidar 3 semantics. */
-    ignored?: Matcher,
+    ignored?: WatchMatcher,
     /** Treat include patterns as literal paths. */
     disableGlobbing?: boolean,
     /** @deprecated Accepted for compatibility; Chokidar 4 ignores this option. */
@@ -25,7 +28,7 @@ export interface SessionOptions {
      * Pattern(s) to be excluded.
      * @default ['node_modules']
      */
-    exclude?: Matcher,
+    exclude?: WatchMatcher,
     /**
      * File extension(s) to be included.
      * @default ['.css']

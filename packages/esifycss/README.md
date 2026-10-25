@@ -224,7 +224,7 @@ export interface SessionOptions {
    * Pattern(s) to be excluded.
    * @default ['node_modules']
    */
-  exclude?: anymatch.Matcher,
+  exclude?: import('esifycss').WatchMatcher,
   /**
    * File extension(s) to be included.
    * @default ['.css']

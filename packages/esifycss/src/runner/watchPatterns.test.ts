@@ -8,7 +8,7 @@ import {setTimeout as delay} from 'node:timers/promises';
 import {Session} from './Session';
 import type {SessionOptions} from './types';
 
-const fixture = async (t: TestContext) => {
+const fixture = async (t: TestContext, SessionClass = Session) => {
     const directory = await fs.promises.mkdtemp(path.join(tmpdir(), 'esifycss patterns-'));
     let session: Session | undefined;
     t.after(async () => {
@@ -24,7 +24,7 @@ const fixture = async (t: TestContext) => {
     };
     const start = async (options: SessionOptions = {}) => {
         const sink = new Writable({write(_chunk, _encoding, callback) { callback(); }});
-        session = new Session({
+        session = new SessionClass({
             include: directory,
             helper: file('helper.js'),
             stdout: sink,
@@ -159,4 +159,44 @@ test('depth stays relative to each include root when a directory is created late
         await delay(20);
     }
     assert.ok(!fs.existsSync(file('future/deep/skipped.css.js')));
+});
+
+
+test('cwd preserves relative add, change, and unlink callback paths', {timeout: 10000}, async (t) => {
+    const events: Record<string, Array<string>> = {add: [], change: [], unlink: []};
+    class RelativeSession extends Session {
+        protected override async onAdd(file: string, stats?: fs.Stats): Promise<void> {
+            events.add.push(file);
+            await super.onAdd(file, stats);
+        }
+        protected override async onChange(file: string, stats?: fs.Stats): Promise<void> {
+            events.change.push(file);
+            await super.onChange(file, stats);
+        }
+        protected override async onUnlink(file: string): Promise<void> {
+            events.unlink.push(file);
+            await super.onUnlink(file);
+        }
+    }
+    const {file, write, start, directory} = await fixture(t, RelativeSession);
+    await write('input.css');
+    await start({include: '*.css', chokidar: {cwd: directory}, watch: true});
+    const generated = file('input.css.js');
+    assert.ok(fs.existsSync(generated));
+    events.change.length = 0;
+    await write('input.css', '.foo{color:blue}');
+    const waitFor = async (ready: () => Promise<boolean>) => {
+        const deadline = Date.now() + 5000;
+        while (!await ready()) {
+            assert.ok(Date.now() < deadline, 'Timed out waiting for a cwd watch event');
+            await delay(20);
+        }
+    };
+    await waitFor(async () => (await fs.promises.readFile(generated, 'utf8')).includes('color:blue'));
+    await fs.promises.unlink(file('input.css'));
+    await waitFor(async () => !fs.existsSync(generated));
+    for (const names of Object.values(events)) {
+        assert.ok(names.length > 0);
+        assert.ok(names.every((name) => name === 'input.css'));
+    }
 });

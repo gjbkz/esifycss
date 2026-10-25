@@ -1,81 +1,58 @@
 import * as path from 'node:path';
-import type {Stats} from 'node:fs';
-import anymatch from 'anymatch';
-import isGlob = require('is-glob');
+import picomatch = require('picomatch');
 import {ensureArray} from '../util/ensureArray';
 import {getWatchRoot} from './getWatchConfiguration';
-import type {SessionOptions, ReadonlyWatchOptions, WatchOptions} from './types';
-
-const normalizeFilePath = (value: string, cwd: string): string => {
-    let normalizedPath = cwd ? path.resolve(cwd, value) : path.normalize(value);
-    if (normalizedPath.endsWith(path.sep) && normalizedPath !== path.parse(normalizedPath).root) {
-        normalizedPath = normalizedPath.slice(0, -1);
-    }
-    return normalizedPath.split(path.sep).join('/');
-};
-
-const normalizePattern = (pattern: string, cwd: string): string => pattern.startsWith('!')
-    ? `!${normalizeFilePath(pattern.slice(1), cwd)}`
-    : normalizeFilePath(pattern, cwd);
+import type {SessionOptions, ReadonlyWatchOptions} from './types';
 
 export const getChokidarOptions = (
-    {chokidar: chokidarOptions = {}, exclude, css}: SessionOptions,
+    {chokidar: options = {}, exclude, css}: SessionOptions,
     include?: ReadonlyArray<string>,
 ): ReadonlyWatchOptions => {
-    const cwd = chokidarOptions.cwd ? path.resolve(chokidarOptions.cwd) : '';
-    const options: WatchOptions = {
-        ...chokidarOptions,
+    const cwd = options.cwd ? path.resolve(options.cwd) : '';
+    const normalize = (file: string, base = cwd) => (base ? path.resolve(base, file) : path.normalize(file)).split(path.sep).join('/');
+    const ignored = [...ensureArray(options.ignored), ...ensureArray(exclude), ...(css ? [css, path.resolve(css)] : [])];
+    const strings = ignored.filter((pattern): pattern is string => typeof pattern === 'string');
+    const negatives = strings.filter((pattern) => pattern.startsWith('!')).map((pattern) => normalize(pattern.slice(1)));
+    const positives = strings.filter((pattern) => !pattern.startsWith('!')).flatMap((pattern) => {
+        const normalized = normalize(pattern).replace(/\/$/, '');
+        return picomatch.scan(normalized).isGlob ? [normalized] : [normalized, `${normalized}/**`];
+    });
+    const matchIgnored = picomatch(positives, {dot: true});
+    const matchKept = picomatch(negatives, {dot: true});
+    const base = cwd || process.cwd();
+    const excluded = picomatch((include || []).filter((pattern) => pattern.startsWith('!')).map((pattern) => normalize(pattern.slice(1), base)), {dot: true});
+    const matchers = (include || []).filter((pattern) => !pattern.startsWith('!')).map((pattern) => {
+        const absolute = normalize(pattern, base);
+        const root = getWatchRoot(absolute, options.disableGlobbing);
+        return {
+            root: root === absolute ? path.dirname(root) : root,
+            recursive: root !== absolute,
+            matches: options.disableGlobbing ? (file: string) => file === absolute : picomatch([absolute], {dot: true}),
+        };
+    });
+    return {
+        ...options,
         ...(cwd ? {cwd} : {}),
         ignoreInitial: false,
         alwaysStat: true,
+        ignored: (file, stats) => {
+            const normalized = normalize(file);
+            if (!matchKept(normalized) && (matchIgnored(normalized) || ignored.some((matcher) => matcher instanceof RegExp
+                ? matcher.test(normalized) : typeof matcher === 'function' && matcher(normalized, stats)))) return true;
+            if (!include || !stats) return false;
+            const absolute = normalize(file, base);
+            if (excluded(absolute)) return true;
+            return !matchers.some(({root, recursive, matches}) => {
+                const relative = path.relative(root, absolute);
+                const within = relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+                const depth = relative.split(path.sep).filter(Boolean).length - (stats.isDirectory() ? 0 : 1);
+                if (stats.isDirectory()) {
+                    const ancestor = path.relative(absolute, root);
+                    if (ancestor !== '..' && !ancestor.startsWith(`..${path.sep}`) && !path.isAbsolute(ancestor)) return true;
+                    if (!recursive || !within) return false;
+                } else if (!matches(absolute)) return false;
+                return options.depth === undefined || depth <= options.depth;
+            });
+        },
     };
-    const ignored = [
-        ...ensureArray(chokidarOptions.ignored),
-        ...ensureArray(exclude),
-        ...(include || []).filter((pattern) => pattern.startsWith('!')).map((pattern) => pattern.slice(1)),
-    ];
-    if (css) {
-        ignored.push(css, path.resolve(css));
-    }
-    const ignoredPatterns = ignored.map((matcher) => typeof matcher === 'string' ? normalizePattern(matcher, cwd) : matcher);
-    const matchIgnored = anymatch([
-        ...ignoredPatterns,
-        ...ignoredPatterns.filter((matcher): matcher is string => typeof matcher === 'string' && !isGlob(matcher))
-        .map((matcher) => `${matcher}/**`),
-    ], null, {dot: true});
-    const base = cwd || process.cwd();
-    const includedPatterns = (include || []).map((pattern) => normalizePattern(pattern, base));
-    const matchIncluded = chokidarOptions.disableGlobbing
-        ? (file: string) => includedPatterns.includes(file)
-        : anymatch(includedPatterns, null, {dot: true});
-    const includeMatchers = includedPatterns.filter((pattern) => !pattern.startsWith('!')).map((pattern) => {
-        const root = getWatchRoot(pattern, chokidarOptions.disableGlobbing);
-        return {
-            root: root === pattern ? path.dirname(root) : root,
-            recursive: root !== pattern,
-            matches: chokidarOptions.disableGlobbing
-                ? (file: string) => file === pattern
-                : anymatch(pattern, null, {dot: true}),
-        };
-    });
-    const matchesFile = (file: string) => matchIncluded(file) && includeMatchers.some(({root, matches}) => {
-        const depth = Math.max(0, path.relative(root, file).split(path.sep).filter(Boolean).length - 1);
-        return matches(file) && (chokidarOptions.depth === undefined || depth <= chokidarOptions.depth);
-    });
-    const within = (parent: string, child: string) => {
-        const relative = path.relative(parent, child);
-        return relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
-    };
-    const matchesDirectory = (file: string) => includeMatchers.some(({root, recursive}) => {
-        if (within(file, root)) return true;
-        const depth = path.relative(root, file).split(path.sep).filter(Boolean).length;
-        return recursive && within(root, file) && (chokidarOptions.depth === undefined || depth <= chokidarOptions.depth);
-    });
-    options.ignored = (file, stats?: Stats) => {
-        if (matchIgnored([file, stats])) return true;
-        if (!include || !stats) return false;
-        const absolute = normalizeFilePath(file, base);
-        return stats.isDirectory() ? !matchesDirectory(absolute) : !matchesFile(absolute);
-    };
-    return options;
 };

@@ -66,6 +66,7 @@ export class Session {
         }
         const exposedPromise = this.createExposedPromise();
         const {configuration} = this;
+        if (configuration.chokidar.cwd) filePath = path.resolve(configuration.chokidar.cwd, filePath);
         const postcssResult = await parseCSS({
             plugins: configuration.postcssPlugins,
             options: configuration.postcssOptions,
@@ -121,14 +122,11 @@ export class Session {
         this.initialTask = [];
         this.log(`watching: ${this.configuration.path.join(', ')}`);
         const onError = this.onError.bind(this);
-        const {cwd} = this.configuration.chokidar;
-        const resolveFile = (file: string) => cwd ? path.resolve(cwd, file) : file;
         const watch = getWatchConfiguration(this.configuration.path, this.configuration.chokidar);
         let postUpdate = async () => await Promise.resolve();
         this.watcher = chokidar.watch(watch.paths, watch.options)
         .on('error', onError)
-        .on('add', (watchedPath, stats) => {
-            const file = resolveFile(watchedPath);
+        .on('add', (file, stats) => {
             this.log(`[add] ${file}`);
             const promise = this.onAdd(file, stats);
             if (this.initialTask) {
@@ -136,13 +134,11 @@ export class Session {
             }
             promise.then(postUpdate).catch(onError);
         })
-        .on('change', (watchedPath, stats) => {
-            const file = resolveFile(watchedPath);
+        .on('change', (file, stats) => {
             this.log(`[change] ${file}`);
             this.onChange(file, stats).then(postUpdate).catch(onError);
         })
-        .on('unlink', (watchedPath) => {
-            const file = resolveFile(watchedPath);
+        .on('unlink', (file) => {
             this.log(`[unlink] ${file}`);
             this.onUnlink(file).then(postUpdate).catch(onError);
         });
@@ -211,6 +207,7 @@ export class Session {
     protected async onUnlink(
         file: string,
     ): Promise<void> {
+        if (this.configuration.chokidar.cwd) file = path.resolve(this.configuration.chokidar.cwd, file);
         const outputPath = path.join(`${file}${this.configuration.ext}`);
         this.processedFiles.delete(file);
         await deleteFile(outputPath);
