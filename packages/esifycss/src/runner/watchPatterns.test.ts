@@ -127,8 +127,12 @@ test('watch discovers new directories and handles add, change, and unlink', {tim
     };
     const hasColor = async (color: string) => fs.existsSync(generated)
         && (await fs.promises.readFile(generated, 'utf8')).includes(`color:${color}`);
-    await write('future/deep/new.css');
+    await write('staged/deep/new.css');
+    await fs.promises.rename(file('staged'), file('future'));
     await waitFor(() => hasColor('red'));
+    await write('future/deep/second.css', '.second{color:purple}');
+    await waitFor(async () => fs.existsSync(file('future/deep/second.css.js'))
+        && (await fs.promises.readFile(file('future/deep/second.css.js'), 'utf8')).includes('color:purple'));
     await write('future/deep/new.css', '.foo{color:blue}');
     await waitFor(() => hasColor('blue'));
     await fs.promises.unlink(file('future/deep/new.css'));
@@ -146,8 +150,9 @@ test('depth stays relative to each include root when a directory is created late
     });
     assert.ok(fs.existsSync(file('present/root.css.js')));
     assert.ok(!fs.existsSync(file('present/deep/skipped.css.js')));
-    await write('future/deep/skipped.css');
-    await write('future/root.css');
+    await write('staged/deep/skipped.css');
+    await write('staged/root.css');
+    await fs.promises.rename(file('staged'), file('future'));
     const deadline = Date.now() + 5000;
     while (!fs.existsSync(file('future/root.css.js'))) {
         assert.ok(Date.now() < deadline, 'Timed out waiting for future/root.css');
