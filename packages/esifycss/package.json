@@ -39,7 +39,7 @@
         "chokidar": "4.0.3",
         "commander": "14.0.3",
         "picomatch": "4.0.7",
-        "postcss": "8.5.31",
+        "postcss": "8.5.32",
         "postcss-selector-parser": "7.1.7",
         "vlq": "2.0.4"
     },
