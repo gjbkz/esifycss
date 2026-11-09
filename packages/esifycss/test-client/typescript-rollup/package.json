@@ -9,7 +9,7 @@
     },
     "devDependencies": {
         "esifycss": "file:../..",
-        "rollup": "4.67.2",
+        "rollup": "4.68.0",
         "typescript": "5.9.3"
     }
 }
