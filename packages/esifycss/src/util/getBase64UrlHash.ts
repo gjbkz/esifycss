@@ -1,7 +1,7 @@
-import type {BinaryLike} from 'crypto';
+import type {Hash} from 'crypto';
 import {createHash} from 'crypto';
 
-export const getBase64UrlHash = (...dataList: Array<BinaryLike>): Buffer | string => {
+export const getBase64UrlHash = (...dataList: Array<Parameters<Hash['update']>[0]>): Buffer | string => {
     const hash = createHash('sha256');
     for (const data of dataList) {
         hash.update(data);
